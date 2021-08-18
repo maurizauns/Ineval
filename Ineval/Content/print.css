@@ -1,0 +1,76 @@
+﻿.mt-3 {
+    margin-top: 1rem !important
+}
+
+.mt-2 {
+    margin-top: .5rem !important
+}
+
+
+.bg-color-green {
+    background-color: #cdffcc
+}
+
+.bg-color-purple {
+    background-color: #cbcdfc
+}
+
+.bg-color-pink {
+    background-color: #ef9ebc
+}
+
+.bg-color-yellow {
+    background-color: #feff9b
+}
+
+.text-left {
+    text-align: left !important
+}
+
+.text-right {
+    text-align: right !important
+}
+
+.text-center {
+    text-align: center !important
+}
+
+.bordes {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 1px;
+    padding-left: 5px;
+    font-size: 12.0pt;
+    font-weight: 400;
+    font-style: normal;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    vertical-align: middle;
+    border-top: 1.5px solid gray;
+    border-right: 1.5px solid gray;
+    border-bottom: 1.5px solid gray;
+    border-left: 1.5px solid gray;
+    white-space: normal;
+    border-collapse: collapse
+}
+
+.bordesP {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 1px;
+    padding-left: 5px;
+    font-size: 12.0pt;
+    font-weight: 400;
+    font-style: normal;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    vertical-align: middle;
+    border-top: 2px solid gray;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-left: 2px solid gray;
+    white-space: normal;
+    border-collapse: collapse
+}

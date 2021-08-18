@@ -1,0 +1,149 @@
+﻿@model Ineval.Dto.SettingViewModel
+
+<div class="">
+    <div class="content-header row">
+        <div class="content-header-left col-12 mb-2 mt-1">
+            <div class="row mx-0">
+                <div class="col-xl-4 col-md-12 d-flex align-items-center pl-0">
+                    <h5 class="content-header-title float-left pr-1 mb-0">@ViewBag.Title</h5>
+                    <div class="breadcrumb-wrapper col-9">
+                        <ol class="breadcrumb p-0 mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="/"><i class="bx bx-home-alt"></i></a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="#">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                @ViewBag.Title
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-body">
+        <section class="admission-list-wrapper">
+            <div class="admission-list-filter px-1">
+
+                <div class="row border-div-simec py-2 mb-2">
+                    <div class="col-12  col-sm-12 col-lg-12 ">
+
+                        <div>
+                            <div class="form-group">
+                                @Html.ActionLink("Permisos por Rol", "Index", "RolePermissions", null, new { @class = "list-group-item tabla-maestra" })
+                                @Html.ActionLink("Paises", "Index", "Country", null, new { @class = "list-group-item tabla-maestra" })
+                                @Html.ActionLink("Provincias", "Index", "Province", null, new { @class = "list-group-item tabla-maestra" })
+                                @Html.ActionLink("Cantones", "Index", "Canton", null, new { @class = "list-group-item tabla-maestra" })
+                            </div>
+                        </div>
+
+                        <section id="accordion-icon-wrapper">
+                            <div class="accordion collapse-icon accordion-icon-rotate" id="accordionWrapa2" data-toggle-hover="true">
+                                <div class="card collapse-header open">
+                                    <div id="heading5" class="card-header" data-toggle="collapse" data-target="#accordion5" aria-expanded="true" aria-controls="accordion5" role="tablist">
+                                        <span class="collapse-title">
+                                            <i class="bx bx-cloud align-middle"></i>
+                                            <span class="align-middle">Configuración del Sistema</span>
+                                        </span>
+                                    </div>
+                                    <div id="accordion5" role="tabpanel" data-parent="#accordionWrapa2" aria-labelledby="heading5" class="collapse show" style="">
+                                        <div class="card-content">
+                                            <div class="card-body">
+
+                                                @using (Html.BeginForm("Save", "Setting"))
+                                                {
+                                                    @Html.AntiForgeryToken()
+
+                                                    <div class="form-horizontal">
+                                                        @Html.ValidationSummary(true)
+                                                        @Html.HiddenFor(model => model.Id)
+
+                                                        <div class="col-md-12 row">
+                                                            <div class="col-md-4">
+                                                                @Html.LabelFor(model => model.RutaAplicacion, new { @class = "control-label" })
+                                                                @Html.TextBoxFor(model => model.RutaAplicacion, new { @class = "form-control", style = "max-width: 100% !important", data_toggle = "tooltip", title = "Ruta de la Aplicacion" })
+                                                                @Html.ValidationMessageFor(model => model.RutaAplicacion)
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                @Html.LabelFor(model => model.RegitrosPorPagina, new { @class = "control-label" })
+                                                                @Html.TextBoxFor(model => model.RegitrosPorPagina, new { @class = "form-control", style = "max-width: 100% !important", data_toggle = "tooltip", title = " Numero de Registros Por Pagina" })
+                                                                @Html.ValidationMessageFor(model => model.RegitrosPorPagina)
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                @Html.LabelFor(model => model.FormatoFecha, new { @class = "control-label" })
+                                                                @Html.TextBoxFor(model => model.FormatoFecha, new { @class = "form-control", style = "max-width: 100% !important" })
+                                                                @Html.ValidationMessageFor(model => model.FormatoFecha)
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 row">
+                                                            <div class="col-md-12">
+                                                                <input type="submit" value="Guardar" class="btn btn-primary float-right my-1" />
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+
+<div class="modal fade text-left" id="tablas-maestras-modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel160" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title white" id="myModalLabel160">@ViewBag.Title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form role="form" class="modal-Crud" action='@Url.Action("Save")' data-modal="mark-modal" data-grid="mark-grid">
+                <div class="modal-body setting">
+                    <iframe id="tablas-maestras-iframe" style="width: 100%; height:500px" frameborder="0"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger glow" data-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cerrar</span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script language="javascript" type="text/javascript">
+
+        $(document).on("click", ".tabla-maestra", function (e) {
+
+            var url = $(this).attr("href");
+            var title = $(this).html();
+
+            $("#tablas-maestras-modal h4").html(title);
+            $("#tablas-maestras-iframe").attr("src", url);
+            $("#tablas-maestras-modal").modal("show");
+
+            e.preventDefault();
+        });
+
+    </script>
+}

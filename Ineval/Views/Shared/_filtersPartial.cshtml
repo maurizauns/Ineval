@@ -1,0 +1,52 @@
+﻿@model Ineval.Models.Filters.ModelFilter
+@{
+    var formId = Model.FormId ?? "search_form";
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Get, new { id = formId, data_prefix = "", data_grid = Model.GridId ?? "GridMain", @class = string.Format("clearfix {0}", Model.Class), role = "form" }))
+{
+    <div class="border rounded py-2 row mr-0 ml-0">
+        <div class="form-group col-md-12 btn-filter hide">
+            <div class='pull-right pr-0'>
+                <br>
+                <button class="btn btn-danger  glow btnClearFilter" type="reset">Limpiar</button>
+                <button class="btn btn-primary  glow " type="submit">Buscar</button>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script language="javascript">
+
+    $(function () {
+        var model = {};
+        @if (Model.FieldFilters != null)
+        {
+            foreach (var item in Model.FieldFilters)
+            {
+                var enumValue = (int) item.Type;
+                <text>
+        model = {
+            type: @enumValue,
+            description: '@item.Description',
+            name: '@item.Name',
+            url: '@item.UrlData',
+            defaultValue: '@item.DefaultValue',
+            placeholder: '@item.Placeholder',
+            Url: '@item.Url',
+            Modelo: '@item.Modelo'
+        }
+        addFilter('@formId', model);
+
+        </text>
+
+            }
+        }
+
+    });
+    $(".btnClearFilter").click(function () {
+        $('input[type="hidden"]').val('');
+        $('.select2').val(null).trigger('change');
+    });
+</script>

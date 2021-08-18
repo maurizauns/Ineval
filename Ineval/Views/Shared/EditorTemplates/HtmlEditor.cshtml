@@ -1,0 +1,28 @@
+﻿@model string
+
+<script src="@Url.Content("~/Content/ckeditor/ckeditor.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+         CKEDITOR.replace('@ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty)',
+             {
+                height: '600px',
+                toolbar: 'PorDefecto',
+                filebrowserImageUploadUrl: '@Url.Action("SubirImagen", "Images")',
+                filebrowserImageBrowseLinkUrl: '',
+                filebrowserWindowWidth: '600',
+                filebrowserWindowHeight: '1200'
+            });
+
+            $('input[type="submit"]').click(function () {
+                for (instance in CKEDITOR.instances) {
+                    CKEDITOR.instances[instance].updateElement();
+                }
+            });
+        });
+</script>
+
+@Html.TextArea(string.Empty, /* Name suffix */
+    ViewData.TemplateInfo.FormattedModelValue /* Initial value */
+)

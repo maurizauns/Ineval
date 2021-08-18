@@ -1,0 +1,140 @@
+﻿@using Ineval.Models.Filters
+@using MvcJqGrid
+@using MvcJqGrid.Enums
+@using RP.Website.Helpers
+
+@model Ineval.Dto.UsuarioViewModel
+
+@{
+    ViewBag.Title = "Usuarios";
+}
+
+@Scripts.Render("~/bundles/modalStatic")
+
+<div class="content-header row">
+    <div class="content-header-left col-12 mb-2 mt-1">
+        <div class="row mx-0">
+            <div class="col-8 d-flex align-items-center pl-0">
+                <h5 class="content-header-title float-left pr-1 mb-0">@ViewBag.Title</h5>
+                <div class="breadcrumb-wrapper col-9">
+                    <ol class="breadcrumb p-0 mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="/"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="col-4 px-0 pt-xl-0 pt-1">
+                <button type="button" class="btn btn-success glow invoice-create float-right mr-1 mb-0" data-toggle="modal" data-target="#usuarios-modal" role="button" aria-pressed="true">
+                    <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body border-div-history">
+    <section class="admission-list-wrapper">
+        <div class="admission-list-filter px-1">
+
+            <div class="row border-div-simec py-2 mb-2">
+                <div class="col-12  col-sm-12 col-lg-12 ">
+                    @{
+                        Html.RenderPartial("_filtersPartial", new ModelFilter { FormId = "search_form", GridId = "usuarios-grid", FieldFilters = ViewBag.Filters });
+                    }
+                    @(Html.MyjqGrid("usuarios-grid", Ineval.Common.Context.PageSize)
+                                .AddColumn(new Column("TipoIdentificacion").SetLabel("Tipo Identificacion").SetSortable(true).SetAlign(Align.Center))
+                                .AddColumn(new Column("Identificacion").SetLabel("Identificacion").SetSortable(true).SetAlign(Align.Center))
+                                .AddColumn(new Column("NombresCompletos").SetLabel("Nombre").SetSortable(true).SetAlign(Align.Center))
+                                .AddColumn(new Column("Email").SetLabel("Email").SetSortable(true).SetAlign(Align.Center))
+                                .AddColumn(new Column("Actions").SetFixedWidth(true).SetWidth(120).SetLabel("</br>").SetSortable(false))
+                                 .SetUrl(Url.Action("GetList")))
+
+                    <div class="clearfix">
+                        @Html.PaginationBtn("usuarios-grid", "pull-right")
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<form role="form" class="modal-Crud" action='@Url.Action("Save")' data-modal="usuarios-modal" data-grid="usuarios-grid">
+    <div class="modal fade text-left" id="usuarios-modal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel160" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title white" id="myModalLabel160">@ViewBag.Title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    @Html.HiddenFor(x => x.Id)
+                    <div class="form-group ">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.LabelFor(x => x.TipoIdentificacion)
+                                <select class="form-control" id="TipoIdentificacion" name="TipoIdentificacion">
+                                    <option value="C">Cédula</option>
+                                    <option value="R">Ruc</option>
+                                    <option value="P">Pasaporte</option>
+                                    <option value="O">Otro</option>
+                                </select>
+                                @Html.ValidationMessageFor(model => model.TipoIdentificacion, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(x => x.Identificacion)
+                                @Html.TextBoxFor(x => x.Identificacion, new { @class = "form-control", placeholder = "Identificación", autocomplete = "off" })
+                                @Html.ValidationMessageFor(model => model.Identificacion, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.LabelFor(x => x.NombresCompletos)
+                                @Html.TextBoxFor(x => x.NombresCompletos, new { @class = "form-control", placeholder = "Nombre Completos", autocomplete = "off" })
+                                @Html.ValidationMessageFor(model => model.NombresCompletos, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(x => x.Email)
+                                @Html.TextBoxFor(x => x.Email, new { @class = "form-control", placeholder = "Email", autocomplete = "off" })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.LabelFor(x => x.ApplicationRoleName)
+                                @Html.DropDownList("ApplicationRoleName", null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger glow" data-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cerrar</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary glow ml-1">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Guardar</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts
+    {
+    <script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/person/personCore.js"></script>
+    <script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/security/UsuarioConfig.js"></script>
+}

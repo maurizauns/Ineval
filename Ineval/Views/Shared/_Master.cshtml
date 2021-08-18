@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html style="height: auto;" class="">
+<head>
+    @*<meta charset="utf-8">*@
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ineval | @ViewBag.Title</title>
+    @RenderSection("head", required: false)
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+
+    <link href="https://cdn.syncfusion.com/16.3.0.21/js/web/flat-azure/ej.web.all.min.css" rel="stylesheet" />
+    <link rel="icon" href="~/Content/Images/iconNewTest.ico" />
+    <link rel="stylesheet" href="~/Content/template/fontawesome/css/all.css">
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/template/adminlte.min.css">
+    <link href="~/fonts/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-extended.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/template/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="~/Content/colors.min.css">
+    @Scripts.Render("~/bundles/basico")
+    @Styles.Render("~/Content/other")
+    <style>
+        .ui-autocomplete-loading {
+            background: white url('/Content/Images/busy.gif') right center no-repeat;
+        }
+    </style>
+    <script src="~/Scripts/jsrender.min.js"></script>
+    <script type="text/javascript" src="https://cdn.syncfusion.com/16.3.0.21/js/web/ej.web.all.min.js"></script>
+</head>
+@*<body class="sidebar-mini layout-navbar-fixed control-sidebar-slide-open text-sm sidebar-collapse accent-primary" style="height: auto;">*@
+<body class="sidebar-mini layout-fixed layout-navbar-fixed sidebar-collapse control-sidebar-slide-open text-sm" style="height: auto;">
+    @*<body class="sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed sidebar-collapse control-sidebar-slide-open text-sm" style="height: auto;">*@
+    @*<body class="sidebar-mini control-sidebar-slide-open text-sm sidebar-collapse accent-indigo" style="height: auto;">*@
+    <script>
+
+        var baseUrl = "/";
+        if (baseUrl.endsWith('/')) {
+            baseUrl = baseUrl.substr(0, baseUrl.length - 1);
+        }
+
+        var cultureParams = {
+            separadorMiles: ",",
+            separadorDecimal: ".",
+            numeroDecimales: 4,
+            formatoFecha: "dd/MM/yyyy",
+            formatoFechaLarga: "dd/MM/yyyy HH:mm:ss",
+            prefijo: "$"
+        };
+
+    </script>
+
+    @RenderBody()
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/util")
+    @Scripts.Render("~/bundles/jqGrid")
+    @Scripts.Render("~/bundles/other")
+    @*<script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/Pages/core/configuration/masterSignalR.js"></script>*@
+    <script>
+        var assetBaseUrl = "https://localhost:44346/";
+    </script>
+    @Scripts.Render("~/bundles/LivIconsEvo")
+    <script src="~/Scripts/select2.min.js"></script>
+
+    @RenderSection("scripts", required: false)
+    <div id="cl">
+
+    </div>
+</body>
+</html>

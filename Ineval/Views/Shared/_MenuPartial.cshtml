@@ -1,0 +1,224 @@
+﻿@using Ineval.BO
+@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    var menus = MenuService.GetMenuByIdUser(User.Identity.GetUserId());
+    ViewBag.MenuSecondary = ViewBag.MenuSecondary == null ? false : true;
+
+    <div class="primary-list">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            @*<li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link active">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Inicio
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="~/" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Citas del día</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>*@
+            @if (!ViewBag.MenuSecondary)
+            {
+                <li class="nav-header">Menú</li>
+            }
+            @if (ViewBag.MenuSecondary)
+            {
+                @*<li class="nav-header">Menú Secundario</li>*@
+                <li class="nav-item menuSecondary">
+                    <a class="nav-link  d-flex align-items-center">
+                        @*<i class="livicon-evo livicon-evo-holder" data-options="name: chevron-right-double.svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                        <i class="far fa-chevron-double-right nav-icon"></i>
+                        <p>Menú Secundario</p>
+                    </a>
+                </li>
+            }
+            @foreach (var menu in menus.Where(x => x.Region == "Principal"))
+            {
+                if (menu.MenuItems.Count > 0)
+                {
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            @*<i class="nav-icon fas @(string.IsNullOrWhiteSpace(menu.Icon) ? "fa fa-circle" : menu.Icon) @(string.IsNullOrWhiteSpace(menu.IconColor) ? "text-primary" : menu.IconColor)"></i>*@
+                            <i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menu.Icon) ? "user" : menu.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>
+                            @*<i class="nav-icon far fa-@(string.IsNullOrWhiteSpace(menu.Icon) ? "fa fa-circle" : menu.Icon) @(string.IsNullOrWhiteSpace(menu.IconColor) ? "text-primary" : menu.IconColor)"></i>*@
+                            <p>
+                                @menu.Description
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @foreach (var menuItem in menu.MenuItems)
+                            {
+                                if (menuItem.MenuItems.Count > 0)
+                                {
+                                    <li class="nav-item has-treeview">
+                                        <a href="#" class="nav-link  d-flex align-items-center">
+                                            @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                                            <i class="nav-icon far fa-@(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon)  @(string.IsNullOrWhiteSpace(menuItem.IconColor) ? "text-primary" : menuItem.IconColor)"></i>
+                                            @*<i class="far @menuItem.Icon nav-icon"></i>*@
+                                            <p>
+                                                @menuItem.Description
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview" style="display: none;">
+                                            @foreach (var menuItemPN in menuItem.MenuItems)
+                                            {
+                                                <li class="nav-item">
+                                                    <a href="@Url.Action("Index",menuItemPN.Url)" class="nav-link  d-flex align-items-center" onclick="_load() ,  _stopLoadMenu()">
+                                                        @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menuItemPN.Icon) ? "user" : menuItemPN.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                                                        <i class="far fa-@(string.IsNullOrWhiteSpace(menuItemPN.Icon) ? "user" : menuItemPN.Icon) nav-icon @(string.IsNullOrWhiteSpace(menuItemPN.IconColor) ? "text-primary" : menuItemPN.IconColor)"></i>
+                                                        @*<i class="far @menuItemPN.Icon nav-icon"></i>*@
+                                                        <p>@menuItemPN.Description</p>
+                                                    </a>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Index",menuItem.Url)" class="nav-link d-flex align-items-center" title="@menuItem.Description" onclick="_load() ,  _stopLoadMenu()">
+                                            @*<i class="nav-icon fas @(string.IsNullOrWhiteSpace(menu.Icon) ? "fa fa-circle" : menuItem.Icon) @(string.IsNullOrWhiteSpace(menuItem.IconColor) ? "text-primary" : menuItem.IconColor)"></i>*@
+                                            @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                                            <i class="far fa-@(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon) nav-icon @(string.IsNullOrWhiteSpace(menuItem.IconColor) ? "text-primary" : menuItem.IconColor)"></i>
+                                            <p>@menuItem.Description</p>
+                                        </a>
+                                    </li>
+                                }
+
+                            }
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index",menu.Url)" class="nav-link  d-flex align-items-center"  onclick="_load() ,  _stopLoadMenu()">
+                            <i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menu.Icon) ? "user" : menu.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>
+                            @*<i class="nav-icon far fa-@(string.IsNullOrWhiteSpace(menu.Icon) ? "user" : menu.Icon)  @(string.IsNullOrWhiteSpace(menu.IconColor) ? "text-primary" : menu.IconColor)"></i>*@
+                            <p>@menu.Description</p>
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+
+    if (ViewBag.MenuSecondary)
+    {
+        <div class="secondary-list">
+            <ul class="nav nav-pills nav-sidebar flex-column " data-widget="treeview" role="menu" data-accordion="false">
+                @*<li class="nav-header">Menú Principal</li>*@
+                <li class="nav-item menuPrimary">
+                    <a class="nav-link  d-flex align-items-center">
+                        @*<i class="livicon-evo livicon-evo-holder" data-options="name: chevron-left-double.svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                        <i class="far nav-icon fa-chevron-double-left"></i>
+                        <p>Menú Principal</p>
+                    </a>
+                </li>
+                @foreach (var menu in menus.Where(x => x.Region == "Secondary"))
+                {
+                    if (menu.MenuItems.Count > 0)
+                    {
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link d-flex align-items-center">
+                                @*<i class="nav-icon fas @(string.IsNullOrWhiteSpace(menu.Icon) ? "fa fa-circle" : menu.Icon) @(string.IsNullOrWhiteSpace(menu.IconColor) ? "text-primary" : menu.IconColor)"></i>*@
+                                @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menu.Icon) ? "user" : menu.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                                <i class="nav-icon far fa-@(string.IsNullOrWhiteSpace(menu.Icon) ? "fa fa-circle" : menu.Icon) @(string.IsNullOrWhiteSpace(menu.IconColor) ? "text-primary" : menu.IconColor)"></i>
+                                <p>
+                                    @menu.Description
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                @foreach (var menuItem in menu.MenuItems)
+                                {
+                                    if (menuItem.MenuItems.Count > 0)
+                                    {
+                                        <li class="nav-item has-treeview">
+                                            <a href="#" class="nav-link  d-flex align-items-center">
+                                                @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                                                <i class="nav-icon far fa-@(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon)  @(string.IsNullOrWhiteSpace(menuItem.IconColor) ? "text-primary" : menuItem.IconColor)"></i>
+                                                @*<i class="far @menuItem.Icon nav-icon"></i>*@
+                                                <p>
+                                                    @menuItem.Description
+                                                    <i class="right fas fa-angle-left"></i>
+                                                </p>
+                                            </a>
+                                            <ul class="nav nav-treeview" style="display: none;">
+                                                @foreach (var menuItemPN in menuItem.MenuItems)
+                                                {
+                                                    <li class="nav-item">
+                                                        <a href="@Url.Action("Index",menuItemPN.Url)" class="nav-link  d-flex align-items-center" onclick="_load() ,  _stopLoadMenu()" target="frmBody">
+                                                            @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menuItemPN.Icon) ? "user" : menuItemPN.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                                                            <i class="far fa-@(string.IsNullOrWhiteSpace(menuItemPN.Icon) ? "user" : menuItemPN.Icon) nav-icon @(string.IsNullOrWhiteSpace(menuItemPN.IconColor) ? "text-primary" : menuItemPN.IconColor)"></i>
+                                                            @*<i class="far @menuItemPN.Icon nav-icon"></i>*@
+                                                            <p>@menuItemPN.Description</p>
+                                                        </a>
+                                                    </li>
+                                                }
+
+                                            </ul>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("Index",menuItem.Url)" class="nav-link d-flex align-items-center" title="@menuItem.Description" onclick="_load() ,  _stopLoadMenu()" target="frmBody">
+                                                @*<i class="nav-icon fas @(string.IsNullOrWhiteSpace(menu.Icon) ? "fa fa-circle" : menuItem.Icon) @(string.IsNullOrWhiteSpace(menuItem.IconColor) ? "text-primary" : menuItem.IconColor)"></i>*@
+                                                @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                                                <i class="far fa-@(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon) nav-icon @(string.IsNullOrWhiteSpace(menuItem.IconColor) ? "text-primary" : menuItem.IconColor)"></i>
+                                                <p>@menuItem.Description</p>
+                                            </a>
+                                        </li>
+                                    }
+
+                                }
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index",menu.Url)" class="nav-link  d-flex align-items-center" onclick="_load() ,  _stopLoadMenu()" target="frmBody">
+                                @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menu.Icon) ? "user" : menu.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                                <i class="nav-icon far fa-@(string.IsNullOrWhiteSpace(menu.Icon) ? "user" : menu.Icon)  @(string.IsNullOrWhiteSpace(menu.IconColor) ? "text-primary" : menu.IconColor)"></i>
+                                <p>@menu.Description</p>
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+
+
+}
+
+@if (ViewBag.MenuSecondary)
+{
+    <script>
+        $(window).on("load", function () {
+            $('.primary-list').hide();
+            $('.secondary-list').show();
+            $('.menuPrimary').on('click', function () {
+                $('.primary-list').show('slow');
+                $('.secondary-list').hide('fast');
+            });
+            $('.menuSecondary').on('click', function () {
+                $('.primary-list').hide('slow');
+                $('.secondary-list').show('fast');
+            });
+        });
+    </script>
+}

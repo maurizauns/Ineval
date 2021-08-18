@@ -1,0 +1,104 @@
+﻿@using Ineval.Models.Filters
+@using MvcJqGrid
+@using MvcJqGrid.Enums
+@using RP.Website.Helpers
+@model Ineval.Dto.ProvinceViewModel
+@{
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<div class="content-wrapper">
+    <div class="content-header row">
+        <div class="content-header-left col-12 mb-2 mt-1">
+            <div class="row mx-0">
+                <div class="col-xl-4 col-6 d-flex align-items-center pl-0">
+                    <h5 class="content-header-title float-left pl-1">@ViewBag.Title</h5>
+                </div>
+                <div class="col-xl-8 col-6 px-0 pt-xl-0 pt-1">
+                    <button type="button" class="btn btn-warning glow invoice-create float-right  mr-2" data-toggle="modal" data-target="#province-modal" role="button" aria-pressed="true">
+                        <i class='bx bxs-file-pdf' data-toggle="tooltip" data-placement="top" title="" data-original-title="Pdf" aria-describedby="tooltip273063"></i>
+                    </button>
+                    <button type="button" class="btn btn-success glow invoice-create float-right mr-1" data-toggle="modal" data-target="#province-modal" role="button" aria-pressed="true">
+                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-body">
+        <section class="admission-list-wrapper">
+            <div class="admission-list-filter px-1">
+
+                <div class="row border-div-simec py-2 mb-2">
+                    <div class="col-12  col-sm-12 col-lg-12 ">
+                        @{
+                            Html.RenderPartial("_filtersPartial", new ModelFilter { FormId = "search_form", GridId = "province-grid", FieldFilters = ViewBag.Filters });
+                        }
+                        @(Html.MyjqGrid("province-grid", Ineval.Common.Context.PageSize)
+                        .AddColumn(new Column("Code").SetLabel("Código").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("Description").SetLabel("Descripción").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("Pais").SetLabel("Pais").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("Actions").SetFixedWidth(true).SetWidth(80).SetLabel("</br>").SetSortable(false))
+                        .SetUrl(Url.Action("GetList")))
+                        <div class="clearfix">
+                            @Html.PaginationBtn("province-grid", "pull-right")
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+<div class="modal fade text-left" id="province-modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel160" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title white" id="myModalLabel160">@ViewBag.Title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form role="form" class="modal-Crud" action='@Url.Action("Save")' data-modal="province-modal" data-grid="province-grid">
+                <div class="modal-body">
+                    @Html.HiddenFor(x => x.Id)
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.CountryId)
+                        @Html.DropDownListFor(x => x.CountryId, (SelectList)ViewBag.CountryId, "seleccione", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CountryId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group ">
+                        @Html.LabelFor(x => x.Code)
+                        @Html.TextBoxFor(x => x.Code, new { @class = "form-control", placeholder = "Código" })
+                        @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Description)
+                        @Html.TextBoxFor(x => x.Description, new { @class = "form-control", placeholder = "Descripción" })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger glow" data-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cerrar</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary glow ml-1">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Guardar</span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/configuration/province.js"></script>
+}

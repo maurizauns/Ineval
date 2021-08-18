@@ -1,0 +1,113 @@
+﻿@using Ineval.Models.Filters
+@using MvcJqGrid
+@using MvcJqGrid.Enums
+@using RP.Website.Helpers
+<div class="">
+    @*<div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row mx-0">
+                    <div class="col-8 d-flex align-items-center pl-0">
+                        <h5 class="content-header-title float-left pr-1 mb-0">@ViewBag.Title</h5>
+                    </div>
+                    <div class="col-4 px-0 pt-xl-0 pt-1">
+                        <div class="btn-group float-right mr-1">
+                            <a class="btn btn-success glow dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class='bx bx-export' title="Exportar" data-toggle="tooltip"></i>
+                            </a>
+                            <ul class="excel-menu dropdown-menu dropdown-menu-right" role="menu">
+                                <li><a href="@Url.Action("Exportar","Appointment")" title="Normal" data-toggle="tooltip">Excel Todas</a></li>
+                                <li><a href="#" onclick="exportarData()" title="Normal" data-toggle="tooltip">Excel Filtro</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <div class="row col-12 pt-2">
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3 border-div-history">
+                <span class="info-box-icon bg-primary elevation-1">
+                    <i class="fas fa-users"></i>
+                </span>
+                <div class="info-box-content">
+                    <div id="ratios-financieros-spinner" class="spinner">
+                        <div class="double-bounce1"></div>
+                        <div class="double-bounce2"></div>
+                    </div>
+                    <div id="ratios-financieros" class="hide" data-highcharts-chart="0" style="">
+                        <span class="info-box-text">Personas</span>
+                        <span class="info-box-number" id="person-all"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3 border-div-history">
+                <span class="info-box-icon bg-warning elevation-1">
+                    <i class="fas fa-box"></i>
+                </span>
+                <div class="info-box-content">
+                    <div id="home-product-spinner" class="spinner">
+                        <div class="double-bounce1"></div>
+                        <div class="double-bounce2"></div>
+                    </div>
+                    <div id="home-product" class="hide" data-highcharts-chart="0" style="">
+                        <span class="info-box-text">Productos</span>
+                        <span class="info-box-number" id="product-all"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3 border-div-history">
+                <span class="info-box-icon bg-info elevation-1">
+                    <i class="fas fa-calendar"></i>
+                </span>
+                <div class="info-box-content">
+                    <div id="home-appointment-spinner" class="spinner">
+                        <div class="double-bounce1"></div>
+                        <div class="double-bounce2"></div>
+                    </div>
+                    <div id="home-appointment" class="hide" data-highcharts-chart="0" style="">
+                        <span class="info-box-text">Citas del Dia</span>
+                        <span class="info-box-number" id="appointment-all"></span>
+                        <div class="btn-group float-right mr-1">
+                            <a class="btn btn-success glow dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">
+                                <i class='bx bx-export' title="Exportar" data-toggle="tooltip"></i>
+                            </a>
+                            <ul class="excel-menu dropdown-menu dropdown-menu-right" role="menu">
+                                <li><a href="@Url.Action("Exportar","Appointment")" title="Normal" data-toggle="tooltip">Excel Todas</a></li>
+                                <li><a href="#" onclick="exportarData()" title="Normal" data-toggle="tooltip">Excel Filtro</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3 border-div-history">
+                <span class="info-box-icon bg-danger elevation-1">
+                    <i class="fas fa-shopping-cart"></i>
+                </span>
+                <div class="info-box-content">
+                    <div id="home-sales-spinner" class="spinner">
+                        <div class="double-bounce1"></div>
+                        <div class="double-bounce2"></div>
+                    </div>
+                    <div id="home-sales" class="hide" data-highcharts-chart="0" style="">
+                        <span class="info-box-text">Ventas del mes</span>
+                        <span class="info-box-number" id="sales-all"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+@section scripts
+    {
+    <script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/person/personCore.js"></script>
+    <script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/configuration/home.js"></script>
+}
