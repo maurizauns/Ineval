@@ -17,6 +17,7 @@ namespace Ineval.App_Start
             CreateMap<Country, CountryViewModel>().ReverseMap();
             CreateMap<Province, ProvinceViewModel>().ReverseMap();
             CreateMap<Canton, CantonViewModel>().ReverseMap();
+            CreateMap<Test, TestViewModel>().ReverseMap();
         }
     }
 }

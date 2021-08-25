@@ -50,6 +50,7 @@
     <Compile Include="Dto\Configuration\RoleMenuViewModel.cs" />
     <Compile Include="Dto\Configuration\SettingViewModel.cs" />
     <Compile Include="Dto\Security\UsuarioViewModel.cs" />
+    <Compile Include="Dto\TestViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

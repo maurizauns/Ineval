@@ -66,6 +66,7 @@
     <Compile Include="Implementation\security\RoleMenuService.cs" />
     <Compile Include="Implementation\security\UsuarioService.cs" />
     <Compile Include="Implementation\SwmServices.cs" />
+    <Compile Include="Implementation\TestService.cs" />
     <Compile Include="Interface\IEntityService.cs" />
     <Compile Include="Interface\IService.cs" />
     <Compile Include="Interface\IUnitOfWorkService.cs" />

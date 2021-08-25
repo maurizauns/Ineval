@@ -31,6 +31,6 @@ namespace Ineval.DAL
         public DbSet<Country> Country { get; set; }
         public DbSet<Province> Province { get; set; }
         public DbSet<Canton> Canton { get; set; }
-
+        public DbSet<Test> Test { get; set; }
     }
 }

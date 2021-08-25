@@ -8,7 +8,6 @@ namespace Ineval.BO
 {
     public class CountryService : CatalogService<Country>
     {
-        private readonly string countryList = "countryList";
         public CountryService()
         {
         }
