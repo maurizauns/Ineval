@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using Ineval.DAL;
 using Ineval.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Ineval.App_Start
 {
@@ -18,6 +14,10 @@ namespace Ineval.App_Start
             CreateMap<Province, ProvinceViewModel>().ReverseMap();
             CreateMap<Canton, CantonViewModel>().ReverseMap();
             CreateMap<Test, TestViewModel>().ReverseMap();
+            CreateMap<Parroquia, ParroquiaViewModel>().ReverseMap();
+            CreateMap<DatosExcelCabecera, DatosExcelCabeceraViewModel>().ReverseMap();
+            CreateMap<DatosSustentantes, DatosSustentantesViewModel>().ReverseMap();
+            CreateMap<NombreProceso, NombreProcesoViewModel>().ReverseMap();
         }
     }
 }

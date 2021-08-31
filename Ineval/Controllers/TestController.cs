@@ -14,6 +14,7 @@ using System.Web.Mvc;
 
 namespace Ineval.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class TestController : BaseController<Guid, Test, TestViewModel>
     {
         public TestController()

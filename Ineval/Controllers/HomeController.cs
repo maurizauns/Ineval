@@ -1,6 +1,12 @@
-﻿using System;
+﻿using AutoMapper;
+using Ineval.BO;
+using Ineval.DAL;
+using Ineval.Dto;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -26,6 +32,16 @@ namespace Ineval.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public async Task<JsonResult> GetAllProcesos()
+        {
+            NombreProcesoService Entity= new NombreProcesoService();
+
+            List<NombreProceso> nombreProcesos = await Entity.GetAll().ToListAsync();
+
+            return Json(nombreProcesos.Count(), JsonRequestBehavior.AllowGet);
+                
         }
     }
 }

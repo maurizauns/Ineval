@@ -58,10 +58,14 @@
     <Compile Include="Implementation\configuration\CantonService.cs" />
     <Compile Include="Implementation\configuration\CountryService.cs" />
     <Compile Include="Implementation\configuration\NumberingService.cs" />
+    <Compile Include="Implementation\configuration\ParroquiaService.cs" />
     <Compile Include="Implementation\configuration\ProvinceService.cs" />
     <Compile Include="Implementation\configuration\SettingService.cs" />
     <Compile Include="Implementation\EntityService.cs" />
     <Compile Include="Implementation\MenuService.cs" />
+    <Compile Include="Implementation\procesos\DatosExcelCabeceraService.cs" />
+    <Compile Include="Implementation\procesos\DatosSustentantesService.cs" />
+    <Compile Include="Implementation\procesos\NombreProcesoService.cs" />
     <Compile Include="Implementation\security\AuditoriaService.cs" />
     <Compile Include="Implementation\security\RoleMenuService.cs" />
     <Compile Include="Implementation\security\UsuarioService.cs" />

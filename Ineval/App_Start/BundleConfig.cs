@@ -63,7 +63,8 @@ namespace Ineval
             bundles.Add(new StyleBundle("~/Content/other").Include(
                       "~/Content/themes/base/jquery.ui.css",
                       "~/fonts/LivIconsEvo/LivIconsEvo.css",
-                      "~/Content/select2.css"));
+                      "~/Content/select2.css",
+                      "~/Script/template/sweetalert2/dist/sweetalert2.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/Basico").Include(
                     "~/Scripts/Pages/Basico/vendor.js",
@@ -86,7 +87,10 @@ namespace Ineval
                    "~/Scripts/template/demo.js",
                    "~/Scripts/custom.js",
                    "~/Scripts/nprogress.js",
-                   "~/Scripts/jquery-ui.js"
+                   "~/Scripts/jquery-ui.js",
+                   "~/Scripts/knockout.debug.js",
+                   "~/Scripts/knockout.mapping.js",
+                   "~/Script/template/sweetalert2/dist/sweetalert2.min.js"                   
              ));
 
             bundles.Add(new ScriptBundle("~/bundles/modalStatic").Include(
@@ -98,6 +102,8 @@ namespace Ineval
                     "~/Scripts/Pages/Basico/jquery.tablesorter.widgets.min.js",
                     "~/Scripts/Pages/Basico/shell.js"
               ));
+
+            
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

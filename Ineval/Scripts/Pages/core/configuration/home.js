@@ -2,7 +2,7 @@
 $(function () {
     $.ajax({
         type: 'GET',
-        url: '/Home/GetAllPerson',
+        url: '/Home/GetAllProcesos',
         dataType: 'json',
         cache: true,
         success: function (data) {
@@ -19,7 +19,7 @@ $(function () {
 
     $.ajax({
         type: 'GET',
-        url: '/Home/GetAllEmpresa',
+        url: '/Home/GetAllProcesos',
         dataType: 'json',
         cache: true,
         success: function (data) {
@@ -36,7 +36,7 @@ $(function () {
 
     $.ajax({
         type: 'GET',
-        url: '/Home/GetAllAppointmentByDay',
+        url: '/Home/GetAllProcesos',
         dataType: 'json',
         cache: true,
         success: function (data) {
@@ -53,7 +53,7 @@ $(function () {
 
     $.ajax({
         type: 'GET',
-        url: '/Home/GetAllSalesByMonth',
+        url: '/Home/GetAllProcesos',
         dataType: 'json',
         cache: true,
         success: function (data) {

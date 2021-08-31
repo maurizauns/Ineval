@@ -1,0 +1,85 @@
+﻿
+@using Ineval.Models.Filters
+@using MvcJqGrid
+@using MvcJqGrid.Enums
+@using RP.Website.Helpers
+
+@model Ineval.Dto.DatosExcelCabeceraViewModel
+
+@{
+    ViewBag.Title = "Datos Excel";
+}
+
+@Scripts.Render("~/bundles/modalStatic")
+
+<style>
+    .ulroberto {
+        -webkit-column-count: 4;
+        -moz-column-count: 4;
+        column-count: 4;
+    }
+</style>
+<div class="content-header row" >
+    <div class="content-header-left col-12 mb-2 mt-1">
+        <div class="row mx-0">
+            <div class="col-8 d-flex align-items-center pl-0">
+                <h5 class="content-header-title float-left pr-1 mb-0">@ViewBag.Title</h5>
+                <div class="breadcrumb-wrapper col-9">
+                    <ol class="breadcrumb p-0 mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="/"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="col-4 px-0 pt-xl-0 pt-1">
+                @*<button type="button" class="btn btn-success glow invoice-create float-right mr-1 mb-0" data-toggle="modal" data-target="#usuarios-modal" role="button" aria-pressed="true">
+                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
+                    </button>*@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body border-div-history">
+    <section class="admission-list-wrapper">
+        <div class="admission-list-filter px-1">
+
+            <div class="row border-div-simec py-2 mb-2">
+                <div class="col-12  col-sm-12 col-lg-12 ">
+                    <div class="col-md-10">
+                        <div class="col-md-2">
+                            <label class="control-label">Nombre Documento</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" name="NombreDocumento" class="form-control" id="NombreDocumento" data-bid="value:NombreDocumento,text:NombreDocumento" value="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row border-div-simec py-2 mb-2">
+                <div class="col-12  col-sm-12 col-lg-12 ">
+                    <ul data-bind="foreach: DatosExcel" class="ulroberto">
+                        <li>
+                            <input type="checkbox" class="micheckbox" data-bind="attr: {'id': 'Campo_'+(typeof Id !='function' ? Id:Id())},value:Id" checked>
+                            <span data-bind="text: Description"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <button type="button" data-bind="click: Guardar" class="btn btn-material-teal btn-sm">
+                    <span class="glyphicon glyphicon-download-alt"></span> Generar Archivo Excel
+                </button>                
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+@section scripts
+    {
+    @*<script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/person/personCore.js"></script>
+        <script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/security/UsuarioConfig.js"></script>*@
+    <script type="text/javascript" language="javascript" src="~/Scripts/Pages/Procesos/DatoxExcelCabecera.js?v1"></script>
+}

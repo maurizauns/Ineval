@@ -13,7 +13,7 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item dropdown">
+                @*<li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-comments"></i>
                         <span class="badge badge-danger navbar-badge">3</span>
@@ -33,7 +33,7 @@
                             </div>
                         </a>
                     </div>
-                </li>
+                </li>*@
                 @if (ViewBag.NombreCompleto != null)
                 {
                     <li class="nav-item d-none d-sm-inline-block">
@@ -265,8 +265,11 @@
                     </div>
                 </div>*@
             <section class="content">
-                <div class="container-fluid" @*style="padding-top:15px"*@>
+                <div class="container-fluid" id="ContentGeneral" @*style="padding-top:15px"*@>
                     @RenderBody()
+                    <div id="">
+
+                    </div>
                 </div>
             </section>
         </div>
