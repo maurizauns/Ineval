@@ -50,8 +50,10 @@
     <Compile Include="Dto\Configuration\ProvinceViewModel.cs" />
     <Compile Include="Dto\Configuration\RoleMenuViewModel.cs" />
     <Compile Include="Dto\Configuration\SettingViewModel.cs" />
+    <Compile Include="Dto\Procesos\AsignacionViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosExcelCabeceraViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosSustentantesViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosTemporalesViewModel.cs" />
     <Compile Include="Dto\Procesos\NombreProcesoViewModel.cs" />
     <Compile Include="Dto\Security\UsuarioViewModel.cs" />
     <Compile Include="Dto\TestViewModel.cs" />

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ineval.DAL;
 using Ineval.Dto;
+using Ineval.Dto.Dto.Procesos;
 
 namespace Ineval.App_Start
 {
@@ -18,6 +19,8 @@ namespace Ineval.App_Start
             CreateMap<DatosExcelCabecera, DatosExcelCabeceraViewModel>().ReverseMap();
             CreateMap<DatosSustentantes, DatosSustentantesViewModel>().ReverseMap();
             CreateMap<NombreProceso, NombreProcesoViewModel>().ReverseMap();
+            CreateMap<DatosTemporales, DatosTemporalesViewModel>().ReverseMap();
+            CreateMap<Asignacion, AsignacionViewModel>().ReverseMap();
         }
     }
 }

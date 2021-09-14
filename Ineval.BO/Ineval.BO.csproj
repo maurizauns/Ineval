@@ -63,8 +63,10 @@
     <Compile Include="Implementation\configuration\SettingService.cs" />
     <Compile Include="Implementation\EntityService.cs" />
     <Compile Include="Implementation\MenuService.cs" />
+    <Compile Include="Implementation\procesos\AsignacionService.cs" />
     <Compile Include="Implementation\procesos\DatosExcelCabeceraService.cs" />
     <Compile Include="Implementation\procesos\DatosSustentantesService.cs" />
+    <Compile Include="Implementation\procesos\DatosTemporalesService.cs" />
     <Compile Include="Implementation\procesos\NombreProcesoService.cs" />
     <Compile Include="Implementation\security\AuditoriaService.cs" />
     <Compile Include="Implementation\security\RoleMenuService.cs" />

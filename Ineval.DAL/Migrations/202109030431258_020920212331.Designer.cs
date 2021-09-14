@@ -7,13 +7,13 @@ namespace Ineval.DAL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class _300820212218 : IMigrationMetadata
+    public sealed partial class _020920212331 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(_300820212218));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(_020920212331));
         
         string IMigrationMetadata.Id
         {
-            get { return "202108310319136_300820212218"; }
+            get { return "202109030431258_020920212331"; }
         }
         
         string IMigrationMetadata.Source

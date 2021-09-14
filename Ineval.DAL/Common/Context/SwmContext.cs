@@ -36,5 +36,7 @@ namespace Ineval.DAL
         public DbSet<DatosExcelCabecera> DatosExcelCabecera { get; set; }
         public DbSet<DatosSustentantes> DatosSustentantes { get; set; }
         public DbSet<NombreProceso> NombreProceso { get; set; }
+        public DbSet<DatosTemporales> DatosTemporales { get; set; }
+        public DbSet<Asignacion> Asignacion { get; set; }
     }
 }
