@@ -28,5 +28,6 @@ namespace Ineval.Dto
 
         [Display(Name = "Establecimientos")]
         public string Establecimientos { get; set; }
+        public string APIKEY { get; set; }
     }
 }

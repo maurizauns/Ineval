@@ -36,9 +36,9 @@ namespace Ineval.Controllers
 
         public async Task<JsonResult> GetAllProcesos()
         {
-            NombreProcesoService Entity= new NombreProcesoService();
+            AsignacionService Entity= new AsignacionService();
 
-            List<NombreProceso> nombreProcesos = await Entity.GetAll().ToListAsync();
+            List<Asignacion> nombreProcesos = await Entity.GetAll().ToListAsync();
 
             return Json(nombreProcesos.Count(), JsonRequestBehavior.AllowGet);
                 

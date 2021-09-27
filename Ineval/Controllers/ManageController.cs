@@ -7,12 +7,17 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Ineval.Models;
+using Ineval.DAL;
+using Ineval.BO;
+using System.Data.Entity;
 
 namespace Ineval.Controllers
 {
     [Authorize]
     public class ManageController : Controller
     {
+        private SwmContext db = new SwmContext(); 
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -54,6 +59,8 @@ namespace Ineval.Controllers
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
+            ApplicationUser user = new ApplicationUser();
+            Usuario usuario = new Usuario();
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Su contraseña se ha cambiado."
                 : message == ManageMessageId.SetPasswordSuccess ? "Su contraseña se ha establecido."
@@ -64,15 +71,71 @@ namespace Ineval.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+            user = await UserManager.FindByIdAsync(userId);
+            usuario = db.Usuarios.Where(x => x.ApplicationUserId == userId).FirstOrDefault();
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                NombresCompletos = usuario.NombresCompletos,
+                Email = usuario.Email,
+                Identificacion=usuario.Identificacion,
+                TipoIdentificaion=usuario.TipoIdentificacion,
+                APIKEY = usuario.APIKEY
             };
             return View(model);
+        }
+
+        public async Task<ActionResult> AddPersonalInfo()
+        {
+            return View();
+        }
+
+        public async Task<ActionResult> PersonalInfo()
+        {
+            var userId = User.Identity.GetUserId();
+
+            Usuario usuario = db.Usuarios.Where(x => x.ApplicationUserId == userId).SingleOrDefault();
+
+            return Json(new { Data=usuario}, JsonRequestBehavior.AllowGet);
+                 
+        }
+
+        public async Task<ActionResult> SavePersonalInfo(AddPersonalInfo addPersonalInfo)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { Result = "Hay un error en los campos introducidos, favor verifiquelos..", status = "error" });
+            }
+
+            var userId = User.Identity.GetUserId();
+
+            ApplicationUser user = await UserManager.FindByIdAsync(userId);
+            user.Email = addPersonalInfo.Email;
+            var result = await UserManager.UpdateAsync(user);
+
+           
+            if (result.Succeeded)
+            {
+                Usuario usuario = db.Usuarios.Where(x => x.ApplicationUserId == userId).SingleOrDefault();
+
+                usuario.Email = addPersonalInfo.Email;
+                usuario.NombresCompletos = addPersonalInfo.NombresCompletos;
+                usuario.TipoIdentificacion = addPersonalInfo.TipoIdentificacion;
+                usuario.Identificacion = addPersonalInfo.Identificacion;
+                usuario.APIKEY = addPersonalInfo.APIKEY;
+                usuario.FechaModificacion = DateTime.Now;
+
+                db.Entry(usuario).State = EntityState.Modified;
+                db.Entry(usuario).Property(m => m.FechaCreacion).IsModified = false;
+                db.Entry(usuario).Property(m => m.FechaEliminacion).IsModified = false;
+                await db.SaveChangesAsync();
+            }
+            return Json(new { Result = "La información se actualizó con éxito!", status = "success" });
+
         }
 
         //

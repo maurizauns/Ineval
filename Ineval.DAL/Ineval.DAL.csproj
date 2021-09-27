@@ -81,6 +81,7 @@
     <Compile Include="Entities\configuration\Province.cs" />
     <Compile Include="Entities\Menu.cs" />
     <Compile Include="Entities\procesos\Asignacion.cs" />
+    <Compile Include="Entities\procesos\DatosAMIE.cs" />
     <Compile Include="Entities\procesos\DatosExcelCabecera.cs" />
     <Compile Include="Entities\procesos\DatosSustentantes.cs" />
     <Compile Include="Entities\procesos\DatosTemporales.cs" />

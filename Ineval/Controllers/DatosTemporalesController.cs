@@ -18,6 +18,7 @@ namespace Ineval.Controllers
     [Authorize(Roles = "Administrador")]
     public class DatosTemporalesController : BaseController<Guid, DatosTemporales, DatosTemporalesViewModel>
     {
+        SwmContext db = new SwmContext();
         public DatosTemporalesController()
         {
             Title = "Test";
@@ -49,12 +50,9 @@ namespace Ineval.Controllers
         {
             BinaryReader b = new BinaryReader(archivo.InputStream);
             byte[] binData = b.ReadBytes(archivo.ContentLength);
-            string result = System.Text.Encoding.UTF7.GetString(binData);
-
-            
+            string result = System.Text.Encoding.UTF7.GetString(binData);           
 
             List<DatosTemporales> listaCabecera = new List<DatosTemporales>();
-
 
             string cabecera = string.Empty;
 
@@ -106,7 +104,24 @@ namespace Ineval.Controllers
                 return Json(new { result = "", status = "error" }, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(new { result = "La matriz ha sido guardada con éxito!", status = "success" }, JsonRequestBehavior.AllowGet);
-        }        
+            return Json(new { result = "Guardada con éxito!", status = "success" }, JsonRequestBehavior.AllowGet);
+        }  
+        
+        public async Task<ActionResult> Contar()
+        {
+            var datostemporesls =  from datosTemporales in db.DatosTemporales
+                                        group datosTemporales by new { datosTemporales.amie, datosTemporales.nombre_institucion } into DatosAgrupados
+
+                                        select new { Clave = DatosAgrupados.Key, Datos = DatosAgrupados };
+            
+
+            foreach (var item in datostemporesls)
+            {
+
+            }
+
+
+            return Json(new { datos = datostemporesls.Count() }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

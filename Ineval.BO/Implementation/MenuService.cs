@@ -33,7 +33,7 @@ namespace Ineval.BO
                                 ).ToList();
 
                     List<Guid> existeMenu = new List<Guid>();
-                    var menuLista = consulta.Where(m => m.ParentId == null).OrderBy(m => m.Orden).ToList();
+                    var menuLista = consulta.Where(m => m.ParentId == null && m.Type == "Principal").OrderBy(m => m.Orden).ToList();
                     // var menuLista = consulta.OrderBy(m => m.Orden).ToList();
 
                     //foreach (var item in menuLista)

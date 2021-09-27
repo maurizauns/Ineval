@@ -1,0 +1,56 @@
+﻿<div id="PersonalInfo">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Editar Información</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class=" col-sm-2">
+                        <label class="control-label">Tipo de Identicación</label>
+                    </div>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="TipoIdentificacion" id="TipoIdentificacion" data-bind="value:Data.TipoDocumento">
+                            <option value="C">Cédula</option>
+                            <option value="R">Ruc</option>
+                            <option value="P">Pasaporte</option>
+                            <option value="O">Otro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class=" col-sm-2">
+                        <label class="control-label">Identicación</label>
+                    </div>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="text" name="txtIdentificaion" id="txtIdentificaion" value="" data-bind="value:Data.Identificacion" />
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class=" col-sm-2">
+                        <label class="control-label">Email</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="txtEmail" id="txtEmail" value="" data-bind="value:Data.Email" />
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class=" col-sm-2">
+                        <label class="control-label">API KEY (MapBox)</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="txtAPIKEY" id="txtAPIKEY" value="" data-bind="value:Data.APIKEY"/>
+                    </div>
+                </div>
+
+                <div class="form-group" style="padding-bottom:25px;padding-top:25px;">
+                    <input type="button" name="btnSave" id="btnSave" value="Guardar" class="btn btn-primary" data-bind="click:Save" />
+                    <input type="button" name="btnCancel" id="btnCancel" class="btn btn-secondary" value="Cancelar" data-bind="click:Cancel" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <idv class="col-md-3"></idv>
+</div>
+<script src="~/Scripts/Pages/core/configuration/AddPersonalInfo.js"></script>

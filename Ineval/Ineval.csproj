@@ -458,7 +458,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AsignacionController.cs" />
+    <Compile Include="Controllers\AsignacionController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\ConfiguracionGeneralConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -1724,6 +1724,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\iconfont.ttf" />
     <Content Include="fonts\iconfont.woff" />
+    <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1777,6 +1778,7 @@
     <Content Include="Scripts\Pages\Basico\ZeroClipboard.js" />
     <Content Include="Scripts\Pages\core\app-menu.js" />
     <Content Include="Scripts\Pages\core\app.js" />
+    <Content Include="Scripts\Pages\core\configuration\AddPersonalInfo.js" />
     <Content Include="Scripts\Pages\core\configuration\baseConfiguracionGeneralDB.js" />
     <Content Include="Scripts\Pages\core\configuration\canton.js" />
     <Content Include="Scripts\Pages\core\configuration\cieMaster.js" />
@@ -1798,6 +1800,7 @@
     <Content Include="Scripts\Pages\core\configuration\parroquia.js" />
     <Content Include="Scripts\Pages\core\security\login.js" />
     <Content Include="Scripts\Pages\core\security\UsuarioConfig.js" />
+    <Content Include="Scripts\Pages\Procesos\Asignacion.js" />
     <Content Include="Scripts\Pages\Procesos\DatosSustentantes.js" />
     <Content Include="Scripts\Pages\Procesos\DatosTemporales.js" />
     <Content Include="Scripts\Pages\Procesos\DatoxExcelCabecera.js" />
@@ -2138,6 +2141,7 @@
     <Content Include="Views\NombreProceso\Index.cshtml" />
     <Content Include="Views\DatosTemporales\Index.cshtml" />
     <Content Include="Views\Asignacion\Index.cshtml" />
+    <Content Include="Views\Manage\AddPersonalInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
