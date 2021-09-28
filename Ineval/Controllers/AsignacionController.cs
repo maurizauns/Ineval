@@ -176,12 +176,12 @@ namespace Ineval.App_Start
             //httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
 
 
-            using (Stream stream = httpWebResponse.GetResponseStream())
-            {
-                StreamReader streamReader = new StreamReader(stream);
-                result = streamReader.ReadToEnd();
-                streamReader.Close();
-            }
+            //using (Stream stream = httpWebResponse.GetResponseStream())
+            //{
+            //    StreamReader streamReader = new StreamReader(stream);
+            //    result = streamReader.ReadToEnd();
+            //    streamReader.Close();
+            //}
 
             //using (Stream stream = httpWebResponse.GetResponseStream())
             //{
