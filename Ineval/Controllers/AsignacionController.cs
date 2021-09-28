@@ -1,6 +1,7 @@
 ﻿using Ineval.BO;
 using Ineval.Controllers;
 using Ineval.DAL;
+using Ineval.Dto;
 using Ineval.Dto.Dto.Procesos;
 using Newtonsoft.Json;
 using System;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using static Ineval.Dto.ApiCycling;
 
 namespace Ineval.App_Start
 {
@@ -22,7 +24,7 @@ namespace Ineval.App_Start
 
             Title = "Excel";
         }
-        protected override IQueryable<Asignacion> ApplyFilters(IQueryable<Asignacion> generalQuery,MvcJqGrid.Rule[] filters)
+        protected override IQueryable<Asignacion> ApplyFilters(IQueryable<Asignacion> generalQuery, MvcJqGrid.Rule[] filters)
         {
             throw new NotImplementedException();
         }
@@ -55,61 +57,29 @@ namespace Ineval.App_Start
 
         public async Task<ActionResult> TestApi()
         {
-            string url = "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoiY2hyaXNyb2JlcnQiLCJhIjoiY2s5MHZ3azYyMDYzbzNlcGQ0a2gweDYwYSJ9.zcP0ljnRL_Jgb_9RYYECJQ";
-            WebRequest webRequest = WebRequest.Create(url);
-            HttpWebResponse httpWebResponse = null;
+            Root weatherForecast = await ApiCycling.GetByCycling();
 
-            
+            //string url = "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoiY2hyaXNyb2JlcnQiLCJhIjoiY2s5MHZ3azYyMDYzbzNlcGQ0a2gweDYwYSJ9.zcP0ljnRL_Jgb_9RYYECJQ";
+            //WebRequest webRequest = WebRequest.Create(url);
+            //HttpWebResponse httpWebResponse = null;
 
-            httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
 
-            string result = string.Empty;
 
-            
-            using (Stream stream = httpWebResponse.GetResponseStream())
-            {
-                StreamReader streamReader = new StreamReader(stream);
-                result = streamReader.ReadToEnd();
-                streamReader.Close();
-            }
+            //httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
 
-            Root weatherForecast = JsonConvert.DeserializeObject<Root>(result);
+            //string result = string.Empty;
+
+
+            //using (Stream stream = httpWebResponse.GetResponseStream())
+            //{
+            //    StreamReader streamReader = new StreamReader(stream);
+            //    result = streamReader.ReadToEnd();
+            //    streamReader.Close();
+            //}
+
+            //Root weatherForecast = JsonConvert.DeserializeObject<Root>(result);
 
             return Json(new { weatherForecast }, JsonRequestBehavior.AllowGet);
-        }
-
-        public class Leg
-        {
-            public string summary { get; set; }
-            public double weight { get; set; }
-            public double duration { get; set; }
-            public List<object> steps { get; set; }
-            public double distance { get; set; }
-        }
-
-        public class Route
-        {
-            public string geometry { get; set; }
-            public List<Leg> legs { get; set; }
-            public string weight_name { get; set; }
-            public double weight { get; set; }
-            public double duration { get; set; }
-            public double distance { get; set; }
-        }
-
-        public class Waypoint
-        {
-            public double distance { get; set; }
-            public string name { get; set; }
-            public List<double> location { get; set; }
-        }
-
-        public class Root
-        {
-            public List<Route> routes { get; set; }
-            public List<Waypoint> waypoints { get; set; }
-            public string code { get; set; }
-            public string uuid { get; set; }
         }
     }
 }

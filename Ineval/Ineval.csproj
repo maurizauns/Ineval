@@ -482,6 +482,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NombreProcesoController.cs" />
     <Compile Include="Controllers\ParroquiaController.cs" />
+    <Compile Include="Controllers\ProcesoController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\RolePermissionsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -2142,6 +2143,7 @@
     <Content Include="Views\DatosTemporales\Index.cshtml" />
     <Content Include="Views\Asignacion\Index.cshtml" />
     <Content Include="Views\Manage\AddPersonalInfo.cshtml" />
+    <Content Include="Views\Proceso\Record.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

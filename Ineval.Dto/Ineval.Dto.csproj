@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -42,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\ApiCycling.cs" />
+    <Compile Include="Api\RequestClient.cs" />
+    <Compile Include="Api\Routes.cs" />
     <Compile Include="Common\BaseModel.cs" />
     <Compile Include="Common\GeneralConfigurationViewModel.cs" />
     <Compile Include="Dto\Configuration\CantonViewModel.cs" />
@@ -64,6 +70,9 @@
       <Project>{086afddf-1ea4-4469-b76b-7e7729f1b304}</Project>
       <Name>Ineval.DAL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
