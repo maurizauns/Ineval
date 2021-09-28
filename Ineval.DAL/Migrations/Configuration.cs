@@ -17,6 +17,7 @@ namespace Ineval.DAL.Migrations
             AutomaticMigrationsEnabled =
                 Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["MigrateDatabaseToLatestVersion"]);
 
+            AutomaticMigrationDataLossAllowed = true;
 
             using (DbContext context = new SwmContext())
             {

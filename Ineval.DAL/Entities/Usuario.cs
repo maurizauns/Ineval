@@ -21,5 +21,6 @@ namespace Ineval.DAL
 
         [NotMapped]
         public string ApplicationRoleName { get; set; }
+        public string APIKEY { get; set; }
     }
 }

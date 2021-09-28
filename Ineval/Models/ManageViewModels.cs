@@ -7,11 +7,16 @@ namespace Ineval.Models
 {
     public class IndexViewModel
     {
+        public string Email { get; set; }        
+        public string TipoIdentificaion { get; set; }
+        public string Identificacion { get; set; }
+        public string NombresCompletos { get; set; }
         public bool HasPassword { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
+        public string APIKEY { get; set; }
     }
 
     public class ManageLoginsViewModel
@@ -82,5 +87,19 @@ namespace Ineval.Models
     {
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
+    }
+
+    public class AddPersonalInfo
+    {
+        [Required]
+        public string TipoIdentificacion { get; set; }
+        [Required]
+        public string Identificacion { get; set; }
+        [Required]
+        public string NombresCompletos { get; set; }
+        [Required]
+        public string Email { get; set; }
+        public string APIKEY { get; set; }
+
     }
 }

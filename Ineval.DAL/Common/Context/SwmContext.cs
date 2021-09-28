@@ -31,6 +31,12 @@ namespace Ineval.DAL
         public DbSet<Country> Country { get; set; }
         public DbSet<Province> Province { get; set; }
         public DbSet<Canton> Canton { get; set; }
+        public DbSet<Parroquia> Parroquia { get; set; }
         public DbSet<Test> Test { get; set; }
+        public DbSet<DatosExcelCabecera> DatosExcelCabecera { get; set; }
+        public DbSet<DatosSustentantes> DatosSustentantes { get; set; }
+        public DbSet<NombreProceso> NombreProceso { get; set; }
+        public DbSet<DatosTemporales> DatosTemporales { get; set; }
+        public DbSet<Asignacion> Asignacion { get; set; }
     }
 }

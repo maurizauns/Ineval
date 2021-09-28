@@ -5,16 +5,18 @@ namespace Ineval.DAL.Migrations
     using System.Data.Entity.Infrastructure.Annotations;
     using System.Data.Entity.Migrations;
     
-    public partial class _240820211919 : DbMigration
+    public partial class _030920210218 : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.Test",
+                "dbo.Asignacion",
                 c => new
                     {
                         Id = c.Guid(nullable: false, identity: true),
-                        Name = c.String(),
+                        NombreProcesoId = c.Guid(),
+                        Code = c.String(),
+                        Description = c.String(),
                         FechaCreacion = c.DateTime(nullable: false),
                         FechaModificacion = c.DateTime(),
                         FechaEliminacion = c.DateTime(),
@@ -22,18 +24,22 @@ namespace Ineval.DAL.Migrations
                     },
                 annotations: new Dictionary<string, object>
                 {
-                    { "DynamicFilter_Test_RegistrosEliminados", "EntityFramework.DynamicFilters.DynamicFilterDefinition" },
+                    { "DynamicFilter_Asignacion_RegistrosEliminados", "EntityFramework.DynamicFilters.DynamicFilterDefinition" },
                 })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.NombreProceso", t => t.NombreProcesoId)
+                .Index(t => t.NombreProcesoId);
             
         }
         
         public override void Down()
         {
-            DropTable("dbo.Test",
+            DropForeignKey("dbo.Asignacion", "NombreProcesoId", "dbo.NombreProceso");
+            DropIndex("dbo.Asignacion", new[] { "NombreProcesoId" });
+            DropTable("dbo.Asignacion",
                 removedAnnotations: new Dictionary<string, object>
                 {
-                    { "DynamicFilter_Test_RegistrosEliminados", "EntityFramework.DynamicFilters.DynamicFilterDefinition" },
+                    { "DynamicFilter_Asignacion_RegistrosEliminados", "EntityFramework.DynamicFilters.DynamicFilterDefinition" },
                 });
         }
     }

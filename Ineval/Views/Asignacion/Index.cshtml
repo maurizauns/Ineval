@@ -1,0 +1,89 @@
+﻿@using Ineval.Models.Filters
+@using MvcJqGrid
+@using MvcJqGrid.Enums
+@using RP.Website.Helpers
+
+@model Ineval.Dto.Dto.Procesos.AsignacionViewModel
+
+@{
+    ViewBag.Title = "Datos Nueva Asignacion";
+}
+
+@Scripts.Render("~/bundles/modalStatic")
+
+<div id="ContenidoGeneral">
+    <div class="content-header row">
+        <div class="content-header-left col-12 mb-2 mt-1">
+            <div class="row mx-0">
+                <div class="col-8 d-flex align-items-center pl-0">
+                    <h5 class="content-header-title float-left pr-1 mb-0">@ViewBag.Title</h5>
+                    <div class="breadcrumb-wrapper col-9">
+                        <ol class="breadcrumb p-0 mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="/"><i class="bx bx-home-alt"></i></a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-4 px-0 pt-xl-0 pt-1">
+                    <button type="button" class="btn btn-success glow invoice-create float-right mr-1 mb-0" data-toggle="modal" data-target="#usuarios-modal" role="button" aria-pressed="true">
+                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body border-div-history">
+        <section class="admission-list-wrapper">
+            <div class="admission-list-filter px-1">
+
+                <div class="row border-div-simec py-2 mb-2">
+                    <div class="col-12  col-sm-12 col-lg-12 ">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div style="text-align:left">
+                                    Nombre del Proceso
+                                </div>
+                                <div class="right" style="text-align:right">
+                                    <button id="New" type="button" class="btn btn-primary" data-bind="click:New">Nuevo</button>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-2">Nombre Proceso</div>
+                                        <div class="col-md-4">
+                                            <input type="text" name="name" value="" class="form-control" placeholder="Nombre Proceso" data-bind="enable:Edit" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-2">Tipo de proceso</div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="TipoProceso" name="TipoProceso" data-bind="enable:Edit">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <button type="button" class="btn btn-primary" data-bind="click:Save">Guardar</button>
+                                <button type="button" class="btn btn-secondary" data-bind="click:Cancel">Cancelar</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+
+@section scripts
+    {
+    <script src="~/Scripts/Pages/Procesos/Asignacion.js"></script>
+}
+
