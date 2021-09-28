@@ -15,6 +15,7 @@ namespace Ineval.Controllers
     [Authorize]
     public class HomeController : Controller
     {
+        SwmContext db = new SwmContext();
         public ActionResult Index()
         {
             return View();
@@ -36,12 +37,36 @@ namespace Ineval.Controllers
 
         public async Task<JsonResult> GetAllProcesos()
         {
-            AsignacionService Entity= new AsignacionService();
+            List<Asignacion> nombreProcesos = new List<Asignacion>();
 
-            List<Asignacion> nombreProcesos = await Entity.GetAll().ToListAsync();
+            nombreProcesos = await db.Asignacion.ToListAsync();
+
+
 
             return Json(nombreProcesos.Count(), JsonRequestBehavior.AllowGet);
-                
+
+        }
+
+        public async Task<JsonResult> GetAllProcesosActivos()
+        {
+            AsignacionService Entity = new AsignacionService();
+
+            List<Asignacion> nombreProcesos = await Entity.Where(x => x.Estado == EstadoEnum.Activo).ToListAsync();
+
+            return Json(nombreProcesos.Count(), JsonRequestBehavior.AllowGet);
+
+        }
+
+        public async Task<JsonResult> GetAllProcesosFinalizados()
+        {
+            List<Asignacion> nombreProcesos = new List<Asignacion>();
+
+            nombreProcesos = await db.Asignacion.Where(x => x.Estado != EstadoEnum.Activo).ToListAsync();
+
+            //= await Entity.GetAll().Where(x => x.Estado == EstadoEnum.Eliminado).ToListAsync();
+
+            return Json(nombreProcesos.Count(), JsonRequestBehavior.AllowGet);
+
         }
     }
 }

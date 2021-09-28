@@ -6,71 +6,47 @@
 @model Ineval.Dto.Dto.Procesos.AsignacionViewModel
 
 @{
-    ViewBag.Title = "Datos Nueva Asignacion";
+    ViewBag.Title = "Nueva Asignacion";
 }
 
 @Scripts.Render("~/bundles/modalStatic")
 
-<div id="ContenidoGeneral">
+<div class="content-wrapper">
     <div class="content-header row">
         <div class="content-header-left col-12 mb-2 mt-1">
             <div class="row mx-0">
-                <div class="col-8 d-flex align-items-center pl-0">
-                    <h5 class="content-header-title float-left pr-1 mb-0">@ViewBag.Title</h5>
-                    <div class="breadcrumb-wrapper col-9">
-                        <ol class="breadcrumb p-0 mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="/"><i class="bx bx-home-alt"></i></a>
-                            </li>
-                        </ol>
-                    </div>
+                <div class="col-xl-4 col-6 d-flex align-items-center pl-0">
+                    <h5 class="content-header-title float-left pl-1">@ViewBag.Title</h5>
                 </div>
-                <div class="col-4 px-0 pt-xl-0 pt-1">
-                    <button type="button" class="btn btn-success glow invoice-create float-right mr-1 mb-0" data-toggle="modal" data-target="#usuarios-modal" role="button" aria-pressed="true">
+                <div class="col-xl-8 col-6 px-0 pt-xl-0 pt-1">
+                    @*<button type="button" class="btn btn-warning glow invoice-create float-right  mr-2" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true">
+                        <i class='bx bxs-file-pdf' data-toggle="tooltip" data-placement="top" title="" data-original-title="Pdf" aria-describedby="tooltip273063"></i>
+                    </button>*@
+                    <button type="button" class="btn btn-success glow invoice-create float-right mr-1" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true">
                         <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
                     </button>
+
                 </div>
             </div>
         </div>
     </div>
-    <div class="card-body border-div-history">
+    <div class="content-body">
         <section class="admission-list-wrapper">
             <div class="admission-list-filter px-1">
 
                 <div class="row border-div-simec py-2 mb-2">
                     <div class="col-12  col-sm-12 col-lg-12 ">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <div style="text-align:left">
-                                    Nombre del Proceso
-                                </div>
-                                <div class="right" style="text-align:right">
-                                    <button id="New" type="button" class="btn btn-primary" data-bind="click:New">Nuevo</button>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-2">Nombre Proceso</div>
-                                        <div class="col-md-4">
-                                            <input type="text" name="name" value="" class="form-control" placeholder="Nombre Proceso" data-bind="enable:Edit" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-2">Tipo de proceso</div>
-                                        <div class="col-md-4">
-                                            <select class="form-control" id="TipoProceso" name="TipoProceso" data-bind="enable:Edit">
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-footer">
-                                <button type="button" class="btn btn-primary" data-bind="click:Save">Guardar</button>
-                                <button type="button" class="btn btn-secondary" data-bind="click:Cancel">Cancelar</button>
-                            </div>
+                        @{
+                            Html.RenderPartial("_filtersPartial", new ModelFilter { FormId = "search_form", GridId = "asignacion-grid", FieldFilters = ViewBag.Filters });
+                        }
+                        @(Html.MyjqGrid("asignacion-grid", Ineval.Common.Context.PageSize)
+                        .AddColumn(new Column("Code").SetLabel("Código").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("Description").SetLabel("Descripción").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("NombreProceso").SetLabel("NombreProceso").SetSortable(true).SetAlign(Align.Center))                        
+                        .AddColumn(new Column("Actions").SetFixedWidth(true).SetWidth(80).SetLabel("</br>").SetSortable(false))
+                        .SetUrl(Url.Action("GetList")))
+                        <div class="clearfix">
+                            @Html.PaginationBtn("asignacion-grid", "pull-right")
                         </div>
 
                     </div>
@@ -80,10 +56,59 @@
     </div>
 </div>
 
+<div class="modal fade text-left" id="asignacion-modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel160" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title white" id="myModalLabel160">@ViewBag.Title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form role="form" class="modal-Crud" action='@Url.Action("Save")' data-modal="asignacion-modal" data-grid="asignacion-grid">
+                <div class="modal-body">
+                    @Html.HiddenFor(x => x.Id)
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.NombreProcesoId)
+                        @Html.DropDownListFor(x => x.NombreProcesoId, (SelectList)ViewBag.NombreProcesoId, "Seleccione", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.NombreProcesoId, "", new { @class = "text-danger" })
+                    </div>                   
+                    
+                    <div class="form-group ">
+                        @Html.LabelFor(x => x.Code)
+                        @Html.TextBoxFor(x => x.Code, new { @class = "form-control", placeholder = "Código" })
+                        @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Description)
+                        @Html.TextBoxFor(x => x.Description, new { @class = "form-control", placeholder = "Descripción" })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger glow" data-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cerrar</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary glow ml-1">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Guardar</span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
 
 
 @section scripts
     {
     <script src="~/Scripts/Pages/Procesos/Asignacion.js"></script>
+    <script>
+        urlNombreProceso = "@Url.Action("GetValues", "Asignacion")";
+    </script>
 }
 

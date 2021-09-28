@@ -73,19 +73,26 @@ namespace Ineval.Controllers
             var userId = User.Identity.GetUserId();
             user = await UserManager.FindByIdAsync(userId);
             usuario = db.Usuarios.Where(x => x.ApplicationUserId == userId).FirstOrDefault();
-            var model = new IndexViewModel
+
+            var model = new IndexViewModel();
+
+            if (usuario != null)
             {
-                HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
-                NombresCompletos = usuario.NombresCompletos,
-                Email = usuario.Email,
-                Identificacion=usuario.Identificacion,
-                TipoIdentificaion=usuario.TipoIdentificacion,
-                APIKEY = usuario.APIKEY
-            };
+                model = new IndexViewModel
+                {
+                    HasPassword = HasPassword(),
+                    PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
+                    TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
+                    Logins = await UserManager.GetLoginsAsync(userId),
+                    BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                    NombresCompletos = usuario.NombresCompletos,
+                    Email = usuario.Email,
+                    Identificacion = usuario.Identificacion,
+                    TipoIdentificaion = usuario.TipoIdentificacion,
+                    APIKEY = usuario.APIKEY
+                };
+            }
+            
             return View(model);
         }
 

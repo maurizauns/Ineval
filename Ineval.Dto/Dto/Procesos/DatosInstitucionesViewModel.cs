@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ineval.DAL.Entities.procesos
+namespace Ineval.Dto.Dto.Procesos
 {
-    public class DatosAMIE:BaseEntity
+    public class DatosInstitucionesViewModel: BaseModel
     {
+        [Required(ErrorMessage = "Seleccione Tipo de Asignacion.")]
+        [Display(Name = "Asignacion")]
+        public Guid? AsignacionId { get; set; }
         public string Amie { get; set; }
         public string NombreInstitucion { get; set; }
         public string id_provincia { get; set; }

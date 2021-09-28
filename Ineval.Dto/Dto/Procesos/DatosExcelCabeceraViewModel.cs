@@ -1,6 +1,6 @@
 ﻿namespace Ineval.Dto
 {
-    public class DatosExcelCabeceraViewModel: GeneralConfigurationViewModel
+    public class DatosExcelCabeceraViewModel : GeneralConfigurationViewModel
     {
     }
 }

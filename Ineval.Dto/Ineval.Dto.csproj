@@ -58,9 +58,13 @@
     <Compile Include="Dto\Configuration\SettingViewModel.cs" />
     <Compile Include="Dto\Procesos\AsignacionViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosExcelCabeceraViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosExcelPersonalViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosInstitucionesViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosPersonalTerritorioViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosSustentantesViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosTemporalesViewModel.cs" />
     <Compile Include="Dto\Procesos\NombreProcesoViewModel.cs" />
+    <Compile Include="Dto\Procesos\ParametrosInicialesViewModel.cs" />
     <Compile Include="Dto\Security\UsuarioViewModel.cs" />
     <Compile Include="Dto\TestViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

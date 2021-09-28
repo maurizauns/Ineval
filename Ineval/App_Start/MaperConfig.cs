@@ -16,11 +16,22 @@ namespace Ineval.App_Start
             CreateMap<Canton, CantonViewModel>().ReverseMap();
             CreateMap<Test, TestViewModel>().ReverseMap();
             CreateMap<Parroquia, ParroquiaViewModel>().ReverseMap();
+
+            /*CABECERA EXCEL*/
+
             CreateMap<DatosExcelCabecera, DatosExcelCabeceraViewModel>().ReverseMap();
+            CreateMap<DatosExcelPersonal, DatosExcelPersonalViewModel>().ReverseMap();
+
+            /*FIN CABECERA EXCEL*/
+
             CreateMap<DatosSustentantes, DatosSustentantesViewModel>().ReverseMap();
             CreateMap<NombreProceso, NombreProcesoViewModel>().ReverseMap();
             CreateMap<DatosTemporales, DatosTemporalesViewModel>().ReverseMap();
             CreateMap<Asignacion, AsignacionViewModel>().ReverseMap();
+            CreateMap<DatosInstituciones, DatosInstitucionesViewModel>().ReverseMap();
+            CreateMap<ParametrosIniciales, ParametrosInicialesViewModel>().ReverseMap();
+            CreateMap<DatosPersonalTerritorio, DatosPersonalTerritorioViewModel>().ReverseMap();
+
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Ineval.DAL
 {
-    [Table("Test")]
+    [Table("Prueba")]
     public class Test : BaseEntity
     {
         public string Name { get; set; }
