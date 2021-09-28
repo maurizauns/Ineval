@@ -44,18 +44,18 @@ namespace Ineval.Controllers
 
         public async Task<JsonResult> GetData()
         {
-            
+
             List<Test> tests = new List<Test>();
 
             for (int i = 0; i < 40000; i++)
             {
                 tests.Add(new Test { Name = i.ToString() });
-            }           
+            }
 
             using (var ctx = new SwmContext())
-            {                
+            {
                 ctx.BulkInsert(tests.ToList());
-            }           
+            }
 
             //using (var ctx = new SwmContext())
             //{
