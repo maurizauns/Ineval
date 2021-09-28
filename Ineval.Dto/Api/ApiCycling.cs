@@ -9,9 +9,9 @@ namespace Ineval.Dto
 {
     public class ApiCycling
     {
-        public static async Task<Root> GetByCycling()
+        public static async Task<Root> GetByCycling(string p1, string p2, string p3)
         {
-            var result = await RequestClient.GetItem(Routes.GpMap.Cycling);
+            var result = await RequestClient.GetItem(Routes.GpMap.Cycling.Replace("<P1>",p1).Replace("<P2>", p2).Replace("<P3>", p3));
             Root list = JsonConvert.DeserializeObject<Root>(result);
             return list;
         }

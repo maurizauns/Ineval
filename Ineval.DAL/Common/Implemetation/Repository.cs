@@ -50,6 +50,17 @@ namespace RP.DAL.Repository
             return await Task.Run(() => GetAll().FirstOrDefaultAsync(r => r.Id.Equals(id)));
         }
 
+        public virtual IQueryable<TEntity> GetAllDelete()
+        {
+            return DbSet.Where(t => t.Estado == EstadoEnum.Eliminado);
+        }
+
+        public virtual async Task<IQueryable<TEntity>> GetAllDeleteAsync()
+        {
+            var result = GetAllDelete();
+            return await Task.Run(() => result);
+        }
+
         public virtual IQueryable<TEntity> GetAll()
         {
             return DbSet.Where(t => t.Estado == EstadoEnum.Activo);
@@ -416,5 +427,7 @@ namespace RP.DAL.Repository
                 return ex.SaveResult();
             }
         }
+
+
     }
 }

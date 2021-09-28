@@ -45,6 +45,15 @@ namespace Ineval.BO
             return await Repository.GetByIdAsync(id);
         }
 
+        public IQueryable<TEntity> GetAllDelete()
+        {
+            return Repository.GetAllDelete();
+        }
+
+        public virtual async Task<IQueryable<TEntity>> GetAllDeleteAsync()
+        {
+            return await Repository.GetAllDeleteAsync();
+        }
         public virtual IQueryable<TEntity> GetAll()
         {
             return Repository.GetAll();
@@ -174,5 +183,7 @@ namespace Ineval.BO
         {
             return await Repository.DeleteRangeAsync(entities);
         }
+
+
     }
 }

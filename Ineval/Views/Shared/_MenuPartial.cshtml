@@ -116,12 +116,11 @@
 
     if (ViewBag.MenuSecondary)
     {
-        <div class="secondary-list">
+        <div class="secondary-list"  id="secondary-list-id">
             <ul class="nav nav-pills nav-sidebar flex-column " data-widget="treeview" role="menu" data-accordion="false">
                 @*<li class="nav-header">Menú Principal</li>*@
                 <li class="nav-item menuPrimary">
                     <a class="nav-link  d-flex align-items-center">
-                        @*<i class="livicon-evo livicon-evo-holder" data-options="name: chevron-left-double.svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
                         <i class="far nav-icon fa-chevron-double-left"></i>
                         <p>Menú Principal</p>
                     </a>
@@ -132,8 +131,6 @@
                     {
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link d-flex align-items-center">
-                                @*<i class="nav-icon fas @(string.IsNullOrWhiteSpace(menu.Icon) ? "fa fa-circle" : menu.Icon) @(string.IsNullOrWhiteSpace(menu.IconColor) ? "text-primary" : menu.IconColor)"></i>*@
-                                @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menu.Icon) ? "user" : menu.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
                                 <i class="nav-icon far fa-@(string.IsNullOrWhiteSpace(menu.Icon) ? "fa fa-circle" : menu.Icon) @(string.IsNullOrWhiteSpace(menu.IconColor) ? "text-primary" : menu.IconColor)"></i>
                                 <p>
                                     @menu.Description
@@ -147,9 +144,7 @@
                                     {
                                         <li class="nav-item has-treeview">
                                             <a href="#" class="nav-link  d-flex align-items-center">
-                                                @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
                                                 <i class="nav-icon far fa-@(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon)  @(string.IsNullOrWhiteSpace(menuItem.IconColor) ? "text-primary" : menuItem.IconColor)"></i>
-                                                @*<i class="far @menuItem.Icon nav-icon"></i>*@
                                                 <p>
                                                     @menuItem.Description
                                                     <i class="right fas fa-angle-left"></i>
@@ -159,10 +154,8 @@
                                                 @foreach (var menuItemPN in menuItem.MenuItems)
                                                 {
                                                     <li class="nav-item">
-                                                        <a href="@Url.Action("Index",menuItemPN.Url)" class="nav-link  d-flex align-items-center" onclick="_load() ,  _stopLoadMenu()" target="frmBody">
-                                                            @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menuItemPN.Icon) ? "user" : menuItemPN.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                                                        <a href="@Url.Action("Index",menuItemPN.Url)" class="nav-link  d-flex align-items-center" onclick="_load() ,  _stopLoadMenu()" data-bind="click: LoadView">
                                                             <i class="far fa-@(string.IsNullOrWhiteSpace(menuItemPN.Icon) ? "user" : menuItemPN.Icon) nav-icon @(string.IsNullOrWhiteSpace(menuItemPN.IconColor) ? "text-primary" : menuItemPN.IconColor)"></i>
-                                                            @*<i class="far @menuItemPN.Icon nav-icon"></i>*@
                                                             <p>@menuItemPN.Description</p>
                                                         </a>
                                                     </li>
@@ -174,9 +167,7 @@
                                     else
                                     {
                                         <li class="nav-item">
-                                            <a href="@Url.Action("Index",menuItem.Url)" class="nav-link d-flex align-items-center" title="@menuItem.Description" onclick="_load() ,  _stopLoadMenu()" target="frmBody">
-                                                @*<i class="nav-icon fas @(string.IsNullOrWhiteSpace(menu.Icon) ? "fa fa-circle" : menuItem.Icon) @(string.IsNullOrWhiteSpace(menuItem.IconColor) ? "text-primary" : menuItem.IconColor)"></i>*@
-                                                @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                                            <a href="@Url.Action("Index",menuItem.Url)" class="nav-link d-flex align-items-center" title="@menuItem.Description" onclick="_load() ,  _stopLoadMenu()" data-bind="click: LoadView">
                                                 <i class="far fa-@(string.IsNullOrWhiteSpace(menuItem.Icon) ? "user" : menuItem.Icon) nav-icon @(string.IsNullOrWhiteSpace(menuItem.IconColor) ? "text-primary" : menuItem.IconColor)"></i>
                                                 <p>@menuItem.Description</p>
                                             </a>
@@ -190,8 +181,7 @@
                     else
                     {
                         <li class="nav-item">
-                            <a href="@Url.Action("Index",menu.Url)" class="nav-link  d-flex align-items-center" onclick="_load() ,  _stopLoadMenu()" target="frmBody">
-                                @*<i class="livicon-evo livicon-evo-holder" data-options="name: @(string.IsNullOrWhiteSpace(menu.Icon) ? "user" : menu.Icon).svg; size: 30px; style: Filled;eventOn: parent;strokeColor: #fff"></i>*@
+                            <a href="@Url.Action("Index",menu.Url)" class="nav-link  d-flex align-items-center" onclick="_load() ,  _stopLoadMenu()"  data-bind="click: LoadView">
                                 <i class="nav-icon far fa-@(string.IsNullOrWhiteSpace(menu.Icon) ? "user" : menu.Icon)  @(string.IsNullOrWhiteSpace(menu.IconColor) ? "text-primary" : menu.IconColor)"></i>
                                 <p>@menu.Description</p>
                             </a>

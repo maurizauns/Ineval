@@ -1,3 +1,22 @@
 ﻿<div id="Content">
     contenido inicial
 </div>
+<script src="~/Scripts/knockout.debug.js"></script>
+<script src="~/Scripts/knockout.mapping.js"></script>
+@section scripts
+    {
+    <script>
+        var vmh = {};
+        function KnockoutHistory() {
+            vmh.CurrentUrl = ko.observable()
+            vmh.CurrentId = ko.observable(window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1))
+            vmh.LoadView = function (e) {
+                $("#Content").load(e.LoadView.arguments[1].currentTarget.pathname);
+                $("#Content").show();
+                vmh.CurrentUrl(e.LoadView.arguments[1].currentTarget.pathname)
+            }
+            ko.applyBindings(vmh, $("#secondary-list-id")[0]);
+        }
+        KnockoutHistory()
+    </script>
+}

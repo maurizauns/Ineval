@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "TEST API";
+}
+
+<h2>TEST API</h2>
+
+<script>
+    async function fetchMovies() {
+        fetch('/asignacion/TestApi').then(async function (response) {
+            return await  response.json();
+        }).then(function (d) {
+            if (d.state) {
+                console.log(d.result)
+                console.log(vmh.CurrentId())
+            } else {
+                console.error('no found')
+            }
+        })
+    }
+    fetchMovies()
+</script>

@@ -5,6 +5,7 @@ using Ineval.DAL;
 using Ineval.Dto;
 using Ineval.Dto.Dto.Procesos;
 using Ineval.Models.Filters;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using RP.Website.Helpers;
 using System;
@@ -83,10 +84,16 @@ namespace Ineval.App_Start
                         //.Add(GridHelperExts.CreateLink(Url.Action("GetEntity"),item.Id,"asignacionCallback"))
                         .Add(GridHelperExts.EditAction(Url.Action("GetEntity"), item.Id, "asignacionCallback"))
                         .Add(GridHelperExts.DeleteAction(Url.Action("Delete"), "asignacion-grid", item.Id))
+                         .Add(ConfiguracionAction(item.Id))
                         .End())
             };
         }
-
+        public IHtmlString ConfiguracionAction(object id = null)
+        {
+            var button = string.Format(@"<li class=""""><a title=""Proceso inicial"" data-toggle=""tooltip"" class=""btn btn-info btn-xs"" href=""{0}""><i class=""bx bxs-cog""></i></a></li>",
+                            Url.Action("Record", "Proceso", new { id }));
+            return MvcHtmlString.Create(button);
+        }
         protected override AsignacionViewModel MapperEntityToModel(Asignacion entity)
         {
             return Mapper.Map<Asignacion, AsignacionViewModel>(entity);
@@ -168,31 +175,24 @@ namespace Ineval.App_Start
 
         public async Task<ActionResult> TestApi()
         {
-            Root weatherForecast = await ApiCycling.GetByCycling();
+            UsuarioService usuarioService = new UsuarioService();
+            try
+            {
+                var userId = User.Identity.GetUserId();
+                var usuario = usuarioService.ObtenerPorApplicationUserId(userId);
 
+                Root weatherForecast = await ApiCycling.GetByCycling("-122.42,37.78", "-77.03,38.91", usuario.APIKEY);
 
-
-
-            //httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
-
-
-            //using (Stream stream = httpWebResponse.GetResponseStream())
-            //{
-            //    StreamReader streamReader = new StreamReader(stream);
-            //    result = streamReader.ReadToEnd();
-            //    streamReader.Close();
-            //}
-
-            //using (Stream stream = httpWebResponse.GetResponseStream())
-            //{
-            //    StreamReader streamReader = new StreamReader(stream);
-            //    result = streamReader.ReadToEnd();
-            //    streamReader.Close();
-            //}
-
-            //Root weatherForecast = JsonConvert.DeserializeObject<Root>(result);
-
-            return Json(new { weatherForecast }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = weatherForecast, state = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { result = "", state = false }, JsonRequestBehavior.AllowGet);
+            }
+            finally
+            {
+                usuarioService.Dispose();
+            }
         }
     }
 }

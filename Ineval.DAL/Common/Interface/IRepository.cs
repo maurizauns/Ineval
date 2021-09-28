@@ -16,6 +16,9 @@ namespace RP.DAL.Repository
         Task<TEntity> GetByIdAsync(TKey id);
         IQueryable<TEntity> GetAll();
         Task<IQueryable<TEntity>> GetAllAsync();
+
+        IQueryable<TEntity> GetAllDelete();
+        Task<IQueryable<TEntity>> GetAllDeleteAsync();
         SaveResult Save(TEntity entity);
         Task<SaveResult> SaveAsync(TEntity entity);
         SaveResult Create(TEntity entity);

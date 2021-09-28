@@ -470,6 +470,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseConfiguracionGeneralController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BaseProcesoController.cs" />
     <Compile Include="Controllers\CantonController.cs" />
     <Compile Include="Controllers\ConfiguracionController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
@@ -490,6 +491,7 @@
     <Compile Include="Controllers\RolePermissionsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
+    <Compile Include="Controllers\ViewTestController.cs" />
     <Compile Include="DirectoryList\ItemsData.cs" />
     <Compile Include="Extensions\CustomAuthorizeAttribute.cs" />
     <Compile Include="Extensions\Extensions.cs" />
@@ -2152,9 +2154,12 @@
     <Content Include="Views\DatosExcelPersonal\Index.cshtml" />
     <Content Include="Views\DatosPersonalTerritorio\Index.cshtml" />
     <Content Include="Views\ParametrosIniciales\Index.cshtml" />
+    <Content Include="Views\ViewTest\Register.cshtml" />
+    <Content Include="Views\ViewTest\Register2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\BaseProceso\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>

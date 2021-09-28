@@ -42,8 +42,8 @@
                         @(Html.MyjqGrid("asignacion-grid", Ineval.Common.Context.PageSize)
                         .AddColumn(new Column("Code").SetLabel("Código").SetSortable(true).SetAlign(Align.Center))
                         .AddColumn(new Column("Description").SetLabel("Descripción").SetSortable(true).SetAlign(Align.Center))
-                        .AddColumn(new Column("NombreProceso").SetLabel("NombreProceso").SetSortable(true).SetAlign(Align.Center))                        
-                        .AddColumn(new Column("Actions").SetFixedWidth(true).SetWidth(80).SetLabel("</br>").SetSortable(false))
+                        .AddColumn(new Column("NombreProceso").SetLabel("NombreProceso").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("Actions").SetFixedWidth(true).SetWidth(120).SetLabel("</br>").SetSortable(false))
                         .SetUrl(Url.Action("GetList")))
                         <div class="clearfix">
                             @Html.PaginationBtn("asignacion-grid", "pull-right")
@@ -73,8 +73,8 @@
                         @Html.LabelFor(x => x.NombreProcesoId)
                         @Html.DropDownListFor(x => x.NombreProcesoId, (SelectList)ViewBag.NombreProcesoId, "Seleccione", new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.NombreProcesoId, "", new { @class = "text-danger" })
-                    </div>                   
-                    
+                    </div>
+
                     <div class="form-group ">
                         @Html.LabelFor(x => x.Code)
                         @Html.TextBoxFor(x => x.Code, new { @class = "form-control", placeholder = "Código" })
