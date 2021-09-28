@@ -474,6 +474,8 @@
     <Compile Include="Controllers\ConfiguracionController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\DatosExcelCabeceraController.cs" />
+    <Compile Include="Controllers\DatosExcelPersonalController.cs" />
+    <Compile Include="Controllers\DatosPersonalTerritorioController.cs" />
     <Compile Include="Controllers\DatosSustentantesController.cs" />
     <Compile Include="Controllers\DatosTemporalesController.cs" />
     <Compile Include="Controllers\DiscoveryService.cs" />
@@ -481,6 +483,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NombreProcesoController.cs" />
+    <Compile Include="Controllers\ParametrosInicialesController.cs" />
     <Compile Include="Controllers\ParroquiaController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\RolePermissionsController.cs" />
@@ -1801,9 +1804,11 @@
     <Content Include="Scripts\Pages\core\security\login.js" />
     <Content Include="Scripts\Pages\core\security\UsuarioConfig.js" />
     <Content Include="Scripts\Pages\Procesos\Asignacion.js" />
+    <Content Include="Scripts\Pages\Procesos\DatosPersonalTerritorio.js" />
     <Content Include="Scripts\Pages\Procesos\DatosSustentantes.js" />
     <Content Include="Scripts\Pages\Procesos\DatosTemporales.js" />
     <Content Include="Scripts\Pages\Procesos\DatoxExcelCabecera.js" />
+    <Content Include="Scripts\Pages\Procesos\DatoxExcelPersonal.js" />
     <Content Include="Scripts\Pages\Procesos\nombreProceso.js" />
     <Content Include="Scripts\plugins\parsley.js" />
     <Content Include="Scripts\respond.js" />
@@ -2142,6 +2147,9 @@
     <Content Include="Views\DatosTemporales\Index.cshtml" />
     <Content Include="Views\Asignacion\Index.cshtml" />
     <Content Include="Views\Manage\AddPersonalInfo.cshtml" />
+    <Content Include="Views\DatosExcelPersonal\Index.cshtml" />
+    <Content Include="Views\DatosPersonalTerritorio\Index.cshtml" />
+    <Content Include="Views\ParametrosIniciales\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,15 +1,21 @@
-﻿using Ineval.BO;
+﻿using AutoMapper;
+using Ineval.BO;
 using Ineval.Controllers;
 using Ineval.DAL;
+using Ineval.Dto;
 using Ineval.Dto.Dto.Procesos;
+using Ineval.Models.Filters;
 using Newtonsoft.Json;
+using RP.Website.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Ineval.App_Start
@@ -20,26 +26,79 @@ namespace Ineval.App_Start
         {
             EntityService = new AsignacionService();
 
-            Title = "Excel";
+            Title = "Asignación";
         }
-        protected override IQueryable<Asignacion> ApplyFilters(IQueryable<Asignacion> generalQuery,MvcJqGrid.Rule[] filters)
+
+        public override void OnBeginIndex()
         {
-            throw new NotImplementedException();
+            List<NombreProceso> nombreProcesos = null;
+            using (var nombreProcesosService = new NombreProcesoService())
+            {
+                nombreProcesos = nombreProcesosService.GetAll().ToList();
+                ViewBag.NombreProcesoId = //new SelectList(nombreProcesos, "Id", "Description", null);
+                new SelectList((from s in nombreProcesos.ToList()
+                                select new
+                                {
+                                    Id = s.Id,
+                                    Description = "(" + s.Code + ") " + s.Description
+                                }),
+        "Id",
+        "Description",
+        null);
+            }
+        }
+
+        protected override IQueryable<Asignacion> ApplyFilters(IQueryable<Asignacion> generalQuery, MvcJqGrid.Rule[] filters)
+        {
+            if (filters == null)
+            {
+                return generalQuery;
+            }
+
+            foreach (var item in filters)
+            {
+                var term = item.data.Trim().ToUpper();
+
+                if (String.Equals(item.field, "codigo", StringComparison.OrdinalIgnoreCase))
+                {
+                    generalQuery = generalQuery.Where(x => x.Code.Trim().ToUpper().Contains(term));
+                }
+                else if (String.Equals(item.field, "descripcion", StringComparison.OrdinalIgnoreCase))
+                {
+                    generalQuery = generalQuery.Where(x => x.Description.Trim().ToLower().Contains(term));
+                }
+            }
+            return generalQuery;
         }
 
         protected override string[] GetRow(Asignacion item)
         {
-            throw new NotImplementedException();
+            return new[]
+             {
+                HttpUtility.HtmlEncode(item.Code),
+                HttpUtility.HtmlEncode(item.Description),
+                HttpUtility.HtmlEncode(item.NombreProceso != null ?  "(" + item.NombreProceso.Code + ") " +item.NombreProceso.Description : ""),
+                HttpUtility.HtmlEncode(GridHelperExts.ActionsList("asignacion-modal")
+                        //.Add(GridHelperExts.CreateLink(Url.Action("GetEntity"),item.Id,"asignacionCallback"))
+                        .Add(GridHelperExts.EditAction(Url.Action("GetEntity"), item.Id, "asignacionCallback"))
+                        .Add(GridHelperExts.DeleteAction(Url.Action("Delete"), "asignacion-grid", item.Id))
+                        .End())
+            };
         }
 
         protected override AsignacionViewModel MapperEntityToModel(Asignacion entity)
         {
-            throw new NotImplementedException();
+            return Mapper.Map<Asignacion, AsignacionViewModel>(entity);
         }
 
         protected override Asignacion MapperModelToEntity(AsignacionViewModel viewModel)
         {
-            throw new NotImplementedException();
+            var asignacion = new Asignacion();
+            if (viewModel.Id != null && viewModel.Id != Guid.Empty)
+            {
+                asignacion = EntityService.GetById(viewModel.Id.Value);
+            }
+            return Mapper.Map(viewModel, asignacion);
         }
 
         public async Task<ActionResult> GetFormulario(int id)
@@ -53,19 +112,72 @@ namespace Ineval.App_Start
             return Json(new { procesosList = nombreProceso }, JsonRequestBehavior.AllowGet);
         }
 
+
+        public override IEnumerable<FieldFilter> Filters
+        {
+            get
+            {
+                var filters = new List<FieldFilter>
+                {
+                    new FieldFilter
+                    {
+                        Description = "Descripción",
+                        Name = "descripcion",
+                        Type = FilterType.Textbox
+                    },
+                    new FieldFilter
+                    {
+                        Description = "Código",
+                        Name = "codigo",
+                        Type = FilterType.Textbox
+                    }
+                };
+                return filters;
+            }
+        }
+
+        [AllowAnonymous]
+        public async Task<JsonResult> GetValues(Guid? id)
+        {
+            try
+            {
+                var elements = await EntityService.GetAllAsync();
+
+                var result = await elements.Where(q => q.Id == id).Select(q => new
+                {
+                    value = q.Id,
+                    text = q.Description
+                }).ToListAsync();
+
+                return Json(new
+                {
+                    success = true,
+                    values = (object)result
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new
+                {
+                    success = false,
+                    values = default(object)
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public async Task<ActionResult> TestApi()
         {
             string url = "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoiY2hyaXNyb2JlcnQiLCJhIjoiY2s5MHZ3azYyMDYzbzNlcGQ0a2gweDYwYSJ9.zcP0ljnRL_Jgb_9RYYECJQ";
             WebRequest webRequest = WebRequest.Create(url);
             HttpWebResponse httpWebResponse = null;
 
-            
+
 
             httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
 
             string result = string.Empty;
 
-            
+
             using (Stream stream = httpWebResponse.GetResponseStream())
             {
                 StreamReader streamReader = new StreamReader(stream);

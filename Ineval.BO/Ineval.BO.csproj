@@ -57,6 +57,8 @@
     <Compile Include="Implementation\CatalogService.cs" />
     <Compile Include="Implementation\configuration\CantonService.cs" />
     <Compile Include="Implementation\configuration\CountryService.cs" />
+    <Compile Include="Implementation\procesos\DatosExcelPersonalService.cs" />
+    <Compile Include="Implementation\procesos\DatosInstitucionesService.cs" />
     <Compile Include="Implementation\configuration\NumberingService.cs" />
     <Compile Include="Implementation\configuration\ParroquiaService.cs" />
     <Compile Include="Implementation\configuration\ProvinceService.cs" />
@@ -65,9 +67,11 @@
     <Compile Include="Implementation\MenuService.cs" />
     <Compile Include="Implementation\procesos\AsignacionService.cs" />
     <Compile Include="Implementation\procesos\DatosExcelCabeceraService.cs" />
+    <Compile Include="Implementation\procesos\DatosPersonalTerritorioService.cs" />
     <Compile Include="Implementation\procesos\DatosSustentantesService.cs" />
     <Compile Include="Implementation\procesos\DatosTemporalesService.cs" />
     <Compile Include="Implementation\procesos\NombreProcesoService.cs" />
+    <Compile Include="Implementation\procesos\ParametrosInicialesService.cs" />
     <Compile Include="Implementation\security\AuditoriaService.cs" />
     <Compile Include="Implementation\security\RoleMenuService.cs" />
     <Compile Include="Implementation\security\UsuarioService.cs" />

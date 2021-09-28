@@ -19,54 +19,54 @@ $(function () {
 
     $.ajax({
         type: 'GET',
-        url: '/Home/GetAllProcesos',
+        url: '/Home/GetAllProcesosActivos',
         dataType: 'json',
         cache: true,
         success: function (data) {
-            $('#product-all').html(parseFloat(data).toLocaleString('en'));
-            $('#home-product').removeClass('hide');
+            $('#person-activos').html(parseFloat(data).toLocaleString('en'));
+            $('#ratios-financieros1').removeClass('hide');
         },
         complete: function () {
-            $('#home-product-spinner').addClass('hide');
+            $('#ratios-financieros-spinner1').addClass('hide');
         },
         error: function () {
-            $('#home-product-error').removeClass('hide');
+            $('#ratios-financieros-error1').removeClass('hide');
         },
     });
 
     $.ajax({
         type: 'GET',
-        url: '/Home/GetAllProcesos',
+        url: '/Home/GetAllProcesosFinalizados',
         dataType: 'json',
         cache: true,
         success: function (data) {
-            $('#appointment-all').html(parseFloat(data).toLocaleString('en'));
-            $('#home-appointment').removeClass('hide');
+            $('#person-finalizados').html(parseFloat(data).toLocaleString('en'));
+            $('#ratios-financieros2').removeClass('hide');
         },
         complete: function () {
-            $('#home-appointment-spinner').addClass('hide');
+            $('#ratios-financieros-spinner2').addClass('hide');
         },
         error: function () {
-            $('#home-appointment-error').removeClass('hide');
+            $('#ratios-financieros-error2').removeClass('hide');
         },
     });
 
-    $.ajax({
-        type: 'GET',
-        url: '/Home/GetAllProcesos',
-        dataType: 'json',
-        cache: true,
-        success: function (data) {
-            $('#sales-all').html('$&nbsp;' + parseFloat(data).toLocaleString('en'));
-            $('#home-sales').removeClass('hide');
-        },
-        complete: function () {
-            $('#home-sales-spinner').addClass('hide');
-        },
-        error: function () {
-            $('#home-sales-error').removeClass('hide');
-        },
-    });
+    //$.ajax({
+    //    type: 'GET',
+    //    url: '/Home/GetAllProcesos',
+    //    dataType: 'json',
+    //    cache: true,
+    //    success: function (data) {
+    //        $('#sales-all').html('$&nbsp;' + parseFloat(data).toLocaleString('en'));
+    //        $('#home-sales').removeClass('hide');
+    //    },
+    //    complete: function () {
+    //        $('#home-sales-spinner').addClass('hide');
+    //    },
+    //    error: function () {
+    //        $('#home-sales-error').removeClass('hide');
+    //    },
+    //});
 })
 
 function frmVentasLoaded() {

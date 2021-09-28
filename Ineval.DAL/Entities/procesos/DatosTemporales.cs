@@ -10,6 +10,8 @@ namespace Ineval.DAL
     [Table("DatosTemporales")]
     public class DatosTemporales : BaseEntity
     {
+        public Guid? AsignacionId { get; set; }
+        public virtual Asignacion Asignacion { get; set; }
         public string usu_id { get; set; }
         public string tipo_identificacion { get; set; }
         public string identificacion { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,9 @@ namespace Ineval.Dto
 {
     public class DatosSustentantesViewModel:BaseModel
     {
+        [Required(ErrorMessage = "Seleccione Tipo de Proceso.")]
+        [Display(Name = "Proceso")]
+        public Guid? AsignacionId { get; set; }
         public string usu_id { get; set; }
         public string tipo_identificacion { get; set; }
         public string identificacion { get; set; }
