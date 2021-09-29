@@ -6,6 +6,7 @@ using MvcJqGrid;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -44,6 +45,15 @@ namespace Ineval.Controllers
                 parametrosIniciales = EntityService.GetById(viewModel.Id.Value);
             }
             return Mapper.Map(viewModel, parametrosIniciales);
+        }
+
+
+        public async Task<ActionResult> GetFormulario(Guid? id)
+        {
+            ParametrosIniciales parametrosIniciales = new ParametrosIniciales();
+            parametrosIniciales = await EntityService.FirstOrDefaultAsync(x => x.AsignacionId == id);
+            return Json(new { ParametrosIniciales = parametrosIniciales }, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

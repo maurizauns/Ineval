@@ -12,5 +12,19 @@ namespace Ineval.Controllers
           => PartialView();
         public ActionResult Register2()
           => PartialView();
+        public ActionResult Parametros()
+        => PartialView();
+
+        public ActionResult GenerarExcelDatosSustentantes()
+        => PartialView();
+
+        public ActionResult GenerarExcelDatosPersonalTerritorio()
+        => PartialView();
+
+        public ActionResult SubirDatosSustentantes()
+            => PartialView();
+
+        public ActionResult SubirDatosPersonalTerritorio()
+            => PartialView();
     }
 }

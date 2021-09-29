@@ -51,7 +51,7 @@ namespace Ineval.Controllers
         {
             AsignacionService Entity = new AsignacionService();
 
-            List<Asignacion> nombreProcesos = await Entity.Where(x => x.Estado == EstadoEnum.Activo).ToListAsync();
+            List<Asignacion> nombreProcesos = await Entity.Where(x => x.EstadoProceso == 1).ToListAsync();
 
             return Json(nombreProcesos.Count(), JsonRequestBehavior.AllowGet);
 
@@ -61,9 +61,7 @@ namespace Ineval.Controllers
         {
             List<Asignacion> nombreProcesos = new List<Asignacion>();
 
-            nombreProcesos = await db.Asignacion.Where(x => x.Estado != EstadoEnum.Activo).ToListAsync();
-
-            //= await Entity.GetAll().Where(x => x.Estado == EstadoEnum.Eliminado).ToListAsync();
+            nombreProcesos = await db.Asignacion.Where(x => x.EstadoProceso == 3).ToListAsync();           
 
             return Json(nombreProcesos.Count(), JsonRequestBehavior.AllowGet);
 

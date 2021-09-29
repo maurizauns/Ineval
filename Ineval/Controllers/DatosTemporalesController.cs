@@ -1,9 +1,11 @@
-﻿using Ineval.BO;
+﻿using AutoMapper;
+using Ineval.BO;
 using Ineval.DAL;
 using Ineval.Dto;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -43,14 +45,14 @@ namespace Ineval.Controllers
         protected override DatosTemporales MapperModelToEntity(DatosTemporalesViewModel viewModel)
         {
             throw new NotImplementedException();
-        }        
+        }
 
         [HttpPost]
-        public async Task<ActionResult> AddSustentantesMasiva(HttpPostedFileWrapper archivo)
+        public async Task<ActionResult> AddSustentantesMasiva(HttpPostedFileWrapper archivo, Guid? Id)
         {
             BinaryReader b = new BinaryReader(archivo.InputStream);
             byte[] binData = b.ReadBytes(archivo.ContentLength);
-            string result = System.Text.Encoding.UTF7.GetString(binData);           
+            string result = System.Text.Encoding.UTF7.GetString(binData);
 
             List<DatosTemporales> listaCabecera = new List<DatosTemporales>();
 
@@ -79,25 +81,26 @@ namespace Ineval.Controllers
                         i++;
 
                     }
+                    obj.AsignacionId = Id;
                     listaCabecera.Add(obj);
                 }
             }
 
-            
+
             using (var ctx = new SwmContext())
             {
                 ctx.BulkInsert(listaCabecera.ToList());
             }
-            
+
             b.Close();
             binData = null;
             result = "";
-            listaCabecera = null;            
+            listaCabecera = null;
 
             try
             {
-                
-                
+
+
             }
             catch (Exception)
             {
@@ -105,15 +108,15 @@ namespace Ineval.Controllers
             }
 
             return Json(new { result = "Guardada con éxito!", status = "success" }, JsonRequestBehavior.AllowGet);
-        }  
-        
+        }
+
         public async Task<ActionResult> Contar()
         {
-            var datostemporesls =  from datosTemporales in db.DatosTemporales
-                                        group datosTemporales by new { datosTemporales.amie, datosTemporales.nombre_institucion } into DatosAgrupados
+            var datostemporesls = from datosTemporales in db.DatosTemporales
+                                  group datosTemporales by new { datosTemporales.amie, datosTemporales.nombre_institucion } into DatosAgrupados
 
-                                        select new { Clave = DatosAgrupados.Key, Datos = DatosAgrupados };
-            
+                                  select new { Clave = DatosAgrupados.Key, Datos = DatosAgrupados };
+
 
             foreach (var item in datostemporesls)
             {
@@ -122,6 +125,16 @@ namespace Ineval.Controllers
 
 
             return Json(new { datos = datostemporesls.Count() }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public async Task<ActionResult> GetFormulario(Guid? id)
+        {
+            List<DatosTemporalesViewModel> resultDTO = new List<DatosTemporalesViewModel>();
+            var result = await EntityService.GetAll().Where(x => x.AsignacionId == id).CountAsync();
+            //resultDTO = Mapper.Map<List<DatosTemporalesViewModel>>(result);
+            return Json(new { ParametrosIniciales = result }, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

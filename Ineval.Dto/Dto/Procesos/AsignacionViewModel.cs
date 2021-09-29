@@ -20,5 +20,6 @@ namespace Ineval.Dto.Dto.Procesos
         [Required(ErrorMessage = "Seleccione Tipo de Proceso.")]
         [Display(Name = "Proceso")]
         public Guid? NombreProcesoId { get; set; }
+        public int? EstadoProceso { get; set; }
     }
 }

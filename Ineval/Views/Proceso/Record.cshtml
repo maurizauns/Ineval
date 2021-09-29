@@ -15,6 +15,24 @@
                 $("#Content").show();
                 vmh.CurrentUrl(e.LoadView.arguments[1].currentTarget.pathname)
             }
+
+            vmh.FinalizarProceso = function () {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/Asignacion/UpdateEstadoProceso",
+                    data: JSON.stringify({
+                        Id: vmh.CurrentId()
+                    }),
+                    success: function (Data) {
+                        if (Data.status) {
+                            swal(Data.message, "", "success");
+                            window.location = "/Home";
+                        }
+                    }
+                });
+            }
+
             ko.applyBindings(vmh, $("#secondary-list-id")[0]);
         }
         KnockoutHistory()

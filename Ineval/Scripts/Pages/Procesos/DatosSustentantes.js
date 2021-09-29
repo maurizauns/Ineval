@@ -27,7 +27,7 @@
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 method: 'POST',
                 url: "/DatosSustentantes/AddSustentantesMasiva",
-                data: formData,
+                data: { archivo: formData, Id: vmh.CurrentId() },
                 processData: false,
                 contentType: false,
                 success: function (resp) {

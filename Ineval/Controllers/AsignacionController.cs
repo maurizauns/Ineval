@@ -18,7 +18,9 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using static Ineval.Dto.ApiCycling;
+//using static Ineval.Dto.ApiCycling;
+using static Ineval.Dto.ApiDriving;
+using static Ineval.Dto.ApiPosicionGeografica;
 
 namespace Ineval.App_Start
 {
@@ -38,15 +40,7 @@ namespace Ineval.App_Start
             {
                 nombreProcesos = nombreProcesosService.GetAll().ToList();
                 ViewBag.NombreProcesoId = //new SelectList(nombreProcesos, "Id", "Description", null);
-                new SelectList((from s in nombreProcesos.ToList()
-                                select new
-                                {
-                                    Id = s.Id,
-                                    Description = "(" + s.Code + ") " + s.Description
-                                }),
-        "Id",
-        "Description",
-        null);
+                new SelectList((from s in nombreProcesos.ToList() select new { Id = s.Id, Description = "(" + s.Code + ") " + s.Description }), "Id", "Description", null);
             }
         }
 
@@ -80,6 +74,7 @@ namespace Ineval.App_Start
                 HttpUtility.HtmlEncode(item.Code),
                 HttpUtility.HtmlEncode(item.Description),
                 HttpUtility.HtmlEncode(item.NombreProceso != null ?  "(" + item.NombreProceso.Code + ") " +item.NombreProceso.Description : ""),
+                HttpUtility.HtmlEncode(item.EstadoProceso.HasValue ? item.EstadoProceso.Value==1 ? "Activo" : "Finalizado" : "Activo"),
                 HttpUtility.HtmlEncode(GridHelperExts.ActionsList("asignacion-modal")
                         //.Add(GridHelperExts.CreateLink(Url.Action("GetEntity"),item.Id,"asignacionCallback"))
                         .Add(GridHelperExts.EditAction(Url.Action("GetEntity"), item.Id, "asignacionCallback"))
@@ -120,6 +115,24 @@ namespace Ineval.App_Start
             return Json(new { procesosList = nombreProceso }, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<ActionResult> UpdateEstadoProceso(Guid? Id)
+        {
+            bool estado = false;
+            Asignacion asignacions = new Asignacion();
+
+            asignacions = await EntityService.FirstOrDefaultAsync(x => x.Id == Id);
+
+            asignacions.EstadoProceso = 3;
+
+            var result = await EntityService.UpdateAsync(asignacions);
+            if (result.Succeeded)
+            {
+                estado = true;
+            }
+
+            return Json(new { message = "Asignación Finalizada Correctamente", status = estado }, JsonRequestBehavior.AllowGet);
+
+        }
 
         public override IEnumerable<FieldFilter> Filters
         {
@@ -173,7 +186,29 @@ namespace Ineval.App_Start
             }
         }
 
-        public async Task<ActionResult> TestApi()
+        //public async Task<ActionResult> TestApi()
+        //{
+        //    UsuarioService usuarioService = new UsuarioService();
+        //    try
+        //    {
+        //        var userId = User.Identity.GetUserId();
+        //        var usuario = usuarioService.ObtenerPorApplicationUserId(userId);
+
+        //        Root weatherForecast = await ApiCycling.GetByCycling("-122.42,37.78", "-77.03,38.91", usuario.APIKEY);
+
+        //        return Json(new { result = weatherForecast, state = true }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return Json(new { result = "", state = false }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    finally
+        //    {
+        //        usuarioService.Dispose();
+        //    }
+        //}
+
+        public async Task<ActionResult> TestApi2()
         {
             UsuarioService usuarioService = new UsuarioService();
             try
@@ -181,7 +216,29 @@ namespace Ineval.App_Start
                 var userId = User.Identity.GetUserId();
                 var usuario = usuarioService.ObtenerPorApplicationUserId(userId);
 
-                Root weatherForecast = await ApiCycling.GetByCycling("-122.42,37.78", "-77.03,38.91", usuario.APIKEY);
+                ApiDriving.Root weatherForecast = await ApiDriving.GetByDriving("-122.42,37.78", "-77.03,38.91", usuario.APIKEY);
+
+                return Json(new { result = weatherForecast, state = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { result = "", state = false }, JsonRequestBehavior.AllowGet);
+            }
+            finally
+            {
+                usuarioService.Dispose();
+            }
+        }
+
+        public async Task<ActionResult> TestApi3()
+        {
+            UsuarioService usuarioService = new UsuarioService();
+            try
+            {
+                var userId = User.Identity.GetUserId();
+                var usuario = usuarioService.ObtenerPorApplicationUserId(userId);
+
+                ApiPosicionGeografica.Root weatherForecast = await ApiPosicionGeografica.GetByPosicionGeografica("Ecuador", usuario.APIKEY);
 
                 return Json(new { result = weatherForecast, state = true }, JsonRequestBehavior.AllowGet);
             }

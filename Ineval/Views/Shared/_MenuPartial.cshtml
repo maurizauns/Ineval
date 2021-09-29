@@ -181,13 +181,22 @@
                     else
                     {
                         <li class="nav-item">
-                            <a href="@Url.Action("Index",menu.Url)" class="nav-link  d-flex align-items-center" onclick="_load() ,  _stopLoadMenu()"  data-bind="click: LoadView">
+                            <a href="@Url.Action("Index",menu.Url)" class="nav-link  d-flex align-items-center" onclick="_load() ,  _stopLoadMenu()" data-bind="click: LoadView">
                                 <i class="nav-icon far fa-@(string.IsNullOrWhiteSpace(menu.Icon) ? "user" : menu.Icon)  @(string.IsNullOrWhiteSpace(menu.IconColor) ? "text-primary" : menu.IconColor)"></i>
                                 <p>@menu.Description</p>
                             </a>
                         </li>
                     }
                 }
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link d-flex align-items-center" data-bind="click:FinalizarProceso">
+                        <i class="nav-icon far fa-times-circle"></i>
+                        <p>
+                            Finalizar Proceso
+                            @*<i class="fas fa-angle-left right"></i>*@
+                        </p>
+                    </a>
+                </li>
             </ul>
         </div>
     }

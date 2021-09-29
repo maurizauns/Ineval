@@ -1813,6 +1813,7 @@
     <Content Include="Scripts\Pages\Procesos\DatoxExcelCabecera.js" />
     <Content Include="Scripts\Pages\Procesos\DatoxExcelPersonal.js" />
     <Content Include="Scripts\Pages\Procesos\nombreProceso.js" />
+    <Content Include="Scripts\Pages\Procesos\ParametrosIniciales.js" />
     <Content Include="Scripts\plugins\parsley.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -2156,6 +2157,11 @@
     <Content Include="Views\ParametrosIniciales\Index.cshtml" />
     <Content Include="Views\ViewTest\Register.cshtml" />
     <Content Include="Views\ViewTest\Register2.cshtml" />
+    <Content Include="Views\ViewTest\Parametros.cshtml" />
+    <Content Include="Views\ViewTest\GenerarExcelDatosSustentantes.cshtml" />
+    <Content Include="Views\ViewTest\GenerarExcelDatosPersonalTerritorio.cshtml" />
+    <Content Include="Views\ViewTest\SubirDatosSustentantes.cshtml" />
+    <Content Include="Views\ViewTest\SubirDatosPersonalTerritorio.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

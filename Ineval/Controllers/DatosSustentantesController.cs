@@ -76,7 +76,7 @@ namespace Ineval.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddSustentantesMasiva(HttpPostedFileWrapper archivo)
+        public async Task<ActionResult> AddSustentantesMasiva(HttpPostedFileWrapper archivo, Guid? Id)
         {
             BinaryReader b = new BinaryReader(archivo.InputStream);
             byte[] binData = b.ReadBytes(archivo.ContentLength);
@@ -91,8 +91,8 @@ namespace Ineval.Controllers
             {
                 cabecera = item;
                 break;
-            };            
-            
+            };
+
             foreach (var item in result.Split('\n').Skip(1))
             {
                 if (!string.IsNullOrEmpty(item))
@@ -110,6 +110,7 @@ namespace Ineval.Controllers
                         i++;
 
                     }
+                    obj.AsignacionId = Id;
                     listaCabecera.Add(obj);
                 }
             }

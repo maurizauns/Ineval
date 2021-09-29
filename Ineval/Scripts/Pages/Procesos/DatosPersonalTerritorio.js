@@ -48,7 +48,6 @@ var vmFormTemporales = {};
 $(document).ready(function () {
 
     function KnockoutFormTemporales(temporales) {
-        debugger
         vmFormTemporales = ko.mapping.fromJS(temporales);
 
         vmFormTemporales.Cancel = function () {

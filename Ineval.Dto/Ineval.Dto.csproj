@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\ApiCycling.cs" />
+    <Compile Include="Api\ApiDriving.cs" />
+    <Compile Include="Api\ApiPosicionGeografica.cs" />
     <Compile Include="Api\RequestClient.cs" />
     <Compile Include="Api\Routes.cs" />
     <Compile Include="Common\BaseModel.cs" />

@@ -38,8 +38,8 @@ $(document).ready(function () {
                         }
                         vmFormBMI = {};
                         //window.location = "/DatosExcelCabecera"
-                        $("#ContentGeneral").load("/DatosExcelPersonal");
-                        $("#ContentGeneral").show();
+                        $("#Content").load(vmh.CurrentUrl());
+                        $("#Content").show();
                     }
                 });
             } else {
@@ -48,8 +48,8 @@ $(document).ready(function () {
 
         }
 
-        ko.cleanNode($("#ContentGeneral")[0]);
-        ko.applyBindings(vmFormBMI, $("#ContentGeneral")[0]);
+        ko.cleanNode($("#Content")[0]);
+        ko.applyBindings(vmFormBMI, $("#Content")[0]);
 
         vmFormBMI.DatosExcel(vmFormBMI.ListaDatosExcel());
 

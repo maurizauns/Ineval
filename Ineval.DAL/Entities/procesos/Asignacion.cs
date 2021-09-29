@@ -8,5 +8,6 @@ namespace Ineval.DAL
     {
         public Guid? NombreProcesoId { get; set; }
         public virtual NombreProceso NombreProceso { get; set; }
+        public int? EstadoProceso { get; set; }
     }
 }
