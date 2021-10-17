@@ -4,6 +4,9 @@ using Ineval.Dto;
 using MvcJqGrid;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -24,7 +27,7 @@ namespace Ineval.Controllers
             EntityService = new DatosPersonalTerritorioService();
         }
 
-        protected override IQueryable<DatosPersonalTerritorio> ApplyFilters(IQueryable<DatosPersonalTerritorio> generalQuery, Rule[] filters)
+        protected override IQueryable<DatosPersonalTerritorio> ApplyFilters(IQueryable<DatosPersonalTerritorio> generalQuery, MvcJqGrid.Rule[] filters)
         {
             throw new NotImplementedException();
         }
@@ -44,8 +47,16 @@ namespace Ineval.Controllers
             throw new NotImplementedException();
         }
 
+        public async Task<ActionResult> GetDatos(Guid? id)
+        {
+            //DatosPersonalTerritorioService datosPersonalTerritorioService = new DatosPersonalTerritorioService();
+            var result = await EntityService.GetAll().Where(x => x.AsignacionId == id).CountAsync();
+            return Json(new { Total = result }, JsonRequestBehavior.AllowGet);
+
+        }
+
         [HttpPost]
-        public async Task<ActionResult> AddSustentantesMasiva(HttpPostedFileWrapper archivo)
+        public async Task<ActionResult> AddSustentantesMasiva(HttpPostedFileWrapper archivo, Guid? Id)
         {
             BinaryReader b = new BinaryReader(archivo.InputStream);
             byte[] binData = b.ReadBytes(archivo.ContentLength);
@@ -78,31 +89,97 @@ namespace Ineval.Controllers
                         i++;
 
                     }
-                    obj.AsignacionId = Guid.Parse("7D2F63B0-FF1F-EC11-A5DB-50E0857D5969");
+                    obj.AsignacionId = Id;
                     listaCabecera.Add(obj);
                 }
             }
 
-
-            using (var ctx = new SwmContext())
-            {
-                ctx.BulkInsert(listaCabecera.ToList());
-            }
-
-            b.Close();
-            binData = null;
-            result = "";
-            listaCabecera = null;
-
             try
             {
+                insertMasiveData(listaCabecera.ToList());
+                b.Close();
+                binData = null;
+                result = "";
+                listaCabecera = null;
+
+                return Json(new { result = "Guardada con éxito!", status = "success" }, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return Json(new { result = "", status = "error" }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = ex.Message.ToString(), status = "error" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        public void insertMasiveData(IEnumerable<DatosPersonalTerritorio> datosPersonalTerritorio)
+        {
+            var table = new DataTable();
+            table.Columns.Add("Id", typeof(Guid));
+            table.Columns.Add("AsignacionId", typeof(Guid));
+            table.Columns.Add("tipo_documento", typeof(string));
+            table.Columns.Add("numero_documento", typeof(string));
+            table.Columns.Add("nombres_apellidos", typeof(string));
+            table.Columns.Add("sexo", typeof(string));
+            table.Columns.Add("id_provincia", typeof(string));
+            table.Columns.Add("provincia", typeof(string));
+            table.Columns.Add("canton_id", typeof(string));
+            table.Columns.Add("canton", typeof(string));
+            table.Columns.Add("id_parroquia", typeof(string));
+            table.Columns.Add("parroquia", typeof(string));
+            table.Columns.Add("FechaCreacion", typeof(DateTime));
+            table.Columns.Add("FechaModificacion", typeof(DateTime));
+            table.Columns.Add("FechaEliminacion", typeof(DateTime));
+            table.Columns.Add("Estado", typeof(EstadoEnum));
+            table.Columns.Add("Cargo", typeof(string));
+
+
+            foreach (var item in datosPersonalTerritorio)
+            {
+                table.Rows.Add(new object[]
+                {
+                    item.Id=Guid.NewGuid(),
+                    item.AsignacionId,
+                    item.tipo_documento,
+                    item.numero_documento,
+                    item.nombres_apellidos,
+                    item.sexo,
+                    item.id_provincia,
+                    item.provincia,
+                    item.canton_id,
+                    item.canton,
+                    item.id_parroquia,
+                    item.parroquia,
+                    item.FechaCreacion,
+                    item.FechaModificacion,
+                    item.FechaEliminacion,
+                    item.Estado,
+                    item.Cargo
+                });
             }
 
-            return Json(new { result = "Guardada con éxito!", status = "success" }, JsonRequestBehavior.AllowGet);
+            using (var connection = ConnectionToSql.getConnection())
+            {
+                connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+                    {
+                        try
+                        {
+                            bulkCopy.DestinationTableName = "DatosPersonalTerritorio";
+                            bulkCopy.BulkCopyTimeout = 0;
+                            bulkCopy.WriteToServer(table);
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            connection.Close();
+                        }
+                    }
+                }
+
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Ineval.Controllers
             Title = "Excel";
         }
 
-        public async Task<ActionResult> GetFormulario(int id)
+        public async Task<ActionResult> GetFormulario(Guid? id)
         {
             var ListaDatosExcel = await EntityService.GetAllAsync();
             return Json(new { ListaDatosExcel = ListaDatosExcel }, JsonRequestBehavior.AllowGet);

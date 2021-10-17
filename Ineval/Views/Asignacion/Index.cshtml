@@ -42,8 +42,8 @@
                         @(Html.MyjqGrid("asignacion-grid", Ineval.Common.Context.PageSize)
                         .AddColumn(new Column("Code").SetLabel("Código").SetSortable(true).SetAlign(Align.Center))
                         .AddColumn(new Column("Description").SetLabel("Descripción").SetSortable(true).SetAlign(Align.Center))
-                        .AddColumn(new Column("NombreProceso").SetLabel("NombreProceso").SetSortable(true).SetAlign(Align.Center))
-                        .AddColumn(new Column("EstadoProceso").SetLabel("EstadoProceso").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("NombreProceso").SetLabel("Nombre Proceso").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("EstadoProceso").SetLabel("Estado Proceso").SetSortable(true).SetAlign(Align.Center))
                         .AddColumn(new Column("Actions").SetFixedWidth(true).SetWidth(120).SetLabel("</br>").SetSortable(false))
                         .SetUrl(Url.Action("GetList")))
                         <div class="clearfix">

@@ -1,0 +1,194 @@
+﻿@{
+    ViewBag.Title = "Parametros Iniciales";
+}
+
+@*@Scripts.Render("~/bundles/modalStatic")*@
+
+<div class="content-header row">
+    <div class="content-header-left col-12 mb-2 mt-1">
+        <div class="row mx-0">
+            <div class="col-8 d-flex align-items-center pl-0">
+                <h5 class="content-header-title float-left pr-1 mb-0">@ViewBag.Title</h5>
+                <div class="breadcrumb-wrapper col-9">
+                    <ol class="breadcrumb p-0 mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="/"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="col-4 px-0 pt-xl-0 pt-1">
+                <button type="button" class="btn btn-success glow invoice-create float-right mr-1 mb-0" data-toggle="modal" role="button" aria-pressed="true" data-bind="click:New,visible:VisibleNew">
+                    <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body border-div-history">
+    <section class="admission-list-wrapper">
+        <div class="admission-list-filter px-1">
+
+            <div class="row border-div-simec py-2 mb-2">
+                <div class="col-12  col-sm-12 col-lg-12 ">
+                    <div class="form-group" data-bind="visible:Existe()==false">
+                        No Existe Registros
+                    </div>
+                    <div class="form-group" data-bind="visible:Existe()==true">
+                        <input type="hidden" name="name" value="" data-bind="value:Id" />
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Numero de Laboratorios:</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" class="form-control" name="name" value="" data-bind="checked:SinoNumeroLaboratorios,enable:EditarEnable" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6" data-bind="enable:VisibleNumeroLab">
+                                <div class="col-md-2">
+                                    <label class="control-label">Número de Laboratorios</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroLaboratorios,enable:EditarEnable" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Numero de Equipos:</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" class="form-control" name="name" value="" data-bind="checked:SinoNumeroEquipos,enable:EditarEnable" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    <label class="control-label">Número de Equipos</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroEquipos,enable:EditarEnable" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Numero de Laboratorios:</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" class="form-control" name="name" value="" data-bind="checked:SinoNumerosSesiones,enable:EditarEnable" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    <label class="control-label">Número de Sesiones</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumerosSesiones,enable:EditarEnable" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Numero de Laboratorios:</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" class="form-control" name="name" value="" data-bind="checked:SinoNumeroDiasEvaluar,enable:EditarEnable" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    <label class="control-label">Número de Dias a Evaluar</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroDiasEvaluar,enable:EditarEnable" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Tiempo de Viaje:</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" class="form-control" name="name" value="" data-bind="checked:SinoTiempoViaje,enable:EditarEnable" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    <label class="control-label">Tiempo De Viaje(Minutos)</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:TiempoViaje,enable:EditarEnable" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-12 col-12 col-lg-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <div class="col-md-2"><label class="control-label">Filtro</label></div>
+                                        <div class="col-md-10">
+                                            <select class="form-control" id="cmbFiltro1">
+                                                <option value="1">Amie</option>
+                                                <option value="2">Provincia</option>
+                                                <option value="3">Canton</option>
+                                                <option value="4">Parroquia</option>
+                                                <option value="5">Circuito</option>
+                                                <option value="6">Distrito</option>
+                                                <option value="7">Zona</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="col-md-2"><label class="control-label">Filtro 2</label></div>
+                                        <div class="col-md-10">
+                                            <select class="form-control" id="cmbFiltro2">
+                                                <option value="">-- Seleccione --</option>
+                                                <option value="1">Jornada</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="col-md-2"><label class="control-label">Filtro 3</label></div>
+                                        <div class="col-md-10">
+                                            <select class="form-control" id="cmbFiltro3">
+                                                <option  value="">-- Seleccione --</option>
+                                                <option value="1">Grado</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" style="text-align:center">
+                                <button class="btn btn-primary" data-bind="click:Filtro">Aplicar Filtro</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button type="button" data-bind="click: Guardar,visible:VisibleSave" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-floppy-saved"></span> Guardar
+                </button>
+                <button type="button" data-bind="click: Edit,visible:VisibleEdit" class="btn btn-secondary">
+                    <span class="glyphicon glyphicon-edit"></span> Editar
+                </button>
+                <button type="button" data-bind="click: Cancel,visible:VisibleCancel" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </section>
+</div>
+<script type="text/javascript" language="javascript" src="~/Scripts/Pages/Procesos/ProcesoAsignacion.js"></script>

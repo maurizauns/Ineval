@@ -26,6 +26,7 @@ namespace Ineval.App_Start
 {
     public class AsignacionController : BaseController<Guid, Asignacion, AsignacionViewModel>
     {
+        SwmContext db = new SwmContext();
         public AsignacionController()
         {
             EntityService = new AsignacionService();
@@ -39,7 +40,7 @@ namespace Ineval.App_Start
             using (var nombreProcesosService = new NombreProcesoService())
             {
                 nombreProcesos = nombreProcesosService.GetAll().ToList();
-                ViewBag.NombreProcesoId = //new SelectList(nombreProcesos, "Id", "Description", null);
+                ViewBag.NombreProcesoId =
                 new SelectList((from s in nombreProcesos.ToList() select new { Id = s.Id, Description = "(" + s.Code + ") " + s.Description }), "Id", "Description", null);
             }
         }
@@ -76,7 +77,6 @@ namespace Ineval.App_Start
                 HttpUtility.HtmlEncode(item.NombreProceso != null ?  "(" + item.NombreProceso.Code + ") " +item.NombreProceso.Description : ""),
                 HttpUtility.HtmlEncode(item.EstadoProceso.HasValue ? item.EstadoProceso.Value==1 ? "Activo" : "Finalizado" : "Activo"),
                 HttpUtility.HtmlEncode(GridHelperExts.ActionsList("asignacion-modal")
-                        //.Add(GridHelperExts.CreateLink(Url.Action("GetEntity"),item.Id,"asignacionCallback"))
                         .Add(GridHelperExts.EditAction(Url.Action("GetEntity"), item.Id, "asignacionCallback"))
                         .Add(GridHelperExts.DeleteAction(Url.Action("Delete"), "asignacion-grid", item.Id))
                          .Add(ConfiguracionAction(item.Id))
@@ -104,7 +104,7 @@ namespace Ineval.App_Start
             return Mapper.Map(viewModel, asignacion);
         }
 
-        public async Task<ActionResult> GetFormulario(int id)
+        public async Task<ActionResult> GetFormulario(Guid? id)
         {
             //var procesoService = new NombreProcesoService();
             List<NombreProceso> nombreProceso = new List<NombreProceso>();
@@ -186,27 +186,27 @@ namespace Ineval.App_Start
             }
         }
 
-        //public async Task<ActionResult> TestApi()
-        //{
-        //    UsuarioService usuarioService = new UsuarioService();
-        //    try
-        //    {
-        //        var userId = User.Identity.GetUserId();
-        //        var usuario = usuarioService.ObtenerPorApplicationUserId(userId);
+        public async Task<ActionResult> TestApi()
+        {
+            UsuarioService usuarioService = new UsuarioService();
+            try
+            {
+                var userId = User.Identity.GetUserId();
+                var usuario = usuarioService.ObtenerPorApplicationUserId(userId);
 
-        //        Root weatherForecast = await ApiCycling.GetByCycling("-122.42,37.78", "-77.03,38.91", usuario.APIKEY);
+                ApiCycling.Root weatherForecast = await ApiCycling.GetByCycling("-122.42,37.78", "-77.03,38.91", usuario.APIKEY);
 
-        //        return Json(new { result = weatherForecast, state = true }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return Json(new { result = "", state = false }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    finally
-        //    {
-        //        usuarioService.Dispose();
-        //    }
-        //}
+                return Json(new { result = weatherForecast, state = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { result = "", state = false }, JsonRequestBehavior.AllowGet);
+            }
+            finally
+            {
+                usuarioService.Dispose();
+            }
+        }
 
         public async Task<ActionResult> TestApi2()
         {
@@ -238,7 +238,7 @@ namespace Ineval.App_Start
                 var userId = User.Identity.GetUserId();
                 var usuario = usuarioService.ObtenerPorApplicationUserId(userId);
 
-                ApiPosicionGeografica.Root weatherForecast = await ApiPosicionGeografica.GetByPosicionGeografica("Ecuador", usuario.APIKEY);
+                ApiPosicionGeografica.Root weatherForecast = await ApiPosicionGeografica.GetByPosicionGeografica("AZUAY,CAMILO PONCE ENRIQUEZ", usuario.APIKEY);
 
                 return Json(new { result = weatherForecast, state = true }, JsonRequestBehavior.AllowGet);
             }
@@ -250,6 +250,21 @@ namespace Ineval.App_Start
             {
                 usuarioService.Dispose();
             }
+        }
+
+        public class Posicion
+        {
+            public string Lng { get; set; }
+            public string Lat { get; set; }
+        }
+        public async Task<ActionResult> Test(Guid? Id)
+        {
+            List<DatosInstituciones> lista = new List<DatosInstituciones>();
+            //Guid? id = "ef7fe99a-0f23-ec11-a5dc-50e0857d5969";
+            lista = await db.DatosInstituciones.Where(x => x.AsignacionId == Id && x.provincia == "Pichincha").ToListAsync();
+            var jsonResult = Json(new { result = lista }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
     }
 }

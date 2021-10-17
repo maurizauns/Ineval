@@ -12,10 +12,17 @@ namespace Ineval.Dto
         [Required(ErrorMessage = "Seleccione Tipo de Asignacion.")]
         [Display(Name = "Asignacion")]
         public Guid? AsignacionId { get; set; }
+        public bool? SiNoNumeroLaboratorios { get; set; }
         public int? NumeroLaboratorios { get; set; }
+        public bool? SiNoNumeroEquipos { get; set; }
         public int? NumeroEquipos { get; set; }
+        public bool? SiNoNumerosSesiones { get; set; }
         public int? NumerosSesiones { get; set; }
+        public bool? SiNoNumeroDiasEvaluar { get; set; }
         public int? NumeroDiasEvaluar { get; set; }
+        public bool? SiNoTiempoViaje { get; set; }
         public int? TiempoViaje { get; set; }
+        public bool? SiNoDuracionPrueba { get; set; }
+        public int? DuracionPrueba { get; set; }
     }
 }

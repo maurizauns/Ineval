@@ -1,5 +1,5 @@
 ﻿<div id="Content">
-    contenido inicial
+    
 </div>
 <script src="~/Scripts/knockout.debug.js"></script>
 <script src="~/Scripts/knockout.mapping.js"></script>
@@ -10,6 +10,7 @@
         function KnockoutHistory() {
             vmh.CurrentUrl = ko.observable()
             vmh.CurrentId = ko.observable(window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1))
+            vmh.PasswordMapBox = ko.observable("");
             vmh.LoadView = function (e) {
                 $("#Content").load(e.LoadView.arguments[1].currentTarget.pathname);
                 $("#Content").show();
@@ -32,6 +33,29 @@
                     }
                 });
             }
+
+            
+
+            vmh.GetUsers = function () {
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: '/ViewTest/GetUsers',
+                    //data: JSON.stringify(),
+                    success: function (data) {
+                        debugger
+                        if (data != null) {
+                            if (data.Data.APIKEY == null || data.Data.APIKEY == "") {
+                                error("Debe registrarse en MapBox para usar las funciones Completas del Sistema");
+                            } else {
+                                vmh.PasswordMapBox(data.Data.APIKEY);
+                            }
+                        }
+                    }
+                });
+            }
+            //call to get users list when the VM is loading or you can call it on any event on your model
+            vmh.GetUsers();
 
             ko.applyBindings(vmh, $("#secondary-list-id")[0]);
         }

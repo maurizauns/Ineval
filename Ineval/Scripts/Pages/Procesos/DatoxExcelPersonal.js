@@ -57,7 +57,7 @@ $(document).ready(function () {
     $.ajax({
         type: "GET",
         contentType: "application/json; charset=utf-8",
-        url: "/DatosExcelPersonal/GetFormulario?id=" + 5,
+        url: "/DatosExcelPersonal/GetFormulario?id=" + vmh.CurrentId(),
         success: KnockoutFormBMI
     });
 });

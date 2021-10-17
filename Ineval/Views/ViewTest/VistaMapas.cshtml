@@ -1,0 +1,48 @@
+﻿
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css' rel='stylesheet' />
+
+<div class="form-group">
+    <div class="col-md-2">
+        <label class="control-label">Filtros</label>
+        <div class="form-group">
+            <div class=" ">
+                <label class="control-label">Provincia</label>
+            </div>
+
+            <div class="col-md-10">
+                <select id="cmbProvincia" class="form-control" onchange="cambioProvincia(this)">
+                    <option value="01">Azuay</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="">
+                <label class="control-label ">Canton</label>
+            </div>
+            <div class="col-md-10">
+                <select id="cmbCanton" class="form-control" onchange="cambioCanton(this)">
+                    <option value="value">text</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="">
+                <label class="control-label ">Parroquia</label>
+            </div>
+            <div class="col-md-10">
+                <select id="cmbParroquia" class="form-control" onchange="cambioParroquia(this)">
+                    <option value="value">text</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            @*<a id="downloadLink" href="" download="map.png">Download ↓</a>*@
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div id='map' style='width: 100%; height: 800px;'></div>
+    </div>
+
+</div>
+<script type="text/javascript" src="~/Scripts/Pages/Procesos/DatosMapas.js"></script>

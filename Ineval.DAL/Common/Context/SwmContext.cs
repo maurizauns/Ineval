@@ -42,5 +42,8 @@ namespace Ineval.DAL
         public DbSet<ParametrosIniciales> ParametrosIniciales { get; set; }
         public DbSet<DatosExcelPersonal> DatosExcelPersonal { get; set; }
         public DbSet<DatosPersonalTerritorio> DatosPersonalTerritorio { get; set; }
+        public DbSet<DatosProvinciaLatLng> DatosProvinciaLatLng { get; set; }
+        public DbSet<DatosCantonLatLng> DatosCantonLatLng { get; set; }
+        public DbSet<DatosParroquiaLatLng> DatosParroquiaLatLng { get; set; }
     }
 }

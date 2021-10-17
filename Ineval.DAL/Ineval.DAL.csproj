@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\BaseEntityClass.cs" />
+    <Compile Include="Common\Context\ConnectionToSql.cs" />
     <Compile Include="Common\Context\SwmContext.cs" />
     <Compile Include="Common\EstadoEnum.cs" />
     <Compile Include="Common\GeneralConfigurationBase.cs" />
@@ -81,10 +82,13 @@
     <Compile Include="Entities\configuration\Province.cs" />
     <Compile Include="Entities\Menu.cs" />
     <Compile Include="Entities\procesos\Asignacion.cs" />
+    <Compile Include="Entities\procesos\DatosCantonLatLng.cs" />
     <Compile Include="Entities\procesos\DatosExcelPersonal.cs" />
     <Compile Include="Entities\procesos\DatosInstituciones.cs" />
     <Compile Include="Entities\procesos\DatosExcelCabecera.cs" />
+    <Compile Include="Entities\procesos\DatosParroquiaLatLng.cs" />
     <Compile Include="Entities\procesos\DatosPersonalTerritorio.cs" />
+    <Compile Include="Entities\procesos\DatosProvinciaLatLng.cs" />
     <Compile Include="Entities\procesos\DatosSustentantes.cs" />
     <Compile Include="Entities\procesos\DatosTemporales.cs" />
     <Compile Include="Entities\procesos\NombreProceso.cs" />
@@ -123,6 +127,22 @@
     <Compile Include="Migrations\202109280405122_202109272305.Designer.cs">
       <DependentUpon>202109280405122_202109272305.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110010528536_011020210028.cs" />
+    <Compile Include="Migrations\202110010528536_011020210028.Designer.cs">
+      <DependentUpon>202110010528536_011020210028.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110010530526_01102021002801.cs" />
+    <Compile Include="Migrations\202110010530526_01102021002801.Designer.cs">
+      <DependentUpon>202110010530526_01102021002801.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110010540508_011020210040.cs" />
+    <Compile Include="Migrations\202110010540508_011020210040.Designer.cs">
+      <DependentUpon>202110010540508_011020210040.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110010547294_011020210047.cs" />
+    <Compile Include="Migrations\202110010547294_011020210047.Designer.cs">
+      <DependentUpon>202110010547294_011020210047.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -155,6 +175,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202109280405122_202109272305.resx">
       <DependentUpon>202109280405122_202109272305.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110010528536_011020210028.resx">
+      <DependentUpon>202110010528536_011020210028.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110010530526_01102021002801.resx">
+      <DependentUpon>202110010530526_01102021002801.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110010540508_011020210040.resx">
+      <DependentUpon>202110010540508_011020210040.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110010547294_011020210047.resx">
+      <DependentUpon>202110010547294_011020210047.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

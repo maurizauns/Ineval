@@ -18,6 +18,6 @@ namespace Ineval.Dto
         public string canton { get; set; }
         public string id_parroquia { get; set; }
         public string parroquia { get; set; }
-        public string Tipo_Personal { get; set; }
+        public string Cargo { get; set; }
     }
 }

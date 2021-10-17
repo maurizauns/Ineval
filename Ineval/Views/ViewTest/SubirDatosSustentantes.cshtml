@@ -38,10 +38,16 @@
         <div class="admission-list-filter px-1">
             <div class="row border-div-simec py-2 mb-2">
                 <div class="col-12 col-sm-12 col-lg-12">
-                    <div class="form-group">
+                    <div class="form-group row">
                         <label class="control-label col-md-4">Numero Total de Registros Cargados:</label>
                         <div class="col-md-8">
                             <span data-bind="text:NumeroTotal"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label col-md-4">Numero Total de Instituciones Cargados:</label>
+                        <div class="col-md-8">
+                            <span data-bind="text:NumeroTotalInsticiones"></span>
                         </div>
                     </div>
                 </div>
@@ -56,6 +62,25 @@
                 <div class="col-12  col-sm-12 col-lg-12 ">
                     <button type="button" onclick="CargaMatriz()" class="btn btn-primary">
                         Cargar Datos Sustentantes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="card-body border-div-history">
+    <section class="admission-list-wrapper">
+        <div class="admission-list-filter px-1">
+            <div class="row border-div-simec py-2 mb-2">
+                <div class="col-6  col-sm-6 col-lg-6 ">
+                    <button type="button" data-bind="click:MigrarDatosSustentantes" class="btn btn-primary">
+                        Migrar Datos Sustentantes
+                    </button>
+                </div>
+                <div class="col-6  col-sm-6 col-lg-6 ">
+                    <button type="button" data-bind="click:MigrarDatosInstituciones" class="btn btn-primary">
+                        Migrar Datos Instituciones
                     </button>
                 </div>
             </div>

@@ -16,21 +16,18 @@
 <div class="content-header row">
     <div class="content-header-left col-12 mb-2 mt-1">
         <div class="row mx-0">
-            <div class="col-8 d-flex align-items-center pl-0">
+            <div class="col-12 d-flex align-items-center pl-0">
                 <h5 class="content-header-title float-left pr-1 mb-0">@ViewBag.Title</h5>
-                <div class="breadcrumb-wrapper col-9">
-                    <ol class="breadcrumb p-0 mb-0">
-                        <li class="breadcrumb-item">
-                            <a href="/"><i class="bx bx-home-alt"></i></a>
-                        </li>
-                    </ol>
-                </div>
+                @*<div class="breadcrumb-wrapper col-9">
+                        <ol class="breadcrumb p-0 mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="/"><i class="bx bx-home-alt"></i></a>
+                            </li>
+                        </ol>
+                    </div>*@
             </div>
-            <div class="col-4 px-0 pt-xl-0 pt-1">
-                @*<button type="button" class="btn btn-success glow invoice-create float-right mr-1 mb-0" data-toggle="modal" data-target="#usuarios-modal" role="button" aria-pressed="true">
-                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
-                    </button>*@
-            </div>
+            @*<div class="col-4 px-0 pt-xl-0 pt-1">
+                </div>*@
         </div>
     </div>
 </div>
@@ -40,22 +37,34 @@
 
             <div class="row border-div-simec py-2 mb-2">
                 <div class="col-12  col-sm-12 col-lg-12 ">
+                    <div class="form-group">
+                        <label>Número de Personal en Territorio:</label>
+                        <span data-bind="text:NumeroTotal"></span>
+                    </div>
+
                     <button type="button" onclick="CargaMatriz()" class="btn btn-primary">
                         Cargar Datos Personal en Territorio
                     </button>
 
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
-<div class="card-body border-div-history">
-    <section class="admission-list-wrapper">
-        <div class="admission-list-filter px-1">
-            <div class="row border-div-simec py-2 mb-2">
-                <div class="col-12 col-sm-12 col-lg-12">
                     <div class="form-group">
-                        <input type="button" name="name" value="Contar Amie" data-bind="click:Cancel" />
+                        <table class="table table-hover table-striped" cellspacing="0" width="100%" id="cargarDatosPT">
+                            <thead>
+                                <tr>
+                                    <td>Tipo Documento</td>
+                                    <td>Número Documento</td>
+                                    <td>Nombres y Apellidos</td>
+                                    <td>Sexo</td>
+                                    <td>Id Provincia</td>
+                                    <td>Provincia</td>
+                                    <td>Id Cantón</td>
+                                    <td>Cantón</td>
+                                    <td>Id Parroquia</td>
+                                    <td>Parroquia</td>
+                                    <td>Cargo</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -67,5 +76,5 @@
 
 @section scripts
     {
-    
+
 }

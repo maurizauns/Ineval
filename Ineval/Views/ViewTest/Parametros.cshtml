@@ -47,51 +47,88 @@
                     </div>
                     <div class="form-group" data-bind="visible:Existe()==true">
                         <input type="hidden" name="name" value="" data-bind="value:Id" />
-                        <div class="form-group">
+                        <div class="form-group row">
                             <div class="col-md-6">
-                                <div class="col-md-2">
-                                    <label class="control-label">Número de Laboratorios</label>
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Numero de Laboratorios:</label>
                                 </div>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" name="name" value="" data-bind="value:NumeroLaboratorios,enable:EditarEnable" />
+                                <div class="col-md-2">
+                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoNumeroLaboratorios,enable:EditarEnable" />
+                                    
+                                </div>
+                                <div class="col-md-4" data-bind="enable:VisibleNumeroLab">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroLaboratorios,enable:EditarEnable" />
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="col-md-2">
-                                    <label class="control-label">Número de Equipos</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" name="name" value="" data-bind="value:NumeroEquipos,enable:EditarEnable" />
-                                </div>
-                            </div>
+                            <div class="col-md-6"></div>
+
+                            
                         </div>
-                        <div class="form-group">
+                        <div class="form-group  row">
                             <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Numero de Equipos:</label>
+                                </div>
                                 <div class="col-md-2">
-                                    <label class="control-label">Número de Sesiones</label>
+                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoNumeroEquipos,enable:EditarEnable" />
                                 </div>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" name="name" value="" data-bind="value:NumerosSesiones,enable:EditarEnable" />
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroEquipos,enable:EditarEnable" />
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-md-2">
-                                    <label class="control-label">Número de Dias a Evaluar</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" name="name" value="" data-bind="value:NumeroDiasEvaluar,enable:EditarEnable" />
-                                </div>
-                            </div>
+                            </div>                           
                         </div>
-                        <div class="form-group">
+                        <div class="form-group row">
                             <div class="col-md-6">
-                                <div class="col-md-2">
-                                    <label class="control-label">Tiempo De Viaje(Minutos)</label>
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Numero de Sesiones:</label>
                                 </div>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" name="name" value="" data-bind="value:TiempoViaje,enable:EditarEnable" />
+                                <div class="col-md-2">
+                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoNumerosSesiones,enable:EditarEnable" />
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumerosSesiones,enable:EditarEnable" />
                                 </div>
                             </div>                            
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Numero de Dias a Evaluar:</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoNumeroDiasEvaluar,enable:EditarEnable" />
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroDiasEvaluar,enable:EditarEnable" />
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Duracion de la prueba(horas)</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoDuracionPrueba,enable:EditarEnable" />
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:DuracionPrueba,enable:EditarEnable" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Tiempo de Viaje(minutos):</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoTiempoViaje,enable:EditarEnable" />
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:TiempoViaje,enable:EditarEnable" />
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ineval.Dto.Dto.Procesos
+namespace Ineval.Dto
 {
     public class DatosInstitucionesViewModel: BaseModel
     {
@@ -25,7 +25,12 @@ namespace Ineval.Dto.Dto.Procesos
         public string id_distrito { get; set; }
         public string distrito { get; set; }
         public string id_zona { get; set; }
+        public string numero_laboratorios { get; set; }
+        public string numero_computadorasfuncionales { get; set; }
+        public string numero_computadorasnofuncionales { get; set; }
         public string sostenimiento_institucion { get; set; }
         public string regimen_institucion { get; set; }
+        public string coordenada_Lat { get; set; }
+        public string coordenada_Lng { get; set; }
     }
 }

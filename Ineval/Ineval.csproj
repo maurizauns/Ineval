@@ -403,8 +403,8 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
-    <Reference Include="Z.EntityFramework.Extensions, Version=5.2.7.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Z.EntityFramework.Extensions.5.2.7\lib\net45\Z.EntityFramework.Extensions.dll</HintPath>
+    <Reference Include="Z.EntityFramework.Extensions, Version=5.2.13.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Extensions.5.2.13\lib\net45\Z.EntityFramework.Extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -476,6 +476,7 @@
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\DatosExcelCabeceraController.cs" />
     <Compile Include="Controllers\DatosExcelPersonalController.cs" />
+    <Compile Include="Controllers\DatosMapasController.cs" />
     <Compile Include="Controllers\DatosPersonalTerritorioController.cs" />
     <Compile Include="Controllers\DatosSustentantesController.cs" />
     <Compile Include="Controllers\DatosTemporalesController.cs" />
@@ -486,6 +487,7 @@
     <Compile Include="Controllers\NombreProcesoController.cs" />
     <Compile Include="Controllers\ParametrosInicialesController.cs" />
     <Compile Include="Controllers\ParroquiaController.cs" />
+    <Compile Include="Controllers\ProcesoAsignacionController.cs" />
     <Compile Include="Controllers\ProcesoController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\RolePermissionsController.cs" />
@@ -977,6 +979,63 @@
     <Content Include="Content\colors.css" />
     <Content Include="Content\colors.min.css" />
     <Content Include="Content\custom.css" />
+    <Content Include="Content\DataTables\css\dataTables.autoFill.css" />
+    <Content Include="Content\DataTables\css\dataTables.autoFill.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.bootstrap.css" />
+    <Content Include="Content\DataTables\css\dataTables.colReorder.css" />
+    <Content Include="Content\DataTables\css\dataTables.colReorder.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.colVis.css" />
+    <Content Include="Content\DataTables\css\dataTables.colvis.jqueryui.css" />
+    <Content Include="Content\DataTables\css\dataTables.colVis.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.fixedColumns.css" />
+    <Content Include="Content\DataTables\css\dataTables.fixedColumns.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.fixedHeader.css" />
+    <Content Include="Content\DataTables\css\dataTables.fixedHeader.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.foundation.css" />
+    <Content Include="Content\DataTables\css\dataTables.jqueryui.css" />
+    <Content Include="Content\DataTables\css\dataTables.keyTable.css" />
+    <Content Include="Content\DataTables\css\dataTables.keyTable.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.responsive.css" />
+    <Content Include="Content\DataTables\css\dataTables.scroller.css" />
+    <Content Include="Content\DataTables\css\dataTables.scroller.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.tableTools.css" />
+    <Content Include="Content\DataTables\css\dataTables.tableTools.min.css" />
+    <Content Include="Content\DataTables\css\jquery.dataTables.css" />
+    <Content Include="Content\DataTables\css\jquery.dataTables.min.css" />
+    <Content Include="Content\DataTables\css\jquery.dataTables_themeroller.css" />
+    <Content Include="Content\DataTables\css\responsive.dataTables.min.css" />
+    <Content Include="Content\DataTables\css\rowReorder.dataTables.min.css" />
+    <Content Include="Content\DataTables\images\background.png" />
+    <Content Include="Content\DataTables\images\back_disabled.png" />
+    <Content Include="Content\DataTables\images\back_enabled.png" />
+    <Content Include="Content\DataTables\images\back_enabled_hover.png" />
+    <Content Include="Content\DataTables\images\collection.png" />
+    <Content Include="Content\DataTables\images\collection_hover.png" />
+    <Content Include="Content\DataTables\images\copy.png" />
+    <Content Include="Content\DataTables\images\copy_hover.png" />
+    <Content Include="Content\DataTables\images\csv.png" />
+    <Content Include="Content\DataTables\images\csv_hover.png" />
+    <Content Include="Content\DataTables\images\details_close.png" />
+    <Content Include="Content\DataTables\images\details_open.png" />
+    <Content Include="Content\DataTables\images\filler.png" />
+    <Content Include="Content\DataTables\images\forward_disabled.png" />
+    <Content Include="Content\DataTables\images\forward_enabled.png" />
+    <Content Include="Content\DataTables\images\forward_enabled_hover.png" />
+    <Content Include="Content\DataTables\images\insert.png" />
+    <Content Include="Content\DataTables\images\loading-background.png" />
+    <Content Include="Content\DataTables\images\pdf.png" />
+    <Content Include="Content\DataTables\images\pdf_hover.png" />
+    <Content Include="Content\DataTables\images\print.png" />
+    <Content Include="Content\DataTables\images\print_hover.png" />
+    <Content Include="Content\DataTables\images\sort_asc.png" />
+    <Content Include="Content\DataTables\images\sort_asc_disabled.png" />
+    <Content Include="Content\DataTables\images\sort_both.png" />
+    <Content Include="Content\DataTables\images\sort_desc.png" />
+    <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
+    <Content Include="Content\DataTables\images\xls.png" />
+    <Content Include="Content\DataTables\images\xls_hover.png" />
+    <Content Include="Content\DataTables\swf\copy_csv_xls.swf" />
+    <Content Include="Content\DataTables\swf\copy_csv_xls_pdf.swf" />
     <Content Include="Content\estiloPeriodoncia.css" />
     <Content Include="Content\flot.css" />
     <Content Include="Content\font-awesome.css" />
@@ -1659,6 +1718,33 @@
     <Content Include="Scripts\core\security\UsuarioConfig.js" />
     <Content Include="Scripts\culture.js" />
     <Content Include="Scripts\custom.js" />
+    <Content Include="Scripts\DataTables\dataTables.autoFill.js" />
+    <Content Include="Scripts\DataTables\dataTables.autoFill.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.bootstrap.js" />
+    <Content Include="Scripts\DataTables\dataTables.colReorder.js" />
+    <Content Include="Scripts\DataTables\dataTables.colReorder.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.colVis.js" />
+    <Content Include="Scripts\DataTables\dataTables.colVis.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.fixedColumns.js" />
+    <Content Include="Scripts\DataTables\dataTables.fixedColumns.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.fixedHeader.js" />
+    <Content Include="Scripts\DataTables\dataTables.fixedHeader.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.foundation.js" />
+    <Content Include="Scripts\DataTables\dataTables.jqueryui.js" />
+    <Content Include="Scripts\DataTables\dataTables.keyTable.js" />
+    <Content Include="Scripts\DataTables\dataTables.keyTable.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.responsive.js" />
+    <Content Include="Scripts\DataTables\dataTables.responsive.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.rowReorder.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.scroller.js" />
+    <Content Include="Scripts\DataTables\dataTables.scroller.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.tableTools.js" />
+    <Content Include="Scripts\DataTables\dataTables.tableTools.min.js" />
+    <Content Include="Scripts\DataTables\datetime-moment.js" />
+    <Content Include="Scripts\DataTables\jquery.dataTables.js" />
+    <Content Include="Scripts\DataTables\jquery.dataTables.min.js" />
+    <Content Include="Scripts\DataTables\jquery.dataTables1-10-12.js" />
+    <Content Include="Scripts\DataTables\page.jumpToData%28%29.js" />
     <Content Include="Scripts\dropzone\dropzone.css" />
     <Content Include="Scripts\dropzone\dropzone.js" />
     <Content Include="Scripts\dropzone\dropzone2.css" />
@@ -1730,6 +1816,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\iconfont.ttf" />
     <Content Include="fonts\iconfont.woff" />
+    <Content Include="Content\DataTables\css\dataTables.jqueryui.scss" />
+    <Content Include="Content\DataTables\css\dataTables.responsive.scss" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -1807,6 +1895,7 @@
     <Content Include="Scripts\Pages\core\security\login.js" />
     <Content Include="Scripts\Pages\core\security\UsuarioConfig.js" />
     <Content Include="Scripts\Pages\Procesos\Asignacion.js" />
+    <Content Include="Scripts\Pages\Procesos\DatosMapas.js" />
     <Content Include="Scripts\Pages\Procesos\DatosPersonalTerritorio.js" />
     <Content Include="Scripts\Pages\Procesos\DatosSustentantes.js" />
     <Content Include="Scripts\Pages\Procesos\DatosTemporales.js" />
@@ -1814,6 +1903,7 @@
     <Content Include="Scripts\Pages\Procesos\DatoxExcelPersonal.js" />
     <Content Include="Scripts\Pages\Procesos\nombreProceso.js" />
     <Content Include="Scripts\Pages\Procesos\ParametrosIniciales.js" />
+    <Content Include="Scripts\Pages\Procesos\ProcesoAsignacion.js" />
     <Content Include="Scripts\plugins\parsley.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -2162,10 +2252,14 @@
     <Content Include="Views\ViewTest\GenerarExcelDatosPersonalTerritorio.cshtml" />
     <Content Include="Views\ViewTest\SubirDatosSustentantes.cshtml" />
     <Content Include="Views\ViewTest\SubirDatosPersonalTerritorio.cshtml" />
+    <Content Include="Views\ViewTest\VistaMapas.cshtml" />
+    <Content Include="Views\ViewTest\ViewProcesoAsignacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\BaseProceso\" />
+    <Folder Include="Views\DatosMapas\" />
+    <Folder Include="Views\ProcesoAsignacion\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
