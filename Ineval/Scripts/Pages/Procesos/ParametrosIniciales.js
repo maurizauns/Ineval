@@ -28,6 +28,13 @@ $(document).ready(function () {
 
 
         vmFormParametrosIniciales.Id = ko.observable("");
+        vmFormParametrosIniciales.startToAdd = ko.observable("");
+        vmFormParametrosIniciales.HoraMaxima = ko.observable("");
+        vmFormParametrosIniciales.HoraInicio = ko.observable("");
+        vmFormParametrosIniciales.HoraFin = ko.observable("");
+        vmFormParametrosIniciales.TiempoEvaluacion = ko.observable("");
+        vmFormParametrosIniciales.TiempoReceso = ko.observable("");
+        vmFormParametrosIniciales.TiempoReal = ko.observable("");
         vmFormParametrosIniciales.SinoNumeroLaboratorios = ko.observable(false);
         vmFormParametrosIniciales.NumeroLaboratorios = ko.observable("");
         vmFormParametrosIniciales.SinoNumeroEquipos = ko.observable(false);
@@ -68,7 +75,13 @@ $(document).ready(function () {
                     SinoDuracionPrueba: vmFormParametrosIniciales.SinoDuracionPrueba(),
                     DuracionPrueba: vmFormParametrosIniciales.DuracionPrueba(),
                     SinoTiempoViaje: vmFormParametrosIniciales.SinoTiempoViaje(),
-                    TiempoViaje: vmFormParametrosIniciales.TiempoViaje()
+                    TiempoViaje: vmFormParametrosIniciales.TiempoViaje(),
+                    HoraInicio: vmFormParametrosIniciales.HoraInicio(),
+                    HoraFin: vmFormParametrosIniciales.HoraFin(),
+                    HoraMaxima: vmFormParametrosIniciales.HoraMaxima(),
+                    TiempoEvaluacion: vmFormParametrosIniciales.TiempoEvaluacion(),
+                    TiempoReceso: vmFormParametrosIniciales.TiempoReceso(),
+                    TiempoReal: vmFormParametrosIniciales.TiempoReal()
                 }),
                 success: function (Data) {
                     swal(Data.message, "Registro Guardado", "success");
@@ -79,7 +92,7 @@ $(document).ready(function () {
 
                 }
             });
-        }
+        }       
 
         vmFormParametrosIniciales.Edit = function () {
             vmFormParametrosIniciales.EditarEnable(true);
@@ -104,6 +117,39 @@ $(document).ready(function () {
             //}
         }
 
+        vmFormParametrosIniciales.EventoCambioFecha = function () {
+            if (vmFormParametrosIniciales.HoraInicio() != "") {
+                
+            } else {
+                error("No debe estar vacio");
+            }
+
+            if (vmFormParametrosIniciales.HoraFin() != "") {
+
+            } else {
+                error("No debe estar vacio");
+            }
+
+            if (vmFormParametrosIniciales.TiempoEvaluacion() != "") {
+
+            } else {
+                error("No debe estar vacio");
+            }
+
+            if (vmFormParametrosIniciales.TiempoReceso() != "") {
+
+            } else {
+                error("No debe estar vacio");
+            }
+
+            //vmFormParametrosIniciales.TiempoReal(vmFormParametrosIniciales.HoraInicio() + vmFormParametrosIniciales.TiempoReceso());
+
+            //while (vmFormParametrosIniciales.HoraSession() <= vmFormParametrosIniciales.HoraInicio()) {
+
+            //}
+
+        }
+
         if (typeof vmFormParametrosIniciales.ParametrosIniciales === 'function') {
             vmFormParametrosIniciales.Existe(false);
             vmFormParametrosIniciales.VisibleNew(true);
@@ -114,6 +160,12 @@ $(document).ready(function () {
             vmFormParametrosIniciales.VisibleCancel(false);
 
             vmFormParametrosIniciales.Id("");
+            vmFormParametrosIniciales.HoraMaxima = ko.observable("");
+            vmFormParametrosIniciales.HoraInicio = ko.observable("");
+            vmFormParametrosIniciales.HoraFin = ko.observable("");
+            vmFormParametrosIniciales.TiempoEvaluacion = ko.observable("");
+            vmFormParametrosIniciales.TiempoReceso = ko.observable("");
+            vmFormParametrosIniciales.TiempoReal = ko.observable("");
             vmFormParametrosIniciales.SinoNumeroLaboratorios(false);
             vmFormParametrosIniciales.NumeroLaboratorios("");
             vmFormParametrosIniciales.SinoNumeroEquipos(false);
@@ -134,6 +186,12 @@ $(document).ready(function () {
             vmFormParametrosIniciales.VisibleEdit(true);
             vmFormParametrosIniciales.VisibleCancel(true);
             vmFormParametrosIniciales.Id(vmFormParametrosIniciales.ParametrosIniciales.Id());
+            vmFormParametrosIniciales.HoraMaxima(vmFormParametrosIniciales.ParametrosIniciales.HoraMaxima());
+            vmFormParametrosIniciales.HoraInicio(vmFormParametrosIniciales.ParametrosIniciales.HoraInicio());
+            vmFormParametrosIniciales.HoraFin(vmFormParametrosIniciales.ParametrosIniciales.HoraFin());
+            vmFormParametrosIniciales.TiempoEvaluacion(vmFormParametrosIniciales.ParametrosIniciales.TiempoEvaluacion());
+            vmFormParametrosIniciales.TiempoReceso(vmFormParametrosIniciales.ParametrosIniciales.TiempoReceso());
+            vmFormParametrosIniciales.TiempoReal(vmFormParametrosIniciales.ParametrosIniciales.TiempoReal());
             vmFormParametrosIniciales.SinoNumeroLaboratorios(vmFormParametrosIniciales.ParametrosIniciales.SiNoNumeroLaboratorios());
             vmFormParametrosIniciales.NumeroLaboratorios(vmFormParametrosIniciales.ParametrosIniciales.NumeroLaboratorios());
             vmFormParametrosIniciales.SinoNumeroEquipos(vmFormParametrosIniciales.ParametrosIniciales.SiNoNumeroEquipos());
@@ -160,3 +218,89 @@ $(document).ready(function () {
         success: KnockoutFormParametrosIniciales
     });
 });
+
+$(function () {
+    //$('#datetimepickerStart').datetimepicker({
+    //    icons: {
+    //        time: 'fa fa-clock-o',
+    //        date: 'fa fa-calendar',
+    //        up: 'fa fa-chevron-up',
+    //        down: 'fa fa-chevron-down',
+    //        previous: 'fa fa-chevron-left',
+    //        next: 'fa fa-chevron-right',
+    //        today: 'fa fa-crosshairs',
+    //        clear: 'fa fa-trash',
+    //    },
+    //    format: 'HH:mm'
+    //});
+
+    //$('#datetimepickerEnd').datetimepicker({
+    //    icons: {
+    //        time: 'fa fa-clock-o',
+    //        date: 'fa fa-calendar',
+    //        up: 'fa fa-chevron-up',
+    //        down: 'fa fa-chevron-down',
+    //        previous: 'fa fa-chevron-left',
+    //        next: 'fa fa-chevron-right',
+    //        today: 'fa fa-crosshairs',
+    //        clear: 'fa fa-trash',
+    //        format: "mm-dd-yyyy"
+    //    },
+    //    format: 'HH:mm'
+    //});
+
+    //$('#datetimepicker1').datetimepicker();
+    //$('#datetimepicker2').datetimepicker();
+    //$('#datetimepicker10').datetimepicker();
+    //$('#datetimepicker20').datetimepicker();
+
+    //$("#datetimepicker1").on("dp.change", function (e) {
+    //    $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+    //});
+    //$("#datetimepicker2").on("dp.change", function (e) {
+    //    $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+    //});
+    //$("#datetimepicker10").on("dp.change", function (e) {
+    //    $('#datetimepicker20').data("DateTimePicker").minDate(e.date);
+    //});
+    //$("#datetimepicker20").on("dp.change", function (e) {
+    //    $('#datetimepicker10').data("DateTimePicker").maxDate(e.date);
+    //});
+});
+
+function CheckTime(str) {
+    hora = str.value;
+    if (hora == '') {
+        return;
+    }
+    if (hora.length > 8) {
+        error("Introdujo una cadena mayor a 8 caracteres");
+        return;
+    }
+    if (hora.length != 8) {
+        error("Introducir HH:MM:SS");
+        return;
+    }
+    a = hora.charAt(0); //<=2
+    b = hora.charAt(1); //<4
+    c = hora.charAt(2); //:
+    d = hora.charAt(3); //<=5
+    e = hora.charAt(5); //:
+    f = hora.charAt(6); //<=5
+    if ((a == 2 && b > 3) || (a > 2)) {
+        error("El valor que introdujo en la Hora no corresponde, introduzca un digito entre 00 y 23");
+        return;
+    }
+    if (d > 5) {
+        error("El valor que introdujo en los minutos no corresponde, introduzca un digito entre 00 y 59");
+        return;
+    }
+    if (f > 5) {
+        error("El valor que introdujo en los segundos no corresponde");
+        return;
+    }
+    if (c != ':' || e != ':') {
+        error("Introduzca el caracter ':' para separar la hora, los minutos y los segundos");
+        return;
+    }
+}

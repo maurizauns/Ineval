@@ -24,5 +24,12 @@ namespace Ineval.DAL
         public int? TiempoViaje { get; set; }
         public bool? SiNoDuracionPrueba { get; set; }
         public int? DuracionPrueba { get; set; }
+        public string HoraMaxima { get; set; }
+        public string HoraInicio { get; set; }
+        public string HoraFin { get; set; }
+        public string TiempoEvaluacion { get; set; }
+        public string TiempoReceso { get; set; }
+        public string TiempoReal { get; set; }
+
     }
 }

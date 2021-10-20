@@ -30,8 +30,8 @@
             </div>
             <div class="col-4 px-0 pt-xl-0 pt-1">
                 <button type="button" class="btn btn-success glow invoice-create float-right mr-1 mb-0" data-toggle="modal" role="button" aria-pressed="true" data-bind="click:New,visible:VisibleNew">
-                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
-                    </button>
+                    <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -50,32 +50,94 @@
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <div class="col-md-4">
-                                    <label class="control-label">Aplicar Numero de Laboratorios:</label>
+                                    <label class="control-label">Hora Inicio Evaluación (HH:MM:SS):</label>
                                 </div>
-                                <div class="col-md-2">
-                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoNumeroLaboratorios,enable:EditarEnable" />
-                                    
-                                </div>
-                                <div class="col-md-4" data-bind="enable:VisibleNumeroLab">
-                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroLaboratorios,enable:EditarEnable" />
+                                <div class="col-md-8">
+                                    <input type="text" name="name" value="" class="form-control" data-bind="value:HoraInicio,enable:EditarEnable,event:{blur:EventoCambioFecha}" onblur="CheckTime(this)" />
+                                    @*<div class='input-group date' id='datetimepicker'>
+                                            <input data-bind='datetimepickerHour: HoraInicio' class="form-control" id="start" />
+                                            <span class="input-group-addon cal-sm" style="pointer-events:none;">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>*@
                                 </div>
                             </div>
-                            <div class="col-md-6"></div>
-
-                            
                         </div>
-                        <div class="form-group  row">
+                        <div class="form-group row">
                             <div class="col-md-6">
                                 <div class="col-md-4">
-                                    <label class="control-label">Aplicar Numero de Equipos:</label>
+                                    <label class="control-label">Hora Fin Evaluación (HH:MM:SS):</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" name="name" value="" class="form-control" data-bind="value:HoraMaxima,enable:EditarEnable,event:{blur:EventoCambioFecha}" onblur="CheckTime(this)" />
+                                    @*<div class='input-group date' id='datetimepicker'>
+                                            <input data-bind='datetimepickerHour: HoraInicio' class="form-control" id="start" />
+                                            <span class="input-group-addon cal-sm" style="pointer-events:none;">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Tiempo Evaluación (HH:MM:SS):</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" name="name" value="" class="form-control" data-bind="value:TiempoEvaluacion,enable:EditarEnable,event:{blur:EventoCambioFecha}" onblur="CheckTime(this)" />
+                                    @*<div class='input-group date' id='datetimepicker'>
+                                            <input data-bind='datetimepickerHour: HoraInicio' class="form-control" id="start" />
+                                            <span class="input-group-addon cal-sm" style="pointer-events:none;">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Timepo Receso (HH:MM:SS):</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" name="name" value="" class="form-control" data-bind="value:TiempoReceso,enable:EditarEnable,event:{blur:EventoCambioFecha}" onblur="CheckTime(this)" />
+                                    @*<div class='input-group date' id='datetimepicker'>
+                                            <input data-bind='datetimepickerHour: HoraInicio' class="form-control" id="start" />
+                                            <span class="input-group-addon cal-sm" style="pointer-events:none;">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="form-group row">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Aplicar Numero de Laboratorios:</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoNumeroLaboratorios,enable:EditarEnable" />
+
+                                    </div>
+                                    <div class="col-md-4" data-bind="enable:VisibleNumeroLab">
+                                        <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroLaboratorios,enable:EditarEnable" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>*@
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Numero de Dias a Evaluar:</label>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoNumeroEquipos,enable:EditarEnable" />
+                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoNumeroDiasEvaluar,enable:EditarEnable" />
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroEquipos,enable:EditarEnable" />
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroDiasEvaluar,enable:EditarEnable" />
                                 </div>
-                            </div>                           
+                            </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-6">
@@ -88,34 +150,21 @@
                                 <div class="col-md-4">
                                     <input type="number" class="form-control" name="name" value="" data-bind="value:NumerosSesiones,enable:EditarEnable" />
                                 </div>
-                            </div>                            
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Aplicar Numero de Dias a Evaluar:</label>
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoNumeroDiasEvaluar,enable:EditarEnable" />
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroDiasEvaluar,enable:EditarEnable" />
-                                </div>
-                            </div>                            
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Aplicar Duracion de la prueba(horas)</label>
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoDuracionPrueba,enable:EditarEnable" />
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="number" class="form-control" name="name" value="" data-bind="value:DuracionPrueba,enable:EditarEnable" />
-                                </div>
                             </div>
                         </div>
+                        <div class="form-group  row">
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label class="control-label">Aplicar Numero de Sustentantes por Sessión:</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" class="" name="name" value="" data-bind="checked:SinoNumeroEquipos,enable:EditarEnable" />
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroEquipos,enable:EditarEnable" />
+                                </div>
+                            </div>
+                        </div>                       
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <div class="col-md-4">
@@ -128,11 +177,11 @@
                                     <input type="number" class="form-control" name="name" value="" data-bind="value:TiempoViaje,enable:EditarEnable" />
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
             <div>
                 <button type="button" data-bind="click: Guardar,visible:VisibleSave" class="btn btn-primary">
                     <span class="glyphicon glyphicon-floppy-saved"></span> Guardar
@@ -154,5 +203,5 @@
     {
     @*<script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/person/personCore.js"></script>
         <script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/security/UsuarioConfig.js"></script>*@
-    
+
 }

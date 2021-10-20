@@ -46,6 +46,9 @@
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.3\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -84,11 +87,14 @@
     <Compile Include="Entities\procesos\Asignacion.cs" />
     <Compile Include="Entities\procesos\DatosCantonLatLng.cs" />
     <Compile Include="Entities\procesos\DatosExcelPersonal.cs" />
+    <Compile Include="Entities\procesos\DatosFiltros.cs" />
     <Compile Include="Entities\procesos\DatosInstituciones.cs" />
     <Compile Include="Entities\procesos\DatosExcelCabecera.cs" />
     <Compile Include="Entities\procesos\DatosParroquiaLatLng.cs" />
     <Compile Include="Entities\procesos\DatosPersonalTerritorio.cs" />
     <Compile Include="Entities\procesos\DatosProvinciaLatLng.cs" />
+    <Compile Include="Entities\procesos\DatosSedes.cs" />
+    <Compile Include="Entities\procesos\DatosSedesAsignacion.cs" />
     <Compile Include="Entities\procesos\DatosSustentantes.cs" />
     <Compile Include="Entities\procesos\DatosTemporales.cs" />
     <Compile Include="Entities\procesos\NombreProceso.cs" />
@@ -143,6 +149,18 @@
     <Compile Include="Migrations\202110010547294_011020210047.Designer.cs">
       <DependentUpon>202110010547294_011020210047.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110172043577_17102021154301.cs" />
+    <Compile Include="Migrations\202110172043577_17102021154301.Designer.cs">
+      <DependentUpon>202110172043577_17102021154301.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110191634126_191020211133.cs" />
+    <Compile Include="Migrations\202110191634126_191020211133.Designer.cs">
+      <DependentUpon>202110191634126_191020211133.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110191921517_191020211421.cs" />
+    <Compile Include="Migrations\202110191921517_191020211421.Designer.cs">
+      <DependentUpon>202110191921517_191020211421.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -187,6 +205,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110010547294_011020210047.resx">
       <DependentUpon>202110010547294_011020210047.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110172043577_17102021154301.resx">
+      <DependentUpon>202110172043577_17102021154301.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110191634126_191020211133.resx">
+      <DependentUpon>202110191634126_191020211133.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110191921517_191020211421.resx">
+      <DependentUpon>202110191921517_191020211421.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

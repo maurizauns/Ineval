@@ -43,7 +43,6 @@
                     url: '/ViewTest/GetUsers',
                     //data: JSON.stringify(),
                     success: function (data) {
-                        debugger
                         if (data != null) {
                             if (data.Data.APIKEY == null || data.Data.APIKEY == "") {
                                 error("Debe registrarse en MapBox para usar las funciones Completas del Sistema");

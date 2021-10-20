@@ -1,5 +1,7 @@
-﻿using Ineval.BO;
+﻿using AutoMapper;
+using Ineval.BO;
 using Ineval.DAL;
+using Ineval.Dto;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -21,72 +23,31 @@ namespace Ineval.Controllers
         }
         public async Task<ActionResult> GetFormulario(Guid? id)
         {
-            //var procesoService = new NombreProcesoService();
-            List<DatosInstituciones> nombreProvincia = new List<DatosInstituciones>();
-            //using (var procesoService = new DatosInstitucionesService())
-            //{
-            //    nombreProvincia = procesoService.GetAll().Where(x => x.AsignacionId == id).ToList();
-            //}
+            
+            List<DatosSedes> result = await db.DatosSedes.Where(x => x.AsignacionId == id).ToListAsync();
+            List<DatosSedesViewModel> resultDTO = Mapper.Map<List<DatosSedesViewModel>>(result);           
 
             List<Datoscmb> datosProvincia = new List<Datoscmb>();
             List<Datoscmb> datosCanton = new List<Datoscmb>();
-            List<Datoscmb> datosParroquia = new List<Datoscmb>();
+            List<Datoscmb> datosParroquia = new List<Datoscmb>();            
 
-            var datostemporeProvincias = from datosInstituciones in db.DatosInstituciones
-                                         where datosInstituciones.AsignacionId == id
-                                         group datosInstituciones by new { datosInstituciones.id_provincia, datosInstituciones.provincia } into DatosAgrupados
-
-                                         select new { Clave = DatosAgrupados.Key, Datos = DatosAgrupados };
-
-            foreach (var item in datostemporeProvincias)
-            {
-                datosProvincia.Add(new Datoscmb
-                {
-                    Code = item.Clave.id_provincia,
-                    Description = item.Clave.provincia
-                });
-            }
-
-            var datostemporesCantonces = from datosInstituciones in db.DatosInstituciones
-                                         where datosInstituciones.AsignacionId == id
-                                         group datosInstituciones by new { datosInstituciones.canton_id, datosInstituciones.canton } into DatosAgrupados
-
-                                         select new { Clave = DatosAgrupados.Key, Datos = DatosAgrupados };
-
-            foreach (var item in datostemporesCantonces)
-            {
-                datosCanton.Add(new Datoscmb
-                {
-                    Code = item.Clave.canton_id,
-                    Description = item.Clave.canton
-                });
-            }
-
-
-            var datostemporeInstituciones = from datosInstituciones in db.DatosInstituciones
-                                            where datosInstituciones.AsignacionId == id
-                                            group datosInstituciones by new { datosInstituciones.id_parroquia, datosInstituciones.parroquia } into DatosAgrupados
-
-                                            select new { Clave = DatosAgrupados.Key, Datos = DatosAgrupados };
-
-            foreach (var item in datostemporeInstituciones)
-            {
-                datosParroquia.Add(new Datoscmb
-                {
-                    Code = item.Clave.id_parroquia,
-                    Description = item.Clave.parroquia
-                });
-            }
-
-
-            return Json(new { Provincia = datosProvincia.OrderBy(o=>o.Description), Canton = datosCanton.OrderBy(o => o.Description), Parroquia = datosParroquia.OrderBy(o => o.Description) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = resultDTO.OrderBy(o => o.Description) }, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<ActionResult> MapaByProvincia(Guid? Id, string id_provincia)
+        public async Task<ActionResult> MapaByProvincia(Guid? Id, Guid? id_sede)
         {
-            List<DatosInstituciones> lista = new List<DatosInstituciones>();
+            List<DatosSedes> lista = new List<DatosSedes>();
             //Guid? id = "ef7fe99a-0f23-ec11-a5dc-50e0857d5969";
-            lista = await db.DatosInstituciones.Where(x => x.AsignacionId == Id && x.id_provincia == id_provincia).ToListAsync();
+            if (id_sede != null)
+            {
+                lista = await db.DatosSedes.Where(x => x.AsignacionId == Id && x.Id == id_sede).ToListAsync();
+            }
+            else
+            {
+                lista = await db.DatosSedes.Where(x => x.AsignacionId == Id).ToListAsync();
+            }
+
+
             var jsonResult = Json(new { result = lista }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Parametros Iniciales";
+    ViewBag.Title = "Filtros";
 }
 
 @*@Scripts.Render("~/bundles/modalStatic")*@
@@ -36,148 +36,85 @@
                     </div>
                     <div class="form-group" data-bind="visible:Existe()==true">
                         <input type="hidden" name="name" value="" data-bind="value:Id" />
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Aplicar Numero de Laboratorios:</label>
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="checkbox" class="form-control" name="name" value="" data-bind="checked:SinoNumeroLaboratorios,enable:EditarEnable" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-6" data-bind="enable:VisibleNumeroLab">
-                                <div class="col-md-2">
-                                    <label class="control-label">Número de Laboratorios</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroLaboratorios,enable:EditarEnable" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Aplicar Numero de Equipos:</label>
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="checkbox" class="form-control" name="name" value="" data-bind="checked:SinoNumeroEquipos,enable:EditarEnable" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-md-2">
-                                    <label class="control-label">Número de Equipos</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroEquipos,enable:EditarEnable" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Aplicar Numero de Laboratorios:</label>
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="checkbox" class="form-control" name="name" value="" data-bind="checked:SinoNumerosSesiones,enable:EditarEnable" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-md-2">
-                                    <label class="control-label">Número de Sesiones</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumerosSesiones,enable:EditarEnable" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Aplicar Numero de Laboratorios:</label>
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="checkbox" class="form-control" name="name" value="" data-bind="checked:SinoNumeroDiasEvaluar,enable:EditarEnable" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-md-2">
-                                    <label class="control-label">Número de Dias a Evaluar</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="number" class="form-control" name="name" value="" data-bind="value:NumeroDiasEvaluar,enable:EditarEnable" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Aplicar Tiempo de Viaje:</label>
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="checkbox" class="form-control" name="name" value="" data-bind="checked:SinoTiempoViaje,enable:EditarEnable" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-md-2">
-                                    <label class="control-label">Tiempo De Viaje(Minutos)</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="number" class="form-control" name="name" value="" data-bind="value:TiempoViaje,enable:EditarEnable" />
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="col-md-12 col-12 col-lg-12">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"></div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <div class="col-md-3">
-                                        <div class="col-md-2"><label class="control-label">Filtro</label></div>
-                                        <div class="col-md-10">
-                                            <select class="form-control" id="cmbFiltro1">
-                                                <option value="1">Amie</option>
-                                                <option value="2">Provincia</option>
-                                                <option value="3">Canton</option>
-                                                <option value="4">Parroquia</option>
-                                                <option value="5">Circuito</option>
-                                                <option value="6">Distrito</option>
-                                                <option value="7">Zona</option>
-                                            </select>
+                        <div class="col-md-12 col-12 col-lg-12">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading"></div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <div class="col-md-3"><label class="control-label">Filtro</label></div>
+                                                <div class="col-md-9">
+                                                    <select class="form-control" id="cmbFiltro1" data-bind="value:Filtro1,event:{ change: cambiarFiltro}">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <option value="1">Amie</option>
+                                                        <option value="2">Provincia</option>
+                                                        <option value="3">Canton</option>
+                                                        <option value="4">Parroquia</option>
+                                                        <option value="5">Circuito</option>
+                                                        <option value="6">Distrito</option>
+                                                        <option value="7">Zona</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" data-bind="visible:visibleFiltro2">
+                                                <div class="col-md-3"><label class="control-label">Filtro 2</label></div>
+                                                <div class="col-md-9">
+                                                    <select class="form-control" id="cmbFiltro2" data-bind="value:Filtro2,event:{ change: cambiarFiltro2}">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <option value="1">Jornada</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" data-bind="visible:visibleFiltro3">
+                                                <div class="col-md-3"><label class="control-label">Filtro 3</label></div>
+                                                <div class="col-md-9">
+                                                    <select class="form-control" id="cmbFiltro3" data-bind="value:Filtro3,event:{ change: cambiarFiltro3}">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <option value="1">Grado</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12"><br /> </div>
+                                        <div class="col-md-12">
+                                            <div class="col-md-3" data-bind="visible:visibleFiltro4">
+                                                <div class="col-md-3"><label class="control-label">Filtro 4</label></div>
+                                                <div class="col-md-9">
+                                                    <select class="form-control" id="cmbFiltro4" data-bind="value:Filtro4">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <option value="1">Amie</option>
+                                                        <option value="2">Provincia</option>
+                                                        <option value="3">Canton</option>
+                                                        <option value="4">Parroquia</option>
+                                                        <option value="5">Circuito</option>
+                                                        <option value="6">Distrito</option>
+                                                        <option value="7">Zona</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" data-bind="visible:visibleFiltro5">
+                                                <div class="col-md-3"><label class="control-label">Filtro 5</label></div>
+                                                <div class="col-md-9">
+                                                    <select class="form-control" id="cmbFiltro5" data-bind="value:Filtro5">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <option value="1">Jornada</option>
+                                                    </select>
+                                                </div>
+                                            </div>                                            
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="col-md-2"><label class="control-label">Filtro 2</label></div>
-                                        <div class="col-md-10">
-                                            <select class="form-control" id="cmbFiltro2">
-                                                <option value="">-- Seleccione --</option>
-                                                <option value="1">Jornada</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="col-md-2"><label class="control-label">Filtro 3</label></div>
-                                        <div class="col-md-10">
-                                            <select class="form-control" id="cmbFiltro3">
-                                                <option  value="">-- Seleccione --</option>
-                                                <option value="1">Grado</option>
-                                            </select>
-                                        </div>
+                                    <div class="form-group" style="text-align:center">
+                                        <button class="btn btn-primary" data-bind="click:Filtro">Aplicar Filtro</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group" style="text-align:center">
-                                <button class="btn btn-primary" data-bind="click:Filtro">Aplicar Filtro</button>
                             </div>
                         </div>
                     </div>
                 </div>
+                
             </div>
-            <div>
+            @*<div>
                 <button type="button" data-bind="click: Guardar,visible:VisibleSave" class="btn btn-primary">
                     <span class="glyphicon glyphicon-floppy-saved"></span> Guardar
                 </button>
@@ -187,7 +124,7 @@
                 <button type="button" data-bind="click: Cancel,visible:VisibleCancel" class="btn btn-warning">
                     <span class="glyphicon glyphicon-remove"></span> Cancelar
                 </button>
-            </div>
+            </div>*@
         </div>
     </section>
 </div>

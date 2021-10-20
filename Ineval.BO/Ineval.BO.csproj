@@ -59,6 +59,7 @@
     <Compile Include="Implementation\configuration\CountryService.cs" />
     <Compile Include="Implementation\procesos\DatosCantonLatLngService.cs" />
     <Compile Include="Implementation\procesos\DatosExcelPersonalService.cs" />
+    <Compile Include="Implementation\procesos\DatosFiltrosService.cs" />
     <Compile Include="Implementation\procesos\DatosInstitucionesService.cs" />
     <Compile Include="Implementation\configuration\NumberingService.cs" />
     <Compile Include="Implementation\configuration\ParroquiaService.cs" />
@@ -71,6 +72,8 @@
     <Compile Include="Implementation\procesos\DatosParroquiaLatLngService.cs" />
     <Compile Include="Implementation\procesos\DatosPersonalTerritorioService.cs" />
     <Compile Include="Implementation\procesos\DatosProvinciaLatLngService.cs" />
+    <Compile Include="Implementation\procesos\DatosSedesAsignacionService.cs" />
+    <Compile Include="Implementation\procesos\DatosSedesService.cs" />
     <Compile Include="Implementation\procesos\DatosSustentantesService.cs" />
     <Compile Include="Implementation\procesos\DatosTemporalesService.cs" />
     <Compile Include="Implementation\procesos\NombreProcesoService.cs" />

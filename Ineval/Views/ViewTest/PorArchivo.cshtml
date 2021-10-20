@@ -1,0 +1,49 @@
+﻿
+<div class="card-body border-div-history">
+    <section class="admission-list-wrapper">
+        <div class="admission-list-filter px-1">
+
+            <div class="row border-div-simec py-2 mb-2">
+                <div class="col-12  col-sm-12 col-lg-12 ">                    
+                    <div class="form-group">
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <center> <h4>Reporte Sedes</h4></center>
+                                <hr />
+                                <div class="col-md-6" style="text-align:center">
+                                    <button type="button" class="btn btn-primary" onclick="sedesexcel()">
+                                        <span class="glyphicon glyphicon-download-alt"></span> Exportar Excel
+                                    </button>
+                                </div>
+                                <div class="col-md-6" style="text-align:center">
+                                    <button type="button" data-bind="click: Edit,visible:VisibleEdit" class="btn btn-secondary">
+                                        <span class="glyphicon glyphicon-download-alt"></span> Exportar PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12"><br /></div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <center> <h4>Reporte Asiganciones</h4></center>
+                                <hr />
+                                <div class="col-md-6" style="text-align:center">
+                                    <button type="button" class="btn btn-primary" onclick="porAsignacionExcel()">
+                                        <span class="glyphicon glyphicon-download-alt"></span> Exportar Excel
+                                    </button>
+                                </div>
+                                <div class="col-md-6" style="text-align:center">
+                                    <button type="button" data-bind="click: Edit,visible:VisibleEdit" class="btn btn-secondary">
+                                        <span class="glyphicon glyphicon-download-alt"></span> Exportar PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="~/Scripts/Pages/Procesos/PorArchivo.js"></script>

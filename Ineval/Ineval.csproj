@@ -1750,6 +1750,7 @@
     <Content Include="Scripts\dropzone\dropzone2.css" />
     <Content Include="Scripts\dropzone\dropzone2.js" />
     <Content Include="Scripts\dropzone\styledropzone.css" />
+    <Content Include="Scripts\filesaver.js" />
     <Content Include="Scripts\fullcalendar.js" />
     <Content Include="Scripts\highcharts\gchart.js" />
     <Content Include="Scripts\highcharts\highcharts.js" />
@@ -1758,6 +1759,7 @@
     <Content Include="Scripts\highcharts\jsapi_compiled_format_module.js" />
     <Content Include="Scripts\highcharts\jsapi_compiled_ui_module.js" />
     <Content Include="Scripts\highcharts\loader.js" />
+    <Content Include="Scripts\html2canvas.js" />
     <Content Include="Scripts\i18n\grid.locale-ar.js" />
     <Content Include="Scripts\i18n\grid.locale-bg.js" />
     <Content Include="Scripts\i18n\grid.locale-bg1251.js" />
@@ -1903,6 +1905,7 @@
     <Content Include="Scripts\Pages\Procesos\DatoxExcelPersonal.js" />
     <Content Include="Scripts\Pages\Procesos\nombreProceso.js" />
     <Content Include="Scripts\Pages\Procesos\ParametrosIniciales.js" />
+    <Content Include="Scripts\Pages\Procesos\PorArchivo.js" />
     <Content Include="Scripts\Pages\Procesos\ProcesoAsignacion.js" />
     <Content Include="Scripts\plugins\parsley.js" />
     <Content Include="Scripts\respond.js" />
@@ -2254,6 +2257,7 @@
     <Content Include="Views\ViewTest\SubirDatosPersonalTerritorio.cshtml" />
     <Content Include="Views\ViewTest\VistaMapas.cshtml" />
     <Content Include="Views\ViewTest\ViewProcesoAsignacion.cshtml" />
+    <Content Include="Views\ViewTest\PorArchivo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

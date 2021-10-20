@@ -35,6 +35,12 @@ namespace Ineval.App_Start
             CreateMap<DatosProvinciaLatLng, DatosProvinciaLatLngViewModel>().ReverseMap();
             CreateMap<DatosCantonLatLng, DatosCantonLatLngViewModel>().ReverseMap();
             CreateMap<DatosParroquiaLatLng, DatosParroquiaLatLngViewModel>().ReverseMap();
+
+            CreateMap<DatosSedes, DatosSedesViewModel>().ReverseMap();
+
+            CreateMap<DatosSedesAsignacion, DatosSedesAsignacionViewModel>().ReverseMap();
+
+            CreateMap<DatosFiltros, DatosFiltrosViewModel>().ReverseMap();
         }
     }
 }

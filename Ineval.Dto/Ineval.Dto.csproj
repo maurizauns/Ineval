@@ -62,10 +62,13 @@
     <Compile Include="Dto\Procesos\DatosCantonLatLngViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosExcelCabeceraViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosExcelPersonalViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosFiltrosViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosInstitucionesViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosParroquiaLatLngViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosPersonalTerritorioViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosProvinciaLatLngViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosSedesAsignacionViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosSedesViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosSustentantesViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosTemporalesViewModel.cs" />
     <Compile Include="Dto\Procesos\NombreProcesoViewModel.cs" />

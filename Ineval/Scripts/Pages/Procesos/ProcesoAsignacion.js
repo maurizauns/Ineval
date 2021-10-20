@@ -28,16 +28,16 @@ $(document).ready(function () {
 
 
         vmFormProcesoAsignacion.Id = ko.observable("");
-        vmFormProcesoAsignacion.SinoNumeroLaboratorios = ko.observable(false);
-        vmFormProcesoAsignacion.NumeroLaboratorios = ko.observable("");
-        vmFormProcesoAsignacion.SinoNumeroEquipos = ko.observable(false);
-        vmFormProcesoAsignacion.NumeroEquipos = ko.observable("");
-        vmFormProcesoAsignacion.SinoNumerosSesiones = ko.observable(false);
-        vmFormProcesoAsignacion.NumerosSesiones = ko.observable("");
-        vmFormProcesoAsignacion.SinoNumeroDiasEvaluar = ko.observable(false);
-        vmFormProcesoAsignacion.NumeroDiasEvaluar = ko.observable("");
-        vmFormProcesoAsignacion.SinoTiempoViaje = ko.observable(false);
-        vmFormProcesoAsignacion.TiempoViaje = ko.observable("");
+        vmFormProcesoAsignacion.Filtro1 = ko.observable("");
+        vmFormProcesoAsignacion.Filtro2 = ko.observable("");
+        vmFormProcesoAsignacion.Filtro3 = ko.observable("");
+        vmFormProcesoAsignacion.Filtro4 = ko.observable("");
+        vmFormProcesoAsignacion.Filtro5 = ko.observable("");
+
+        vmFormProcesoAsignacion.visibleFiltro2 = ko.observable(false);
+        vmFormProcesoAsignacion.visibleFiltro3 = ko.observable(false);
+        vmFormProcesoAsignacion.visibleFiltro4 = ko.observable(false);
+        vmFormProcesoAsignacion.visibleFiltro5 = ko.observable(false);
 
         vmFormProcesoAsignacion.New = function () {
             vmFormProcesoAsignacion.Existe(true);
@@ -51,20 +51,10 @@ $(document).ready(function () {
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
-                url: "/ParametrosIniciales/Save",
+                url: "/ViewTest/SaveFiltros",
                 data: JSON.stringify({
                     Id: vmFormProcesoAsignacion.Id(),
-                    AsignacionId: vmh.CurrentId(),
-                    SinoNumeroLaboratorios: vmFormProcesoAsignacion.SinoNumeroLaboratorios(),
-                    NumeroLaboratorios: vmFormProcesoAsignacion.NumeroLaboratorios(),
-                    SinoNumeroEquipos: vmFormProcesoAsignacion.SinoNumeroEquipos(),
-                    NumeroEquipos: vmFormProcesoAsignacion.NumeroEquipos(),
-                    SinoNumerosSesiones: vmFormProcesoAsignacion.SinoNumerosSesiones(),
-                    NumerosSesiones: vmFormProcesoAsignacion.NumerosSesiones(),
-                    SinoNumeroDiasEvaluar: vmFormProcesoAsignacion.SinoNumeroDiasEvaluar(),
-                    NumeroDiasEvaluar: vmFormProcesoAsignacion.NumeroDiasEvaluar(),
-                    SinoTiempoViaje: vmFormProcesoAsignacion.SinoTiempoViaje(),
-                    TiempoViaje: vmFormProcesoAsignacion.TiempoViaje()
+                    AsignacionId: vmh.CurrentId()
                 }),
                 success: function (Data) {
                     _load();
@@ -92,36 +82,90 @@ $(document).ready(function () {
 
         }
 
-        vmFormProcesoAsignacion.Filtro = function () {
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: "/ViewTest/Filtro",
-                data: JSON.stringify({
-                    Id: vmh.CurrentId(),
-                    Parametro1: $("#cmbFiltro1").val(),
-                    Parametro2: $("#cmbFiltro2").val(),
-                    Parametro3: $("#cmbFiltro3").val(),
-                }),
-                beforeSend: function () {
-                    _load();
-                },
-                success: function (Data) {
-                    
-                    swal(Data.message, "Registro Guardado", "success");
-                    vmFormProcesoAsignacion = {};
-
-                    $("#Content").load(vmh.CurrentUrl());
-                    $("#Content").show();
-
-                },
-                complete: function () {
-                    _stopLoad();
-                }
-            });
+        vmFormProcesoAsignacion.cambiarFiltro = function () {
+            if (vmFormProcesoAsignacion.Filtro1() == 1) {
+                vmFormProcesoAsignacion.visibleFiltro2(true);
+                vmFormProcesoAsignacion.Filtro2("");
+            } else {
+                vmFormProcesoAsignacion.Filtro2("");
+                vmFormProcesoAsignacion.Filtro3("");
+                vmFormProcesoAsignacion.visibleFiltro2(false);
+                vmFormProcesoAsignacion.visibleFiltro3(false);
+                vmFormProcesoAsignacion.visibleFiltro4(false);
+                vmFormProcesoAsignacion.visibleFiltro5(false);                
+            }
         }
 
-        if (typeof vmFormProcesoAsignacion.ParametrosIniciales === 'function') {
+        vmFormProcesoAsignacion.cambiarFiltro2 = function () {
+            if (vmFormProcesoAsignacion.Filtro2() != "") {
+                if (vmFormProcesoAsignacion.Filtro2() == 1) {
+                    vmFormProcesoAsignacion.visibleFiltro3(true);
+                } else {
+                    vmFormProcesoAsignacion.visibleFiltro3(false);
+                    vmFormProcesoAsignacion.visibleFiltro4(false);
+                    vmFormProcesoAsignacion.visibleFiltro5(false);
+                }
+            } else {
+                error("Debse Seleccionar Alguno");
+                vmFormProcesoAsignacion.Filtro3("");
+                vmFormProcesoAsignacion.visibleFiltro3(false);
+                vmFormProcesoAsignacion.visibleFiltro4(false);
+                vmFormProcesoAsignacion.visibleFiltro5(false);
+            }
+        }
+
+        vmFormProcesoAsignacion.cambiarFiltro3 = function () {
+            if (vmFormProcesoAsignacion.Filtro3() != "") {
+                if (vmFormProcesoAsignacion.Filtro3() == 1) {
+                    vmFormProcesoAsignacion.visibleFiltro3(true);
+                } else {
+                    vmFormProcesoAsignacion.visibleFiltro3(false);
+                    vmFormProcesoAsignacion.visibleFiltro4(false);
+                    vmFormProcesoAsignacion.visibleFiltro5(false);
+                }
+            } else {
+                error("Debse Seleccionar Alguno");
+            }
+        }
+
+        vmFormProcesoAsignacion.Filtro = function () {
+            if (vmFormProcesoAsignacion.Filtro1() != "") {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/ViewTest/Filtro",
+                    data: JSON.stringify({
+                        Id: vmh.CurrentId(),
+                        Parametro1: $("#cmbFiltro1").val(),
+                        Parametro2: $("#cmbFiltro2").val(),
+                        Parametro3: $("#cmbFiltro3").val(),
+                    }),
+                    beforeSend: function () {
+                        _load();
+                    },
+                    success: function (Data) {
+                        debugger
+                        if (Data.result != "" && Data.result != null) {
+
+                        } else {
+                            swal(Data.message, "", Data.status);
+                            vmFormProcesoAsignacion = {};
+
+                            $("#Content").load(vmh.CurrentUrl());
+                            $("#Content").show();
+                        }
+                    },
+                    complete: function () {
+                        _stopLoad();
+                    }
+                });
+            } else {
+                error("Debe selecionar al menos 1");
+            }
+
+        }
+
+        if (typeof vmFormProcesoAsignacion.data === 'function') {
             vmFormProcesoAsignacion.Existe(false);
             vmFormProcesoAsignacion.VisibleNew(true);
             vmFormProcesoAsignacion.VisibleEditar(false);
@@ -131,34 +175,41 @@ $(document).ready(function () {
             vmFormProcesoAsignacion.VisibleCancel(false);
 
             vmFormProcesoAsignacion.Id("");
-            vmFormProcesoAsignacion.SinoNumeroLaboratorios(false);
-            vmFormProcesoAsignacion.NumeroLaboratorios("");
-            vmFormProcesoAsignacion.SinoNumeroEquipos(false);
-            vmFormProcesoAsignacion.NumeroEquipos("");
-            vmFormProcesoAsignacion.SinoNumerosSesiones(false);
-            vmFormProcesoAsignacion.NumerosSesiones("");
-            vmFormProcesoAsignacion.SinoNumeroDiasEvaluar(false);
-            vmFormProcesoAsignacion.NumeroDiasEvaluar("");
-            vmFormProcesoAsignacion.SinoTiempoViaje(false);
-            vmFormProcesoAsignacion.TiempoViaje("");
-        } else if (vmFormProcesoAsignacion.ParametrosIniciales != null) {
+            vmFormProcesoAsignacion.Filtro1("");
+            vmFormProcesoAsignacion.Filtro2("");
+            vmFormProcesoAsignacion.Filtro3("");
+            vmFormProcesoAsignacion.Filtro4("");
+            vmFormProcesoAsignacion.Filtro5("");
+        } else if (vmFormProcesoAsignacion.data != null) {
             vmFormProcesoAsignacion.Existe(true);
             vmFormProcesoAsignacion.VisibleEditar(false);
             vmFormProcesoAsignacion.EditarEnable(false);
             vmFormProcesoAsignacion.VisibleSave(false);
             vmFormProcesoAsignacion.VisibleEdit(true);
             vmFormProcesoAsignacion.VisibleCancel(true);
-            vmFormProcesoAsignacion.Id(vmFormProcesoAsignacion.ParametrosIniciales.Id());
-            vmFormProcesoAsignacion.SinoNumeroLaboratorios(vmFormProcesoAsignacion.ParametrosIniciales.SiNoNumeroLaboratorios());
-            vmFormProcesoAsignacion.NumeroLaboratorios(vmFormProcesoAsignacion.ParametrosIniciales.NumeroLaboratorios());
-            vmFormProcesoAsignacion.SinoNumeroEquipos(vmFormProcesoAsignacion.ParametrosIniciales.SiNoNumeroEquipos());
-            vmFormProcesoAsignacion.NumeroEquipos(vmFormProcesoAsignacion.ParametrosIniciales.NumeroEquipos());
-            vmFormProcesoAsignacion.SinoNumerosSesiones(vmFormProcesoAsignacion.ParametrosIniciales.SiNoNumerosSesiones());
-            vmFormProcesoAsignacion.NumerosSesiones(vmFormProcesoAsignacion.ParametrosIniciales.NumerosSesiones());
-            vmFormProcesoAsignacion.SinoNumeroDiasEvaluar(vmFormProcesoAsignacion.ParametrosIniciales.SiNoNumeroDiasEvaluar());
-            vmFormProcesoAsignacion.NumeroDiasEvaluar(vmFormProcesoAsignacion.ParametrosIniciales.NumeroDiasEvaluar());
-            vmFormProcesoAsignacion.SinoTiempoViaje(vmFormProcesoAsignacion.ParametrosIniciales.SiNoTiempoViaje());
-            vmFormProcesoAsignacion.TiempoViaje(vmFormProcesoAsignacion.ParametrosIniciales.TiempoViaje());
+            vmFormProcesoAsignacion.Id(vmFormProcesoAsignacion.data.Id());
+            vmFormProcesoAsignacion.Filtro1(vmFormProcesoAsignacion.data.Filtro1());
+
+            if (vmFormProcesoAsignacion.data.Filtro1() == 1) {
+                vmFormProcesoAsignacion.visibleFiltro2(true);
+                if (vmFormProcesoAsignacion.data.Filtro2() == 1) {
+                    vmFormProcesoAsignacion.visibleFiltro2(true);
+                    if(vmFormProcesoAsignacion.data.Filtro3() == 1){
+                        vmFormProcesoAsignacion.visibleFiltro3(true);
+                    }
+                }
+
+            } else {
+                vmFormProcesoAsignacion.visibleFiltro2(false);
+                vmFormProcesoAsignacion.visibleFiltro3(false);
+                vmFormProcesoAsignacion.visibleFiltro4(false);
+                vmFormProcesoAsignacion.visibleFiltro5(false);
+            }
+
+            vmFormProcesoAsignacion.Filtro2(vmFormProcesoAsignacion.data.Filtro2());
+            vmFormProcesoAsignacion.Filtro3(vmFormProcesoAsignacion.data.Filtro3());
+            vmFormProcesoAsignacion.Filtro4(vmFormProcesoAsignacion.data.Filtro4());
+            vmFormProcesoAsignacion.Filtro5(vmFormProcesoAsignacion.data.Filtro5());
         } else {
             vmFormProcesoAsignacion.VisibleNew(true);
         }
@@ -169,7 +220,7 @@ $(document).ready(function () {
     $.ajax({
         type: "GET",
         contentType: "application/json; charset=utf-8",
-        url: "/ParametrosIniciales/GetFormulario?id=" + vmh.CurrentId(),
+        url: "/ViewTest/GetFiltros?AsignacionId=" + vmh.CurrentId(),
         success: KnockoutFormParametrosIniciales
     });
 });

@@ -5,9 +5,9 @@
         function KnockoutFormMapas(datosMapas) {
             vmFormViewMapas = ko.mapping.fromJS(datosMapas);
 
-            cargarCombo(datosMapas.Provincia, "cmbProvincia", "cmbProvincia");
-            cargarCombo(datosMapas.Canton, "cmbCanton", "cmbCanton");
-            cargarCombo(datosMapas.Parroquia, "cmbParroquia", "cmbParroquia");
+            cargarCombo(datosMapas.result, "cmbSedes", "cmbSedes");
+            //cargarCombo(datosMapas.Canton, "cmbCanton", "cmbCanton");
+            //cargarCombo(datosMapas.Parroquia, "cmbParroquia", "cmbParroquia");
 
             ko.cleanNode($("#Content")[0]);
             ko.applyBindings(vmFormViewMapas, $("#Content")[0]);
@@ -17,13 +17,19 @@
             type: "GET",
             contentType: "application/json; charset=utf-8",
             url: "/DatosMapas/GetFormulario?id=" + vmh.CurrentId(),
-            success: KnockoutFormMapas
+            beforeSend: function () {
+                _load();
+            },
+            success: KnockoutFormMapas,
+            complete: function () {
+                _stopLoad()
+            }            
         });
 
     })
 
 
-
+    //var marker;
     mapboxgl.accessToken = vmh.PasswordMapBox();
     const map = new mapboxgl.Map({
         container: 'map', // container ID
@@ -33,6 +39,7 @@
         preserveDrawingBuffer: true
     });
 
+    
 
 
     function getRandomColor() {
@@ -51,9 +58,10 @@
         var options = '';
 
 
-        if (id == "cmb") {
+        if (id == "cmbSedes") {
             select.empty();
-            options += "<option value=''>Todos..</option>";
+            options += "<option value=''></option>";
+            options += "<option value='All'>Todos..</option>";
         }
         else {
             select.empty();
@@ -65,8 +73,8 @@
         }
 
         for (var i = 0; i < result.length; i++) {
-            if (id == 'cmbProvincia') {
-                options += "<option value='" + result[i].Code + "'>" + result[i].Description + "</option>";
+            if (id == 'cmbSedes') {
+                options += "<option value='" + result[i].Id + "'>" + result[i].Description + "</option>";
             }
             else if (id == 'cmbCanton') {
                 options += "<option value='" + result[i].Code + "'>" + result[i].Description + "</option>";
@@ -96,13 +104,18 @@
         }, 200);
     }
 
-    function cambioProvincia() {
-        var provinca = $("#cmbProvincia").val();
-        if (provinca != "") {
-            cargarProvincia(provinca);
+    function cambioSedes() {
+        var sede = $("#cmbSedes").val();
+        if (sede != "") {
+            if (sede == "All") {
+                cargarSedes();
+            } else {
+                cargarSedes(sede);
+            }
+            
         }
         else {
-
+            error("Debe selecionar alguno");
         }
     }
 
@@ -126,63 +139,117 @@
         }
     }
 
-    function cargarProvincia(id_provincia) {
+    function cargarSedes(id_sede) {
         var marker, i;
-
-        fetch('/DatosMapas/MapaByProvincia?Id=' + vmh.CurrentId() + "&id_provincia=" + id_provincia).then(async function (response) {
+        //const marker = new mapboxgl.Marker().addTo(map);
+        //marker.remove();
+        fetch('/DatosMapas/MapaByProvincia?Id=' + vmh.CurrentId() + "&id_sede=" + id_sede).then(async function (response) {
             return await response.json();
         }).then(function (d) {
             for (i = 0; i < d.result.length; i++) {
                 marker = new mapboxgl.Marker({
                     color: getRandomColor(),
                     draggable: true,
-                }).setLngLat([d.result[i].coordenada_Lat, d.result[i].coordenada_Lng])
-                    .setPopup(new mapboxgl.Popup().setHTML("<p>Insitutucion:" + d.result[i].NombreInstitucion + "<br>Procoso:2021</p>"))
+                }).setLngLat([d.result[i].coordenada_lat, d.result[i].coordenada_lng])
+                    .setPopup(new mapboxgl.Popup().setHTML("<p>Sede:" + d.result[i].Description + "<br>Sesiones:" + d.result[i].NumeroSession + "<br>Laboratorio:" + d.result[i].NumeroLaboratorio + "<br>N° Sustentantes:" + d.result[i].NumeroTotalSustentantes + "</p>"))
                     .addTo(map)
                     .togglePopup();;
             }
         })
     }
 
-    function cargarCanton(canton_id) {
-        var marker, i;
+    //function cargarCanton(canton_id) {
+    //    var marker, i;
 
-        fetch('/DatosMapas/MapaByCanton?Id=' + vmh.CurrentId() + '&canton_id=' + canton_id).then(async function (response) {
-            return await response.json();
-        }).then(function (d) {
-            for (i = 0; i < d.result.length; i++) {
-                marker = new mapboxgl.Marker({
-                    color: getRandomColor(),
-                    draggable: true,
-                }).setLngLat([d.result[i].coordenada_Lat, d.result[i].coordenada_Lng])
-                    .setPopup(new mapboxgl.Popup().setHTML("<p>Insitutucion:" + d.result[i].NombreInstitucion + "<br>Procoso:2021</p>"))
-                    .addTo(map)
-                    .togglePopup();;
-            }
-        })
-    }
+    //    fetch('/DatosMapas/MapaByCanton?Id=' + vmh.CurrentId() + '&canton_id=' + canton_id).then(async function (response) {
+    //        return await response.json();
+    //    }).then(function (d) {
+    //        for (i = 0; i < d.result.length; i++) {
+    //            marker = new mapboxgl.Marker({
+    //                color: getRandomColor(),
+    //                draggable: true,
+    //            }).setLngLat([d.result[i].coordenada_Lat, d.result[i].coordenada_Lng])
+    //                .setPopup(new mapboxgl.Popup().setHTML("<p>Insitutucion:" + d.result[i].NombreInstitucion + "<br>Procoso:2021</p>"))
+    //                .addTo(map)
+    //                .togglePopup();;
+    //        }
+    //    })
+    //}
 
-    function cargarParroquia(id_parroquia) {
-        var marker, i;
-        fetch('/DatosMapas/MapaByParroquia?Id=' + vmh.CurrentId() + '&id_parroquia=' + id_parroquia).then(async function (response) {
-            return await response.json();
-        }).then(function (d) {
-            for (i = 0; i < d.result.length; i++) {
-                marker = new mapboxgl.Marker({
-                    color: getRandomColor(),
-                    draggable: true,
-                }).setLngLat([d.result[i].coordenada_Lat, d.result[i].coordenada_Lng])
-                    .setPopup(new mapboxgl.Popup().setHTML("<p>Insitutucion:" + d.result[i].NombreInstitucion + "<br>Proceso:2021</p>"))
-                    .addTo(map)
-                    .togglePopup();;
-            }
-        })
-    }
+    //function cargarParroquia(id_parroquia) {
+    //    var marker, i;
+    //    fetch('/DatosMapas/MapaByParroquia?Id=' + vmh.CurrentId() + '&id_parroquia=' + id_parroquia).then(async function (response) {
+    //        return await response.json();
+    //    }).then(function (d) {
+    //        for (i = 0; i < d.result.length; i++) {
+    //            marker = new mapboxgl.Marker({
+    //                color: getRandomColor(),
+    //                draggable: true,
+    //            }).setLngLat([d.result[i].coordenada_Lat, d.result[i].coordenada_Lng])
+    //                .setPopup(new mapboxgl.Popup().setHTML("<p>Insitutucion:" + d.result[i].NombreInstitucion + "<br>Proceso:2021</p>"))
+    //                .addTo(map)
+    //                .togglePopup();;
+    //        }
+    //    })
+    //}
 
     $('#downloadLink').click(function () {
         var img = map.getCanvas().toDataURL('image/png')
         this.href = img
     })
+
+    function crearimagen() {
+        //html2canvas($('#map'),
+        //    {
+        //        onrendered: function (canvas) {
+        //            var a = document.createElement('a');
+        //            a.href = canvas.toDataURL("image/png");
+        //            a.download = 'image.png';
+        //            a.click();
+        //        }
+        //    });
+        downloadCanvas('map', 'imagen.png');
+    }
+
+
+    function downloadCanvas(canvasId, filename) {
+        // Obteniendo la etiqueta la cual se desea convertir en imagen
+        var domElement = document.getElementById(canvasId);
+
+        // Utilizando la función html2canvas para hacer la conversión
+        html2canvas(domElement, {
+            onrendered: function (domElementCanvas) {
+                // Obteniendo el contexto del canvas ya generado
+                var context = domElementCanvas.getContext('2d');
+
+                // Creando enlace para descargar la imagen generada
+                var link = document.createElement('a');
+                link.href = domElementCanvas.toDataURL("image/png");
+                link.download = filename;
+
+                // Chequeando para browsers más viejos
+                if (document.createEvent) {
+                    var event = document.createEvent('MouseEvents');
+                    // Simulando clic para descargar
+                    event.initMouseEvent("click", true, true, window, 0,
+                        0, 0, 0, 0,
+                        false, false, false, false,
+                        0, null);
+                    link.dispatchEvent(event);
+                } else {
+                    // Simulando clic para descargar
+                    link.click();
+                }
+            }
+        });
+    }
+
+    
+    // Haciendo la conversión y descarga de la imagen al presionar el botón
+    $('#boton-descarga').click(function () {
+        
+    });
+   
 } else {
     swal("Para acceder a este modulo necesita la clave API KEY de Mapbox","","error")
 }

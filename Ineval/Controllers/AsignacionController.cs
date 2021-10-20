@@ -24,6 +24,7 @@ using static Ineval.Dto.ApiPosicionGeografica;
 
 namespace Ineval.App_Start
 {
+    [Authorize(Roles = "Administrador")]
     public class AsignacionController : BaseController<Guid, Asignacion, AsignacionViewModel>
     {
         SwmContext db = new SwmContext();
@@ -79,7 +80,7 @@ namespace Ineval.App_Start
                 HttpUtility.HtmlEncode(GridHelperExts.ActionsList("asignacion-modal")
                         .Add(GridHelperExts.EditAction(Url.Action("GetEntity"), item.Id, "asignacionCallback"))
                         .Add(GridHelperExts.DeleteAction(Url.Action("Delete"), "asignacion-grid", item.Id))
-                         .Add(ConfiguracionAction(item.Id))
+                        .Add(ConfiguracionAction(item.Id))
                         .End())
             };
         }
@@ -208,6 +209,92 @@ namespace Ineval.App_Start
             }
         }
 
+        public async Task<ActionResult> SaveAsignacion(AsignacionViewModel model)
+        {
+            OnBeginCrudAction();
+
+            if (!ModelState.IsValid)
+            {
+                return await Task.Run(() => Json(new { success = false, message = GetValidationMessages() }, JsonRequestBehavior.AllowGet));
+            }
+
+            try
+            {
+                if (model.Id != null)
+                {
+
+                }
+                else
+                {
+                    model.EstadoProceso = 1;
+                }
+
+                var entity = MapperModelToEntity(model);
+
+                var saveResult = await EntityService.SaveAsync(entity);
+
+                if (saveResult.Succeeded)
+                {
+                    ParametrosInicialesService entityparam = new ParametrosInicialesService();
+                    var paraexiste = await entityparam.GetAll().Where(x => x.AsignacionId == entity.Id).SingleOrDefaultAsync();
+                    if (paraexiste != null)
+                    {
+
+                    }
+                    else
+                    {
+                        TimeSpan HoraMaxima = TimeSpan.Parse("19:00:00");
+                        TimeSpan HoraInicio = TimeSpan.Parse("08:00:00");
+                        TimeSpan HoraFin = new TimeSpan();
+                        TimeSpan TiempoEvaluacion = TimeSpan.Parse("02:00:00");
+                        TimeSpan TiempoReceso = TimeSpan.Parse("01:00:00");
+                        TimeSpan TiempoReal = TiempoEvaluacion + TiempoReceso;
+
+                        int NumeroSessiones = 1;
+
+                        TimeSpan HoraSession = HoraInicio + TiempoReal;
+
+                        while (HoraSession <= HoraMaxima)
+                        {
+
+                            NumeroSessiones += 1;
+                            HoraSession += TiempoReal;
+                            HoraFin = HoraSession - TiempoReceso;
+                        };
+
+                        ParametrosIniciales result = new ParametrosIniciales
+                        {
+                            AsignacionId = entity.Id,
+                            HoraMaxima = HoraMaxima.ToString(),
+                            HoraInicio = HoraInicio.ToString(),
+                            HoraFin = HoraFin.ToString(),
+                            TiempoEvaluacion = TiempoEvaluacion.ToString(),
+                            TiempoReceso = TiempoReceso.ToString(),
+                            TiempoReal = TiempoReal.ToString(),
+                            SiNoNumerosSesiones = true,
+                            NumerosSesiones = NumeroSessiones,
+                            SiNoNumeroEquipos = true,
+                            NumeroEquipos = 20,
+                            SiNoNumeroDiasEvaluar = true,
+                            NumeroDiasEvaluar = 1,
+                            SiNoNumeroLaboratorios = true,
+                            NumeroLaboratorios = 5,
+                        };
+
+                        var saveresultparam = await entityparam.SaveAsync(result);
+                    }
+                    return await Task.Run(() => Json(new { success = true, message = string.Empty }, JsonRequestBehavior.AllowGet));
+                }
+
+                return await Task.Run(() => Json(new { success = false, message = saveResult.GetErrorsString() }, JsonRequestBehavior.AllowGet));
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
         public async Task<ActionResult> TestApi2()
         {
             UsuarioService usuarioService = new UsuarioService();
@@ -265,6 +352,40 @@ namespace Ineval.App_Start
             var jsonResult = Json(new { result = lista }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
+        }
+
+        public async Task<ActionResult> prueba()
+        {
+            TimeSpan HoraMaxima = TimeSpan.Parse("19:00:00");
+            TimeSpan HoraInicio = TimeSpan.Parse("08:00:00");
+            TimeSpan HoraFin = new TimeSpan();
+            TimeSpan TiempoEvaluacion = TimeSpan.Parse("02:00:00");
+            TimeSpan TiempoReceso = TimeSpan.Parse("01:00:00");
+            TimeSpan TiempoReal = TiempoEvaluacion + TiempoReceso;
+
+            int NumeroSessiones = 1;
+
+            TimeSpan HoraSession = HoraInicio + TiempoReal;
+
+            while (HoraSession <= HoraMaxima)
+            {
+
+                NumeroSessiones += 1;
+                HoraSession += TiempoReal;
+                HoraFin = HoraSession - TiempoReceso;
+            }
+
+
+
+            string ss = TiempoReal.ToString();
+
+
+            int toalasu = 150;
+            int subtotal = 0;
+            
+            
+
+            return null;
         }
     }
 }
