@@ -82,7 +82,6 @@ function addFilter(formid, model) {
 }
 
 function createFilter(filter) {
-    debugger
     if (filter.type != "") {
         var placeholder = filter.placeholder ? filter.placeholder : filter.description;
         var container = '<div class="form-group col-md-3 control-filter">';

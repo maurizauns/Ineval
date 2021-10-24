@@ -80,6 +80,8 @@
     <Compile Include="Entities\configuration\Canton.cs" />
     <Compile Include="Entities\configuration\Configuracion.cs" />
     <Compile Include="Entities\configuration\Country.cs" />
+    <Compile Include="Entities\configuration\DatosMapboxAPIKEY.cs" />
+    <Compile Include="Entities\configuration\EmailParametros.cs" />
     <Compile Include="Entities\configuration\Numbering.cs" />
     <Compile Include="Entities\configuration\Parroquia.cs" />
     <Compile Include="Entities\configuration\Province.cs" />
@@ -161,6 +163,14 @@
     <Compile Include="Migrations\202110191921517_191020211421.Designer.cs">
       <DependentUpon>202110191921517_191020211421.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110220612293_2210011225.cs" />
+    <Compile Include="Migrations\202110220612293_2210011225.Designer.cs">
+      <DependentUpon>202110220612293_2210011225.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110220758373_221020210258.cs" />
+    <Compile Include="Migrations\202110220758373_221020210258.Designer.cs">
+      <DependentUpon>202110220758373_221020210258.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -214,6 +224,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110191921517_191020211421.resx">
       <DependentUpon>202110191921517_191020211421.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110220612293_2210011225.resx">
+      <DependentUpon>202110220612293_2210011225.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110220758373_221020210258.resx">
+      <DependentUpon>202110220758373_221020210258.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

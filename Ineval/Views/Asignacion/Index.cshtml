@@ -6,54 +6,60 @@
 @model Ineval.Dto.Dto.Procesos.AsignacionViewModel
 
 @{
-    ViewBag.Title = "Nueva Asignacion";
+    ViewBag.Title = "Nueva Asignación";
 }
 
 @*@Scripts.Render("~/bundles/modalStatic")*@
 
-<div class="content-wrapper">
-    <div class="content-header row">
-        <div class="content-header-left col-12 mb-2 mt-1">
-            <div class="row mx-0">
-                <div class="col-xl-4 col-6 d-flex align-items-center pl-0">
-                    <h5 class="content-header-title float-left pl-1">@ViewBag.Title</h5>
+
+<div class="content-header row">
+    <div class="content-header-left col-12 mb-2 mt-1">
+        <div class="row mx-0">
+            <div class="col-xl-7 col-7 d-flex align-items-center pl-0">
+                <h5 class="content-header-title float-left pl-1">@ViewBag.Title &nbsp;</h5>
+                <div class="breadcrumb-wrapper col-9">
+                    <ol class="breadcrumb p-0 mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="/"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                    </ol>
                 </div>
-                <div class="col-xl-8 col-6 px-0 pt-xl-0 pt-1">
-                    @*<button type="button" class="btn btn-warning glow invoice-create float-right  mr-2" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true">
+            </div>
+            <div class="col-xl-5 col-5 px-0 pt-xl-0 pt-1">
+                @*<button type="button" class="btn btn-warning glow invoice-create float-right  mr-2" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true">
                         <i class='bx bxs-file-pdf' data-toggle="tooltip" data-placement="top" title="" data-original-title="Pdf" aria-describedby="tooltip273063"></i>
                     </button>*@
-                    <button type="button" class="btn btn-success glow invoice-create float-right mr-1" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true">
-                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
-                    </button>
+                <button type="button" class="btn btn-success glow invoice-create float-right mr-1" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true">
+                    <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
+                </button>
 
-                </div>
             </div>
         </div>
     </div>
-    <div class="content-body">
-        <section class="admission-list-wrapper">
-            <div class="admission-list-filter px-1">
+</div>
+<div class="content-body">
+    <section class="admission-list-wrapper">
+        <div class="admission-list-filter px-1">
 
-                <div class="row border-div-simec py-2 mb-2">
-                    <div class="col-12  col-sm-12 col-lg-12 ">
-                        @{
-                            Html.RenderPartial("_filtersPartial", new ModelFilter { FormId = "search_form", GridId = "asignacion-grid", FieldFilters = ViewBag.Filters });
-                        }
-                        @(Html.MyjqGrid("asignacion-grid", Ineval.Common.Context.PageSize)
+            <div class="row border-div-simec py-2 mb-2">
+                <div class="col-12  col-sm-12 col-lg-12 ">
+                    @{
+                        Html.RenderPartial("_filtersPartial", new ModelFilter { FormId = "search_form", GridId = "asignacion-grid", FieldFilters = ViewBag.Filters });
+                    }
+                    @(Html.MyjqGrid("asignacion-grid", Ineval.Common.Context.PageSize)
                         .AddColumn(new Column("Code").SetLabel("Código").SetSortable(true).SetAlign(Align.Center))
                         .AddColumn(new Column("Description").SetLabel("Descripción").SetSortable(true).SetAlign(Align.Center))
                         .AddColumn(new Column("NombreProceso").SetLabel("Nombre Proceso").SetSortable(true).SetAlign(Align.Center))
                         .AddColumn(new Column("EstadoProceso").SetLabel("Estado Proceso").SetSortable(true).SetAlign(Align.Center))
                         .AddColumn(new Column("Actions").SetFixedWidth(true).SetWidth(120).SetLabel("</br>").SetSortable(false))
                         .SetUrl(Url.Action("GetList")))
-                        <div class="clearfix">
-                            @Html.PaginationBtn("asignacion-grid", "pull-right")
-                        </div>
+                    <div class="clearfix">
+                        @Html.PaginationBtn("asignacion-grid", "pull-right")
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 </div>
 
 <div class="modal fade text-left" id="asignacion-modal" tabindex="-1" role="dialog"

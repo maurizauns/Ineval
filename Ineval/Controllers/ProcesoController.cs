@@ -1,4 +1,5 @@
-﻿using Ineval.DAL;
+﻿using Ineval.BO;
+using Ineval.DAL;
 using Ineval.Dto.Dto.Procesos;
 using MvcJqGrid;
 using System;
@@ -10,11 +11,19 @@ using System.Web.Mvc;
 
 namespace Ineval.Controllers
 {
-    public class ProcesoController : BaseProcesoController<Guid,Asignacion, AsignacionViewModel>
+    public class ProcesoController : BaseProcesoController<Guid, Asignacion, AsignacionViewModel>
     {
-        public  ActionResult Record(Guid id)
+        public ActionResult Record(Guid id)
         {
+            Asignacion asignacion = new Asignacion();
+            using (AsignacionService asignacionService = new AsignacionService())
+            {
+                asignacion = asignacionService.FirstOrDefault(x => x.Id == id);
+                ViewBag.NombreProceso = asignacion != null ? "Proceso:" + asignacion.NombreProceso.Description : "";
+                ViewBag.EstadoProceso = asignacion != null ? asignacion.EstadoProceso.ToString() : "";
+            }
             ViewBag.Id = id;
+
             return View();
         }
 

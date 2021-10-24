@@ -15,6 +15,7 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -382,10 +383,45 @@ namespace Ineval.App_Start
 
             int toalasu = 150;
             int subtotal = 0;
-            
-            
+
+
 
             return null;
+        }
+
+
+        public async Task<ActionResult> EnviarCorreo()
+        {
+            MailMessage msg = new MailMessage();
+
+            msg.To.Add("r.caiza@reliv.la");
+            msg.Subject = "test de prueba";
+            msg.SubjectEncoding = System.Text.Encoding.UTF8;
+            //msg.Bcc.add
+
+            msg.Body = "Hola";
+            msg.BodyEncoding = System.Text.Encoding.UTF8;
+            msg.IsBodyHtml = true;
+            msg.From = new System.Net.Mail.MailAddress("crissrobert0984@gmail.com");
+            System.Net.Mail.SmtpClient cliete = new System.Net.Mail.SmtpClient();
+
+            cliete.Port = 587;
+            cliete.EnableSsl = true;
+
+            cliete.Host = "smtp.gmail.com";
+            cliete.Credentials = new NetworkCredential("crissrobert0984@gmail.com", "r1o2b3e4r5t6o7");
+
+            
+            try
+            {
+                cliete.Send(msg);
+                return Json("Hola", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json("Error", JsonRequestBehavior.AllowGet);
+
+            }
         }
     }
 }

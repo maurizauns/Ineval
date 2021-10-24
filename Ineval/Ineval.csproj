@@ -477,10 +477,12 @@
     <Compile Include="Controllers\DatosExcelCabeceraController.cs" />
     <Compile Include="Controllers\DatosExcelPersonalController.cs" />
     <Compile Include="Controllers\DatosMapasController.cs" />
+    <Compile Include="Controllers\DatosMapboxAPIKEYController.cs" />
     <Compile Include="Controllers\DatosPersonalTerritorioController.cs" />
     <Compile Include="Controllers\DatosSustentantesController.cs" />
     <Compile Include="Controllers\DatosTemporalesController.cs" />
     <Compile Include="Controllers\DiscoveryService.cs" />
+    <Compile Include="Controllers\EmailParametrosController.cs" />
     <Compile Include="Controllers\ExcelResult.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -1882,9 +1884,11 @@
     <Content Include="Scripts\Pages\core\configuration\companyConfiguration.js" />
     <Content Include="Scripts\Pages\core\configuration\companyElectronicBilling.js" />
     <Content Include="Scripts\Pages\core\configuration\companyRetention.js" />
+    <Content Include="Scripts\Pages\core\configuration\EmailParametros.js" />
     <Content Include="Scripts\Pages\core\configuration\empresaTemplate.js" />
     <Content Include="Scripts\Pages\core\configuration\home.js" />
     <Content Include="Scripts\Pages\core\configuration\institution.js" />
+    <Content Include="Scripts\Pages\core\configuration\MapboxApiKey.js" />
     <Content Include="Scripts\Pages\core\configuration\masterSignalR.js" />
     <Content Include="Scripts\Pages\core\configuration\office.js" />
     <Content Include="Scripts\Pages\core\configuration\province.js" />
@@ -2191,6 +2195,7 @@
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\util.js" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\Validaciones.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -2258,6 +2263,8 @@
     <Content Include="Views\ViewTest\VistaMapas.cshtml" />
     <Content Include="Views\ViewTest\ViewProcesoAsignacion.cshtml" />
     <Content Include="Views\ViewTest\PorArchivo.cshtml" />
+    <Content Include="Views\EmailParametros\Index.cshtml" />
+    <Content Include="Views\DatosMapboxAPIKEY\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

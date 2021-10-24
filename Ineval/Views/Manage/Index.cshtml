@@ -122,10 +122,10 @@
                     <label class="control-label">Email:</label>
                     <strong>@(Model.Email ?? " Ninguno")</strong>
                 </div>
-                <div class="form-group">
+                @*<div class="form-group">
                     <label class="control-label">API KEY (MapBox):</label>
                     <strong>@(Model.APIKEY?? " Ninguno")</strong>&nbsp;<br /><a href="https://www.mapbox.com/" target="_blank">Si no dispone de usa presione aqui para la creación de una</a>
-                </div>
+                </div>*@
             </div>
             <div class="panel-footer">
                 @Html.ActionLink("Editar", "AddPersonalInfo", null, new { @class = "btn btn-xs btn-primary" })

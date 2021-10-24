@@ -1,0 +1,105 @@
+﻿
+@using Ineval.Models.Filters
+@using MvcJqGrid
+@using MvcJqGrid.Enums
+@using RP.Website.Helpers
+@model Ineval.Dto.EmailParametrosViewModel
+@{
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<div class="content-wrapper">
+    <div class="content-header row">
+        <div class="content-header-left col-12 mb-2 mt-1">
+            <div class="row mx-0">
+                <div class="col-xl-4 col-6 d-flex align-items-center pl-0">
+                    <h5 class="content-header-title float-left pl-1">@ViewBag.Title</h5>
+                </div>
+                <div class="col-xl-8 col-6 px-0 pt-xl-0 pt-1">                    
+                    <button type="button" class="btn btn-success glow invoice-create float-right mr-1" data-toggle="modal" data-target="#emailparametros-modal" role="button" aria-pressed="true">
+                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-body">
+        <section class="admission-list-wrapper">
+            <div class="admission-list-filter px-1">
+
+                <div class="row border-div-simec py-2 mb-2">
+                    <div class="col-12  col-sm-12 col-lg-12 ">
+                        @{
+                            Html.RenderPartial("_filtersPartial", new ModelFilter { FormId = "search_form", GridId = "emailparametros-grid", FieldFilters = ViewBag.Filters });
+                        }
+                        @(Html.MyjqGrid("emailparametros-grid", Ineval.Common.Context.PageSize)                        
+                        .AddColumn(new Column("EmailPrincipal").SetLabel("Email Principal").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("EmailPassword").SetLabel("Email Contraseña").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("EmailCopia").SetLabel("Envia Copia Email").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("Actions").SetFixedWidth(true).SetWidth(80).SetLabel("</br>").SetSortable(false))
+                        .SetUrl(Url.Action("GetList")))
+                        <div class="clearfix">
+                            @Html.PaginationBtn("emailparametros-grid", "pull-right")
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="modal fade text-left" id="emailparametros-modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel160" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title white" id="myModalLabel160">@ViewBag.Title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form role="form" class="modal-Crud" action='@Url.Action("SaveNew")' data-modal="emailparametros-modal" data-grid="emailparametros-grid">
+                <div class="modal-body">
+                    @Html.HiddenFor(x => x.Id)
+                    <div class="form-group ">
+                        @Html.LabelFor(x => x.EmailPrincipal)
+                        @Html.TextBoxFor(x => x.EmailPrincipal, new { @class = "form-control", placeholder = "Email Principal" })
+                        @Html.ValidationMessageFor(model => model.EmailPrincipal, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.EmailPassword)
+                        @Html.PasswordFor(x => x.EmailPassword, new { @class = "form-control", placeholder = "Email Password" })
+                        @Html.ValidationMessageFor(model => model.EmailPassword, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.EmailCopia)
+                        @Html.TextBoxFor(x => x.EmailCopia, new { @class = "form-control", placeholder = "Email Copua" })
+                        @Html.ValidationMessageFor(model => model.EmailCopia, "", new { @class = "text-danger" })
+                        <span style="border-top-style: groove;">Para agregar mas de un correo separelos con un espacio maximo(4) </span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger glow" data-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cerrar</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary glow ml-1">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Guardar</span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/configuration/EmailParametros.js"></script>
+    <script type="text/javascript" language="javascript">
+        urlProvince = "@Url.Action("GetValues", "Province")";
+    </script>
+}

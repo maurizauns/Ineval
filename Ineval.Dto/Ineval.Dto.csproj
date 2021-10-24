@@ -54,6 +54,8 @@
     <Compile Include="Common\GeneralConfigurationViewModel.cs" />
     <Compile Include="Dto\Configuration\CantonViewModel.cs" />
     <Compile Include="Dto\Configuration\CountryViewModel.cs" />
+    <Compile Include="Dto\Configuration\DatosMapboxAPIKEYViewModel.cs" />
+    <Compile Include="Dto\Configuration\EmailParametrosViewModel.cs" />
     <Compile Include="Dto\Configuration\ParroquiaViewModel.cs" />
     <Compile Include="Dto\Configuration\ProvinceViewModel.cs" />
     <Compile Include="Dto\Configuration\RoleMenuViewModel.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Dto\Procesos\ParametrosInicialesViewModel.cs" />
     <Compile Include="Dto\Security\UsuarioViewModel.cs" />
     <Compile Include="Dto\TestViewModel.cs" />
+    <Compile Include="EncryptDecrypt\EncryptDecrypt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

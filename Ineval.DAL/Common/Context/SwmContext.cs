@@ -48,5 +48,7 @@ namespace Ineval.DAL
         public DbSet<DatosSedes> DatosSedes { get; set; }
         public DbSet<DatosSedesAsignacion> DatosSedesAsignacion { get; set; }
         public DbSet<DatosFiltros> DatosFiltros { get; set; }
+        public DbSet<EmailParametros> EmailParametros { get; set; }
+        public DbSet<DatosMapboxAPIKEY> DatosMapboxAPIKEY { get; set; }
     }
 }

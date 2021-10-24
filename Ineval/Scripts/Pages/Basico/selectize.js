@@ -14,6 +14,9 @@
  * @author Brian Reavis <brian@thirdroute.com>
  */
 
+var REGEX_EMAIL = "([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@" +
+	"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+
 (function(root, factory) {
 	if (typeof define === 'function' && define.amd) {
 		define('sifter', factory);

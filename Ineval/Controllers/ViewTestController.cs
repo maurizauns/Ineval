@@ -331,10 +331,10 @@ namespace Ineval.Controllers
                                     NumeroSession = subtotalSession,
                                     NumeroLaboratorio = subtotalLabo,
                                     Code = item.amie,
-                                    Description = item.nombre_institucion,
+                                    Description = item.nombre_institucion == null ? item.amie : item.amie,
                                     NumeroTotalSustentantes = totalSuste,
-                                    coordenada_lat = item.coordenada_x != "" ? item.coordenada_x.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[0].ToString().Replace(',', '.'),
-                                    coordenada_lng = item.coordenada_y != "" ? item.coordenada_y.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.')
+                                    coordenada_lat = item.coordenada_x != null ? item.coordenada_x.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[0].ToString().Replace(',', '.'),
+                                    coordenada_lng = item.coordenada_y != null ? item.coordenada_y.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.')
                                 };
 
                                 db.DatosSedes.Add(datosSedes);
@@ -581,8 +581,8 @@ namespace Ineval.Controllers
                                 Code = item.canton_id,
                                 Description = item.canton,
                                 NumeroTotalSustentantes = totalSuste,
-                                coordenada_lat = coordenadas.features.FirstOrDefault().center[0].ToString().Replace(',', '.'),
-                                coordenada_lng = coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.')
+                                coordenada_lat = coordenadas != null ? coordenadas.features.FirstOrDefault().center[0].ToString().Replace(',', '.') : "",
+                                coordenada_lng = coordenadas != null ? coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.') : ""
                             };
 
                             db.DatosSedes.Add(datosSedes);

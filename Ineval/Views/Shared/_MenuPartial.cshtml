@@ -188,15 +188,23 @@
                         </li>
                     }
                 }
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link d-flex align-items-center" data-bind="click:FinalizarProceso">
-                        <i class="nav-icon far fa-times-circle"></i>
-                        <p>
-                            Finalizar Proceso
-                            @*<i class="fas fa-angle-left right"></i>*@
-                        </p>
-                    </a>
-                </li>
+
+                @if (ViewBag.EstadoProceso != null)
+                {
+                    if (ViewBag.EstadoProceso == "1")
+                    {
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link d-flex align-items-center" data-bind="click:FinalizarProceso">
+                                <i class="nav-icon far fa-times-circle"></i>
+                                <p>
+                                    Finalizar Proceso
+                                    @*<i class="fas fa-angle-left right"></i>*@
+                                </p>
+                            </a>
+                        </li>
+                    }
+                }
+
             </ul>
         </div>
     }

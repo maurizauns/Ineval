@@ -32,6 +32,7 @@
 
                         <div>
                             <div class="form-group">
+                                @Html.ActionLink("Correos", "Index", "EmailParametros", null, new { @class = "list-group-item tabla-maestra" })                                
                                 @Html.ActionLink("Permisos por Rol", "Index", "RolePermissions", null, new { @class = "list-group-item tabla-maestra" })
                                 @Html.ActionLink("Paises", "Index", "Country", null, new { @class = "list-group-item tabla-maestra" })
                                 @Html.ActionLink("Provincias", "Index", "Province", null, new { @class = "list-group-item tabla-maestra" })

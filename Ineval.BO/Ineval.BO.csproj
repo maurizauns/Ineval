@@ -57,6 +57,8 @@
     <Compile Include="Implementation\CatalogService.cs" />
     <Compile Include="Implementation\configuration\CantonService.cs" />
     <Compile Include="Implementation\configuration\CountryService.cs" />
+    <Compile Include="Implementation\configuration\DatosMapboxAPIKEYService.cs" />
+    <Compile Include="Implementation\configuration\EmailParametrosService.cs" />
     <Compile Include="Implementation\procesos\DatosCantonLatLngService.cs" />
     <Compile Include="Implementation\procesos\DatosExcelPersonalService.cs" />
     <Compile Include="Implementation\procesos\DatosFiltrosService.cs" />

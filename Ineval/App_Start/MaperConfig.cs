@@ -9,6 +9,8 @@ namespace Ineval.App_Start
     {
         public MaperConfig()
         {
+            CreateMap<EmailParametros, EmailParametrosViewModel>().ReverseMap();
+
             CreateMap<Usuario, UsuarioViewModel>().ReverseMap();
             CreateMap<Configuracion, SettingViewModel>().ReverseMap();
             CreateMap<Country, CountryViewModel>().ReverseMap();
@@ -41,6 +43,9 @@ namespace Ineval.App_Start
             CreateMap<DatosSedesAsignacion, DatosSedesAsignacionViewModel>().ReverseMap();
 
             CreateMap<DatosFiltros, DatosFiltrosViewModel>().ReverseMap();
+
+            CreateMap<DatosMapboxAPIKEY, DatosMapboxAPIKEYViewModel>().ReverseMap();
+
         }
     }
 }

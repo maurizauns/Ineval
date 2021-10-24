@@ -1,5 +1,4 @@
 ﻿var urlProvince;
-debugger
 $(document).ready(function () {
     $("#CountryId").change(function () {
         var paisId = $("#CountryId").val();
