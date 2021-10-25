@@ -483,6 +483,7 @@
     <Compile Include="Controllers\DatosTemporalesController.cs" />
     <Compile Include="Controllers\DiscoveryService.cs" />
     <Compile Include="Controllers\EmailParametrosController.cs" />
+    <Compile Include="Controllers\EnvioCorreos.cs" />
     <Compile Include="Controllers\ExcelResult.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />

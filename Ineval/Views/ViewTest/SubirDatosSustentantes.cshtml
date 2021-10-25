@@ -7,7 +7,7 @@
 @model Ineval.Dto.UsuarioViewModel
 
 @{
-    ViewBag.Title = "Cargar Datos Sustentantes";
+    ViewBag.Title = "Cargar Datos";
 }
 
 @Scripts.Render("~/bundles/modalStatic")
@@ -16,7 +16,7 @@
     <div class="content-header-left col-12 mb-2 mt-1">
         <div class="row mx-0">
             <div class="col-8 d-flex align-items-center pl-0">
-                <h5 class="content-header-title float-left pr-1 mb-0">@ViewBag.Title</h5>
+                <h5 class="content-header-title float-left pr-1 mb-0">@ViewBag.Title &nbsp;</h5>
                 <div class="breadcrumb-wrapper col-9">
                     <ol class="breadcrumb p-0 mb-0">
                         <li class="breadcrumb-item">
@@ -44,12 +44,12 @@
                             <span data-bind="text:NumeroTotal"></span>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    @*<div class="form-group row">
                         <label class="control-label col-md-4">Numero Total de Instituciones Cargados:</label>
                         <div class="col-md-8">
                             <span data-bind="text:NumeroTotalInsticiones"></span>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
         </div>
@@ -69,7 +69,7 @@
     </section>
 </div>
 
-<div class="card-body border-div-history">
+@*<div class="card-body border-div-history">
     <section class="admission-list-wrapper">
         <div class="admission-list-filter px-1">
             <div class="row border-div-simec py-2 mb-2">
@@ -86,7 +86,7 @@
             </div>
         </div>
     </section>
-</div>
+</div>*@
 
 <script src="~/Scripts/Pages/Procesos/DatosTemporales.js"></script>
 

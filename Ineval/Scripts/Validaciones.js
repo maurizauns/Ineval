@@ -1,4 +1,22 @@
-﻿function crearSelectizeEmail(emails, maxItem) {
+﻿function setSelectEmail(id, data) {
+    var nom = data.split(" ");
+    var selectize = $(id)[0].selectize;
+    selectize.clear();
+    selectize.clearOptions();
+    selectize.renderCache = {};
+
+    for (var i in nom) {
+        var email_item = nom[i];
+        selectize.addOption({
+            email: email_item
+        });
+
+    }
+    selectize.refreshOptions(true);
+    selectize.setValue(nom);
+}
+
+function crearSelectizeEmail(emails, maxItem) {
     for (var i = 0; i < emails.length; i++) {
         email = $("#" + emails[i]).selectize({
             plugins: ['remove_button'],
@@ -38,5 +56,17 @@
                 return false;
             }
         });
+    }
+}
+
+function validarEmail(e) {
+    emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+    var mensaje = e.id + "Mensaje";
+    if (emailRegex.test(e.value)) {
+        $("#" + mensaje).html("");
+        return 1;
+    } else {
+        $("#" + mensaje).html("Correo electrónico no valido");
+        return 0;
     }
 }

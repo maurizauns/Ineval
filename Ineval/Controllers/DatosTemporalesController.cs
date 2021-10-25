@@ -2,6 +2,7 @@
 using Ineval.BO;
 using Ineval.DAL;
 using Ineval.Dto;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -51,9 +52,19 @@ namespace Ineval.Controllers
         [HttpPost]
         public async Task<ActionResult> AddSustentantesMasiva(HttpPostedFileWrapper archivo, Guid? Id)
         {
+            var userId = User.Identity.GetUserId();
+
             BinaryReader b = new BinaryReader(archivo.InputStream);
             byte[] binData = b.ReadBytes(archivo.ContentLength);
             string result = System.Text.Encoding.UTF7.GetString(binData);
+
+
+            int datoseliminacion = await db.DatosTemporales.AsNoTracking().Where(x => x.AsignacionId == Id).CountAsync();
+            if (datoseliminacion > 0)
+            {
+                var registroseliminados = db.Database.SqlQuery<List<int>>("exec sp_DeleteDatosTemporales @AsignacionId", new SqlParameter("AsignacionId", Id)).ToList();
+            }
+
 
             List<DatosTemporales> listaCabecera = new List<DatosTemporales>();
 
@@ -87,31 +98,6 @@ namespace Ineval.Controllers
                 }
             }
 
-            //int numerolotes = 1000;
-            //int j = 0;
-            //using (var ctx = new SwmContext())
-            //{
-            //    //ctx.DatosTemporales.AddRange(listaCabecera);
-            //    //await ctx.SaveChangesAsync();
-            //    foreach (var item in listaCabecera)
-            //    {
-            //        ctx.DatosTemporales.Add(item);
-
-            //        if (j % numerolotes == 0)
-            //        {
-            //            await ctx.SaveChangesAsync();
-            //        }
-            //        j++;
-
-            //    }
-            //    //ctx.BulkInsert(listaCabecera.ToList());
-            //}
-
-            //b.Close();
-            //binData = null;
-            //result = "";
-            //listaCabecera = null;
-
             try
             {
                 insertMasiveData(listaCabecera);
@@ -120,6 +106,8 @@ namespace Ineval.Controllers
                 binData = null;
                 result = "";
                 listaCabecera = null;
+
+                bool status = await EnvioCorreos.SendAsync(userId, "Carga de Datos Exitosos");
 
             }
             catch (Exception ex)
@@ -196,7 +184,7 @@ namespace Ineval.Controllers
                    item.Id=Guid.NewGuid(),
                   item.usu_id,
                   item.tipo_identificacion
-                  ,item.identificacion
+                  ,item.identificacion!="" && item.identificacion!=null ? item.identificacion.Length<10 ? "0"+item.identificacion:item.identificacion:item.identificacion
                   ,item.primer_nombre
                   ,item.segundo_nombre
                   ,item.primer_apellido

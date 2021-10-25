@@ -9,8 +9,6 @@
     ViewBag.Title = "Usuarios";
 }
 
-@*@Scripts.Render("~/bundles/modalStatic")*@
-
 <div class="content-header row">
     <div class="content-header-left col-12 mb-2 mt-1">
         <div class="row mx-0">
@@ -59,7 +57,7 @@
     </section>
 </div>
 
-<form role="form" class="modal-Crud" action='@Url.Action("Save")' data-modal="usuarios-modal" data-grid="usuarios-grid">
+<form role="form" class="modal-Crud" action='@Url.Action("SaveNew")' data-modal="usuarios-modal" data-grid="usuarios-grid">
     <div class="modal fade text-left" id="usuarios-modal" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel160" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">

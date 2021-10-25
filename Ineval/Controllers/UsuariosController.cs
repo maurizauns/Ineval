@@ -15,12 +15,14 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Net.Mail;
 
 namespace Ineval.Controllers
 {
     [CustomAuthorize(ModuleName = "Usuarios")]
     public class UsuariosController : BaseController<Guid, Usuario, UsuarioViewModel>
     {
+        SwmContext db = new SwmContext();
         public UsuariosController()
         {
             Title = "Usuario";
@@ -174,5 +176,109 @@ namespace Ineval.Controllers
         }
 
         #endregion
+
+
+        public virtual async Task<ActionResult> SaveNew(UsuarioViewModel model)
+        {
+            OnBeginCrudAction();
+
+            if (!ModelState.IsValid)
+            {
+                return await Task.Run(() => Json(new { success = false, message = GetValidationMessages() }, JsonRequestBehavior.AllowGet));
+            }
+
+            try
+            {
+                var entity = MapperModelToEntity(model);
+
+                var saveResult = await EntityService.SaveAsync(entity);
+
+                if (saveResult.Succeeded)
+                {
+                    EnviarCorreo(entity.Id, "Se registro un nuevo Usuario");
+
+                    return await Task.Run(() => Json(new { success = true, message = string.Empty }, JsonRequestBehavior.AllowGet));
+
+
+                }
+
+                return await Task.Run(() => Json(new { success = false, message = saveResult.GetErrorsString() }, JsonRequestBehavior.AllowGet));
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public async Task<ActionResult> EnviarCorreo(Guid UsuarioId, string Mensaje)
+        {
+            EmailParametros emailParametros = new EmailParametros();
+            emailParametros = await db.EmailParametros.FirstOrDefaultAsync();
+
+            Usuario usuario = new Usuario();
+            usuario = await db.Usuarios.FirstOrDefaultAsync(x => x.Id == UsuarioId);
+
+            MailMessage msg = new MailMessage();
+
+            if (usuario != null)
+            {
+                if (IsValidEmailAddress(usuario.Email))
+                {
+                    msg.To.Add(new MailAddress(usuario.Email.Trim()));
+                }
+            }
+
+            string[] CorreosEnviar;
+
+            CorreosEnviar = emailParametros.EmailCopia.Split(' ');
+
+            foreach (string email_ in CorreosEnviar)
+            {
+                if (IsValidEmailAddress(email_.Trim()))
+                {
+                    msg.CC.Add(new MailAddress(email_.Trim()));
+                }
+            }
+
+            //msg.To.Add("r.caiza@reliv.la");
+            msg.Subject = "Ineval";
+            msg.SubjectEncoding = System.Text.Encoding.UTF8;
+            //msg.Bcc.add
+
+            msg.Body = Mensaje;
+            msg.BodyEncoding = System.Text.Encoding.UTF8;
+            msg.IsBodyHtml = true;
+
+
+
+
+
+            msg.From = new MailAddress(emailParametros.EmailPrincipal);
+            SmtpClient cliete = new SmtpClient();
+
+            cliete.Port = 587;
+            cliete.EnableSsl = true;
+
+            cliete.Host = "smtp.gmail.com";
+            cliete.Credentials = new NetworkCredential(emailParametros.EmailPrincipal, EncryptDecrypt.Decrypt(emailParametros.EmailPassword));
+
+
+            try
+            {
+                cliete.Send(msg);
+                return Json("Hola", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json("Error", JsonRequestBehavior.AllowGet);
+
+            }
+
+        }
+
+        private static bool IsValidEmailAddress(string emailAddress)
+        {
+            return new System.ComponentModel.DataAnnotations.EmailAddressAttribute().IsValid(emailAddress);
+        }
     }
 }

@@ -212,6 +212,8 @@ namespace Ineval.App_Start
 
         public async Task<ActionResult> SaveAsignacion(AsignacionViewModel model)
         {
+            var userId = User.Identity.GetUserId();
+
             OnBeginCrudAction();
 
             if (!ModelState.IsValid)
@@ -284,7 +286,12 @@ namespace Ineval.App_Start
 
                         var saveresultparam = await entityparam.SaveAsync(result);
                     }
+
+                    bool status = await EnvioCorreos.SendAsync(userId, "Se creo un nuevo proceso de Asignación:");
+
                     return await Task.Run(() => Json(new { success = true, message = string.Empty }, JsonRequestBehavior.AllowGet));
+
+                    
                 }
 
                 return await Task.Run(() => Json(new { success = false, message = saveResult.GetErrorsString() }, JsonRequestBehavior.AllowGet));

@@ -33,10 +33,7 @@
                     </ol>
                 </div>
             </div>
-            <div class="col-4 px-0 pt-xl-0 pt-1">
-                @*<button type="button" class="btn btn-success glow invoice-create float-right mr-1 mb-0" data-toggle="modal" data-target="#usuarios-modal" role="button" aria-pressed="true">
-                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
-                    </button>*@
+            <div class="col-4 px-0 pt-xl-0 pt-1">                
             </div>
         </div>
     </div>
@@ -52,7 +49,7 @@
                             <label class="control-label">Nombre Documento</label>
                         </div>
                         <div class="col-md-10">
-                            <input type="text" name="NombreDocumento" class="form-control" id="NombreDocumento" data-bid="value:NombreDocumento,text:NombreDocumento" value="" />
+                            <input type="text" name="NombreDocumento" class="form-control" id="NombreDocumento" data-bid="value:NombreDocumento" value="" />
                         </div>
                     </div>
                 </div>
@@ -61,7 +58,7 @@
                 <div class="col-12  col-sm-12 col-lg-12 ">
                     <ul data-bind="foreach: DatosExcel" class="ulroberto">
                         <li>
-                            <input type="checkbox" class="micheckbox" data-bind="attr: {'id': 'Campo_'+(typeof Id !='function' ? Id:Id())},value:Id">
+                            <input type="checkbox" class="micheckbox" data-bind="attr: {'id': 'Campo_'+(typeof Id !='function' ? Id:Id())},value:Id,checked:check,enable:Habilitado">
                             <span data-bind="text: Description"></span>
                         </li>
                     </ul>
@@ -74,6 +71,11 @@
             </div>
         </div>
     </section>
+</div>
+<div class="card-body border-div-history">
+    <div class="alert alert-danger">
+        <p style="color:white"><i class="glyphicon glyphicon-info-sign"> </i> Algunos ya se encuentran marcados por defectos, porque son necesarios para el proceso.!!!!</p>
+    </div>
 </div>
 
 <script type="text/javascript" language="javascript" src="~/Scripts/Pages/Procesos/DatoxExcelCabecera.js?v1"></script>

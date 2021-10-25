@@ -35,10 +35,11 @@
                     </div>
                 </li>*@
             <li class="nav-item">
-                <a class="nav-link" href="#" style="text-align:center;color:yellow;" id="NombreProceso">
-                    @{
-                        @ViewBag.NombreProceso;
-                    }
+                <a class="nav-link" href="#" style="text-align:center;color:yellow;">
+                    <span>
+                        @{@ViewBag.NombreProceso;}
+                    </span>
+                    <input type="hidden" name="NombreProceso" id="NombreProceso" value="@ViewBag.NombreProceso" />
                 </a>
             </li>
                 @if (ViewBag.NombreCompleto != null)

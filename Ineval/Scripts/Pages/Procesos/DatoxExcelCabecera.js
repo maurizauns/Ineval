@@ -10,6 +10,8 @@ $(document).ready(function () {
         vmFormBMI.DatosExcelIDS = ko.observable([]);
         vmFormBMI.NombreDocumento = ko.observable();
 
+        
+
         vmFormBMI.Guardar = function () {
             var arrayPropertiesRiesgos = new Array();
             $('.micheckbox:checked').each(
@@ -51,13 +53,14 @@ $(document).ready(function () {
         ko.cleanNode($("#Content")[0]);
         ko.applyBindings(vmFormBMI, $("#Content")[0]);
 
+        $("#NombreDocumento").val(vmFormBMI.NombreProceso());
         vmFormBMI.DatosExcel(vmFormBMI.ListaDatosExcel());
-
+        
     };
     $.ajax({
         type: "GET",
         contentType: "application/json; charset=utf-8",
-        url: "/DatosExcelCabecera/GetFormulario?id=" + 5,
+        url: "/DatosExcelCabecera/GetFormulario?id=" + vmh.CurrentId(),
         success: KnockoutFormBMI
     });
 });
