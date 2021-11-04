@@ -287,7 +287,7 @@ namespace Ineval.App_Start
                         var saveresultparam = await entityparam.SaveAsync(result);
                     }
 
-                    bool status = await EnvioCorreos.SendAsync(userId, "Se creo un nuevo proceso de Asignación:");
+                    bool status = await EnvioCorreos.SendAsync(userId, "Se creo un nuevo proceso de Asignación.");
 
                     return await Task.Run(() => Json(new { success = true, message = string.Empty }, JsonRequestBehavior.AllowGet));
 

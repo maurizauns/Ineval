@@ -1,6 +1,7 @@
 ﻿using Ineval.BO;
 using Ineval.DAL;
 using Ineval.Dto;
+using Microsoft.AspNet.Identity;
 using MvcJqGrid;
 using System;
 using System.Collections.Generic;
@@ -58,6 +59,8 @@ namespace Ineval.Controllers
         [HttpPost]
         public async Task<ActionResult> AddSustentantesMasiva(HttpPostedFileWrapper archivo, Guid? Id)
         {
+            var userId = User.Identity.GetUserId();
+
             BinaryReader b = new BinaryReader(archivo.InputStream);
             byte[] binData = b.ReadBytes(archivo.ContentLength);
             string result = System.Text.Encoding.UTF7.GetString(binData);
@@ -101,6 +104,8 @@ namespace Ineval.Controllers
                 binData = null;
                 result = "";
                 listaCabecera = null;
+
+                bool status = await EnvioCorreos.SendAsync(userId, "Carga de Datos Exitosos de Personal en Territorio");
 
                 return Json(new { result = "Guardada con éxito!", status = "success" }, JsonRequestBehavior.AllowGet);
             }

@@ -1,4 +1,4 @@
-﻿<div id="Content">   
+﻿<div id="Content">
 </div>
 <script src="~/Scripts/knockout.debug.js"></script>
 <script src="~/Scripts/knockout.mapping.js"></script>
@@ -33,8 +33,6 @@
                 });
             }
 
-            
-
             vmh.GetUsers = function () {
                 $.ajax({
                     type: "POST",
@@ -42,12 +40,11 @@
                     url: '/ViewTest/GetUsers',
                     //data: JSON.stringify(),
                     success: function (data) {
-                        if (data != null) {
-                            if (data.Data.APIKEY == null || data.Data.APIKEY == "") {
-                                error("Debe registrarse en MapBox para usar las funciones Completas del Sistema");
-                            } else {
-                                vmh.PasswordMapBox(data.Data.APIKEY);
-                            }
+                        if (data.Data != null && data.Data != "") {
+                            vmh.PasswordMapBox(data.Data);
+
+                        } else {
+                            error("Debe registrarse en MapBox para usar las funciones Completas del Sistema");
                         }
                     }
                 });

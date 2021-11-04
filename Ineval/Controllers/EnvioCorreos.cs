@@ -37,24 +37,96 @@ namespace Ineval.Controllers
 
             string[] CorreosEnviar;
 
-            CorreosEnviar = emailParametros.EmailCopia.Split(' ');
+            CorreosEnviar = emailParametros.EmailCopia != null ? emailParametros.EmailCopia.Split(' ') : null;
 
-            foreach (string email_ in CorreosEnviar)
+            if (CorreosEnviar != null)
             {
-                if (IsValidEmailAddress(email_.Trim()))
+                foreach (string email_ in CorreosEnviar)
                 {
-                    msg.CC.Add(new MailAddress(email_.Trim()));
+                    if (IsValidEmailAddress(email_.Trim()))
+                    {
+                        msg.CC.Add(new MailAddress(email_.Trim()));
+                    }
                 }
             }
 
-            
+
             msg.Subject = "Ineval";
             msg.SubjectEncoding = System.Text.Encoding.UTF8;
             //msg.Bcc.add
 
             string html = @"";
             html = html + @"<b>Nombre Usuario: </b> " + usuario.NombresCompletos + "<br/>";
-            
+
+            if (!String.IsNullOrEmpty(mensaje))
+            {
+                html = html + @"<b>Mensaje: </b> " + mensaje + "<br/>";
+            }
+
+            html = html + @"<p>Atentamente </p>";
+
+            html = html + @"<p>Instituto Nacional de Evaluación Educativa </p>";
+
+            html = html + @"<p>Este correo ha sido generado automáticamente, por favor no responda al mismo</p>";
+
+
+
+            msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(html, null, MediaTypeNames.Text.Html));
+            msg.BodyEncoding = System.Text.Encoding.UTF8;
+            msg.IsBodyHtml = true;
+
+
+            msg.From = new MailAddress(emailParametros.EmailPrincipal);
+            SmtpClient cliete = new SmtpClient();
+
+            cliete.Port = 587;
+            cliete.EnableSsl = true;
+
+            cliete.Host = "smtp.gmail.com";
+            cliete.Credentials = new NetworkCredential(emailParametros.EmailPrincipal, EncryptDecrypt.Decrypt(emailParametros.EmailPassword));
+
+            try
+            {
+                cliete.Send(msg);
+                return status = true;
+            }
+            catch (Exception ex)
+            {
+                return status = false;
+
+            }
+        }
+
+        public static async Task<bool> SendAccountAsync(string Id, string mensaje)
+        {
+            bool status = false;
+
+            EmailParametros emailParametros = new EmailParametros();
+            emailParametros = await db.EmailParametros.FirstOrDefaultAsync();
+
+            Usuario usuario = new Usuario();
+            usuario = await db.Usuarios.FirstOrDefaultAsync(x => x.ApplicationUserId == Id);
+
+            MailMessage msg = new MailMessage();
+
+            if (usuario != null)
+            {
+                if (IsValidEmailAddress(usuario.Email))
+                {
+                    msg.To.Add(new MailAddress(usuario.Email.Trim()));
+                }
+            }
+
+
+
+
+            msg.Subject = "Ineval";
+            msg.SubjectEncoding = System.Text.Encoding.UTF8;
+            //msg.Bcc.add
+
+            string html = @"";
+            //html = html + @"<b>Nombre Usuario: </b> " + usuario.NombresCompletos + "<br/>";
+
             if (!String.IsNullOrEmpty(mensaje))
             {
                 html = html + @"<b>Mensaje: </b> " + mensaje + "<br/>";

@@ -107,7 +107,7 @@ namespace Ineval.Controllers
                 result = "";
                 listaCabecera = null;
 
-                bool status = await EnvioCorreos.SendAsync(userId, "Carga de Datos Exitosos");
+                bool status = await EnvioCorreos.SendAsync(userId, "Carga de Datos Exitosos de Datos Sustentantes");
 
             }
             catch (Exception ex)

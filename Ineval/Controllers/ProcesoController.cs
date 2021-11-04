@@ -19,7 +19,7 @@ namespace Ineval.Controllers
             using (AsignacionService asignacionService = new AsignacionService())
             {
                 asignacion = asignacionService.FirstOrDefault(x => x.Id == id);
-                ViewBag.NombreProceso = asignacion != null ? "Proceso:" + asignacion.NombreProceso.Description : "";
+                ViewBag.NombreProceso = asignacion != null ? "Proceso:" + " (" + asignacion.NombreProceso.Code + ") " + asignacion.NombreProceso.Description : "";
                 ViewBag.EstadoProceso = asignacion != null ? asignacion.EstadoProceso.ToString() : "";
             }
             ViewBag.Id = id;

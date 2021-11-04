@@ -159,29 +159,46 @@ namespace Ineval.Controllers
 
         public async Task<ActionResult> GetUsers()
         {
-            var UserId = User.Identity.GetUserId();
-            Guid Id = new Guid(UserId);
+            DatosMapboxAPIKEYService service = new DatosMapboxAPIKEYService();
 
-            UsuarioService usuarioService = new UsuarioService();
+            List<DatosMapboxAPIKEY> result = new List<DatosMapboxAPIKEY>();
+            List<DatosMapboxAPIKEYViewModel> resultDTO = new List<DatosMapboxAPIKEYViewModel>();
 
-            Usuario user = new Usuario();
-            UsuarioViewModel userDTO = new UsuarioViewModel();
+            string apikey = "";
 
             try
             {
-                user = await usuarioService.GetAll().Where(X => X.ApplicationUserId == UserId).SingleOrDefaultAsync();
-                userDTO = Mapper.Map<UsuarioViewModel>(user);
+                result = await service.GetAll().ToListAsync();
+                resultDTO = Mapper.Map<List<DatosMapboxAPIKEYViewModel>>(result);
 
-                return Json(new { Data = userDTO }, JsonRequestBehavior.AllowGet);
+                foreach (var item in resultDTO)
+                {
+                    int cont = 1;
+                    int x = item.NumeroMininoConsulta - item.NumeroUsadasConsultas;
+                    if (x > 0)
+                    {
+                        apikey = item.APIKEY;
+                        DatosMapboxAPIKEY resultApiKey = await db.DatosMapboxAPIKEY.Where(xx => xx.Id == item.Id).FirstOrDefaultAsync();
+
+                        resultApiKey.NumeroUsadasConsultas = item.NumeroUsadasConsultas + cont;
+
+                        var entry = db.Entry(resultApiKey);
+                        entry.State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                        break;
+                    }
+                }
+
+                return Json(new { Data = apikey }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
 
-                return Json(new { Data = userDTO }, JsonRequestBehavior.AllowGet);
+                return Json(new { Data = apikey }, JsonRequestBehavior.AllowGet);
             }
             finally
             {
-                usuarioService.Dispose();
+                service.Dispose();
             }
         }
         public async Task<ActionResult> Filtro(Guid? Id, int? Parametro1, int? Parametro2, int? Parametro3)

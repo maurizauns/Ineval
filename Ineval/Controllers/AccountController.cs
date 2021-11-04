@@ -278,10 +278,7 @@ namespace Ineval.Controllers
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
-                }
-
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
+                }                
                 var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
 
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, Request.Url.Scheme);
@@ -300,18 +297,8 @@ namespace Ineval.Controllers
 
                     var respuesta = "";
 
-                    //Ineval.Common.Helper.EnviarCorreo(
-                    //        usuario.Empresa.EmailDe,
-                    //        model.Email,
-                    //        usuario.Empresa.EmailCc, usuario.Empresa.EmailCco,
-                    //        "Recuperar Contraseña",
-                    //        mensaje,
-                    //        usuario.Empresa.SmtpServidor,
-                    //        usuario.Empresa.SmtpUsuario,
-                    //        usuario.Empresa.SmtpClave,
-                    //        usuario.Empresa.SmtpPuerto,
-                    //        usuario.Empresa.SmtpHabilitaSsl,
-                    //        null, ref respuesta);
+                    bool status = await EnvioCorreos.SendAccountAsync(user.Id, mensaje);
+
                 }
                 finally
                 {
@@ -439,7 +426,7 @@ namespace Ineval.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+        public ActionResult ResetPassword(string userId, string code)
         {
             return code == null ? View("Error") : View();
         }
@@ -455,7 +442,7 @@ namespace Ineval.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.UserName);
+            var user = await UserManager.FindByIdAsync(model.userId);
             if (user == null)
             {
                 // Don't reveal that the user does not exist

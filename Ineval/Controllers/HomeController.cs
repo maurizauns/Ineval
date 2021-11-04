@@ -61,10 +61,52 @@ namespace Ineval.Controllers
         {
             List<Asignacion> nombreProcesos = new List<Asignacion>();
 
-            nombreProcesos = await db.Asignacion.Where(x => x.EstadoProceso == 3).ToListAsync();           
+            nombreProcesos = await db.Asignacion.Where(x => x.EstadoProceso == 3).ToListAsync();
 
             return Json(nombreProcesos.Count(), JsonRequestBehavior.AllowGet);
+        }
 
+        public async Task<JsonResult> UpdateDatosMapbos()
+        {
+            try
+            {            
+                //Primero obtenemos el día actual
+                DateTime date = DateTime.Now;
+
+                //Asi obtenemos el primer dia del mes actual
+                DateTime oPrimerDiaDelMes = new DateTime(date.Year, date.Month, 1);
+
+                //Y de la siguiente forma obtenemos el ultimo dia del mes
+                //agregamos 1 mes al objeto anterior y restamos 1 día.
+                DateTime oUltimoDiaDelMes = oPrimerDiaDelMes.AddMonths(1).AddDays(-1);
+
+                int resultRes = date.Day - oUltimoDiaDelMes.Day;
+
+                if (resultRes == 0)
+                {
+                    DatosMapboxAPIKEYService service = new DatosMapboxAPIKEYService();
+                    List<DatosMapboxAPIKEY> result = await service.GetAll().ToListAsync();
+
+                    foreach (var item in result)
+                    {
+                        item.NumeroUsadasConsultas = 0;
+                        var entry = db.Entry(item);
+                        entry.State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                    }
+                }
+                return Json(true, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+
+                return Json(ex.Message.ToString(), JsonRequestBehavior.AllowGet);
+            }
+            finally
+            {
+                Dispose();
+            }
         }
     }
 }

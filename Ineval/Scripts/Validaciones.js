@@ -1,17 +1,19 @@
 ﻿function setSelectEmail(id, data) {
-    var nom = data.split(" ");
+    var nom = data != null ? data.split(" ") : null;
     var selectize = $(id)[0].selectize;
     selectize.clear();
     selectize.clearOptions();
     selectize.renderCache = {};
 
-    for (var i in nom) {
-        var email_item = nom[i];
-        selectize.addOption({
-            email: email_item
-        });
-
+    if (nom != null) {
+        for (var i in nom) {
+            var email_item = nom[i];
+            selectize.addOption({
+                email: email_item
+            });
+        }
     }
+
     selectize.refreshOptions(true);
     selectize.setValue(nom);
 }

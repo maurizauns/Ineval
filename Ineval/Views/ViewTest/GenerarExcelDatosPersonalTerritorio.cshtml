@@ -61,7 +61,7 @@
                 <div class="col-12  col-sm-12 col-lg-12 ">
                     <ul data-bind="foreach: DatosExcel" class="ulroberto">
                         <li>
-                            <input type="checkbox" class="micheckbox" data-bind="attr: {'id': 'Campo_'+(typeof Id !='function' ? Id:Id())},value:Id">
+                            <input type="checkbox" class="micheckbox" data-bind="attr: {'id': 'Campo_'+(typeof Id !='function' ? Id:Id())},value:Id,checked:check">
                             <span data-bind="text: Description"></span>
                         </li>
                     </ul>

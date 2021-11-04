@@ -51,6 +51,7 @@ $(document).ready(function () {
         ko.cleanNode($("#Content")[0]);
         ko.applyBindings(vmFormBMI, $("#Content")[0]);
 
+        $("#NombreDocumento").val(vmFormBMI.NombreProceso());
         vmFormBMI.DatosExcel(vmFormBMI.ListaDatosExcel());
 
     };

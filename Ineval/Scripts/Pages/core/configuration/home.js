@@ -51,22 +51,19 @@ $(function () {
         },
     });
 
-    //$.ajax({
-    //    type: 'GET',
-    //    url: '/Home/GetAllProcesos',
-    //    dataType: 'json',
-    //    cache: true,
-    //    success: function (data) {
-    //        $('#sales-all').html('$&nbsp;' + parseFloat(data).toLocaleString('en'));
-    //        $('#home-sales').removeClass('hide');
-    //    },
-    //    complete: function () {
-    //        $('#home-sales-spinner').addClass('hide');
-    //    },
-    //    error: function () {
-    //        $('#home-sales-error').removeClass('hide');
-    //    },
-    //});
+    $.ajax({
+        type: 'GET',
+        url: '/Home/UpdateDatosMapbos',
+        dataType: 'json',
+        cache: true,
+        success: function (data) {
+            if (data) {
+
+            } else{
+                error("No se puedo actualizar");
+            }
+        },        
+    });
 })
 
 function frmVentasLoaded() {

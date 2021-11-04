@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Ineval.BO;
 using Ineval.DAL;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,10 +43,8 @@ namespace Ineval.Controllers
             using (AsignacionService asignacionService = new AsignacionService())
             {
                 var result = await asignacionService.WhereAsync(x => x.Id == id);
-                NombreProceso = result.FirstOrDefault().NombreProceso.Description;
+                NombreProceso = " ("+ result.FirstOrDefault().NombreProceso.Code + ") "+result.FirstOrDefault().NombreProceso.Description;
             }
-
-
 
             List<DatosExcelNew> datosExcelNews = new List<DatosExcelNew>();
             var ListaDatosExcel = await EntityService.GetAllAsync();
@@ -76,7 +75,7 @@ namespace Ineval.Controllers
                     Code = item.Code,
                     Description = item.Description,
                     check = listaGuid.Contains(item.Id) ? true : false,
-                    Habilitado = listaGuid.Contains(item.Id) ? false : true,
+                    //Habilitado = listaGuid.Contains(item.Id) ? false : true,
                 });
             }
             return Json(new { NombreProceso = NombreProceso, ListaDatosExcel = datosExcelNews }, JsonRequestBehavior.AllowGet);
@@ -84,6 +83,8 @@ namespace Ineval.Controllers
 
         public virtual async Task<ActionResult> Generar(ICollection<GenericaId> Ids)
         {
+            var userId = User.Identity.GetUserId();
+
             List<DatosExcelCabecera> datosExcelCabeceras = new List<DatosExcelCabecera>();
             List<DatosExcelCabecera> lista = EntityService.GetAll().ToList();
 
@@ -110,10 +111,13 @@ namespace Ineval.Controllers
             List<string> cabecera = new List<string>();
             foreach (var item in datosExcelCabeceras)
             {
-
                 cabecera.Add(item.Code);
-
             }
+
+            
+
+            bool mensaje = await EnvioCorreos.SendAsync(userId, "Se descargo la matriz de datos Sustentantes");
+
 
             return Json(new { Datos = true, cabecera }, JsonRequestBehavior.AllowGet);
         }
@@ -125,6 +129,8 @@ namespace Ineval.Controllers
 
         public ActionResult ExportarExcel(string cabecera, string NombreDocumento)
         {
+            
+
             XLWorkbook wb = new XLWorkbook();
             var ws1 = wb.Worksheets.Add("Reportes");
 

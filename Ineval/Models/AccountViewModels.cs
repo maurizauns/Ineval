@@ -88,8 +88,8 @@ namespace Ineval.Models
     public class ResetPasswordViewModel
     {
         [Required]
-        [Display(Name = "Usuario")]
-        public string UserName { get; set; }
+        //[Display(Name = "UserId")]
+        public string userId { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "La {0} debe tener {2} caracteres.", MinimumLength = 6)]
