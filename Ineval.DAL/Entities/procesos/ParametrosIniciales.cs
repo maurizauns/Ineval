@@ -30,6 +30,6 @@ namespace Ineval.DAL
         public string TiempoEvaluacion { get; set; }
         public string TiempoReceso { get; set; }
         public string TiempoReal { get; set; }
-
+        public int? Tipo { get; set; }
     }
 }

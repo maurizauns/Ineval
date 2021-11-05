@@ -8,6 +8,7 @@ namespace Ineval.Dto
         public virtual DatosSedesViewModel DatosSedes { get; set; }
         public string SessionId { get; set; }
         public string LaboratorioId { get; set; }
+        public string Dia { get; set; }
         public Guid SustentanteId { get; set; }
         public virtual DatosTemporalesViewModel DatosTemporales { get; set; }
     }

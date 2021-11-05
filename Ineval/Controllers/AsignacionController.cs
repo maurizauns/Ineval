@@ -282,6 +282,7 @@ namespace Ineval.App_Start
                             NumeroDiasEvaluar = 1,
                             SiNoNumeroLaboratorios = true,
                             NumeroLaboratorios = 5,
+                            Tipo = 1
                         };
 
                         var saveresultparam = await entityparam.SaveAsync(result);
@@ -291,7 +292,7 @@ namespace Ineval.App_Start
 
                     return await Task.Run(() => Json(new { success = true, message = string.Empty }, JsonRequestBehavior.AllowGet));
 
-                    
+
                 }
 
                 return await Task.Run(() => Json(new { success = false, message = saveResult.GetErrorsString() }, JsonRequestBehavior.AllowGet));
@@ -418,7 +419,7 @@ namespace Ineval.App_Start
             cliete.Host = "smtp.gmail.com";
             cliete.Credentials = new NetworkCredential("crissrobert0984@gmail.com", "r1o2b3e4r5t6o7");
 
-            
+
             try
             {
                 cliete.Send(msg);
