@@ -1,36 +1,107 @@
 ﻿$(function () {
+
+    function EnableInputs() {
+        let element = Array.from($('#frm').find('input'))
+        element.map(el => {
+            $('#'+el.id).prop("disabled",true)
+            
+        })
+        $('#btn-guardar').css("display", "none")
+        $('#btn-cancelar').css("display", "none")
+        $('#btn-editar').css("display", "inline-block")
+    }
     $.ajax({
         type: "GET",
         contentType: "application/json; charset=utf-8",
         url: "/ParametrosIniciales/GetFormulario?id=" + vmh.CurrentId(),
         success: function (r) {
             console.log(r.ParametrosIniciales)
-            $('#txt-HoraInicio').val(r.ParametrosIniciales.HoraInicio)
-            $('#txt-HoraFin').val(r.ParametrosIniciales.HoraFin)
-            $('#txt-HoraEvaluacion').val(r.ParametrosIniciales.TiempoEvaluacion)
-            $('#txt-HoraReceso').val(r.ParametrosIniciales.TiempoReceso)
-            $('#NumSesion').val(r.ParametrosIniciales.NumerosSesiones)
-            $('#txt-diaseval').val(r.ParametrosIniciales.NumeroDiasEvaluar)
-            $('#txt-tiempoViaje').val(r.ParametrosIniciales.TiempoViaje)
-            $('#Id').val(r.ParametrosIniciales.Id)
-            $('#NumeroSustentantes').val(r.ParametrosIniciales.NumeroEquipos)
-            if (r.ParametrosIniciales.Tipo != null) {
-                if (r.ParametrosIniciales.Tipo == 1) {
+            if (r.ParametrosIniciales.HoraInicio == "") {
+                $('#btn-nuevo').css("display", "inline-block")
+                $('#existe').css("display", "inline-block")
+            } else {
+                EnableInputs()
+                $('#btn-nuevo').css("display", "none")
+                $('#existe').css("display", "none")
+                $('#txt-HoraInicio').val(r.ParametrosIniciales.HoraInicio)
+                $('#txt-HoraFin').val(r.ParametrosIniciales.HoraFin)
+                $('#txt-HoraEvaluacion').val(r.ParametrosIniciales.TiempoEvaluacion)
+                $('#txt-HoraReceso').val(r.ParametrosIniciales.TiempoReceso)
+                $('#NumSesion').val(r.ParametrosIniciales.NumerosSesiones)
+                $('#txt-diaseval').val(r.ParametrosIniciales.NumeroDiasEvaluar)
+                $('#txt-tiempoViaje').val(r.ParametrosIniciales.TiempoViaje)
+                $('#Id').val(r.ParametrosIniciales.Id)
+                $('#NumeroSustentantes').val(r.ParametrosIniciales.NumeroEquipos)
+                if (r.ParametrosIniciales.Tipo != null) {
+                    if (r.ParametrosIniciales.Tipo == 1) {
+                        $("#tipoNacional").attr("checked", true);
+                        $("#tipoInterno").attr("checked", false);
+                    } else {
+                        $("#tipoInterno").attr("checked", true);
+                        $("#tipoNacional").attr("checked", false);
+                    }
+                } else {
                     $("#tipoNacional").attr("checked", true);
                     $("#tipoInterno").attr("checked", false);
-                } else {
-                    $("#tipoInterno").attr("checked", true);
-                    $("#tipoNacional").attr("checked", false);
                 }
-            } else {
-                $("#tipoNacional").attr("checked", true);
-                $("#tipoInterno").attr("checked", false);
             }
-            //$('input:radio[name=tipo]:checked').val(r.ParametrosIniciales.Tipo)
+            
+            
         }
     });
 
+    $('#btn-editar').click(function () {
+        let element = Array.from($('#frm').find('input'))
+        element.map(el => {
+            $('#' + el.id).prop("disabled", false)
 
+        })
+        $('#btn-guardar').css("display", "inline-block")
+        $('#btn-editar').css("display", "none")
+        $('#btn-cancelar').css("display", "inline-block")
+    })
+
+    $('#btn-cancelar').click(function () {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            url: "/ParametrosIniciales/GetFormulario?id=" + vmh.CurrentId(),
+            success: function (r) {
+                console.log(r.ParametrosIniciales)
+                if (r.ParametrosIniciales.HoraInicio == "") {
+                    $('#btn-nuevo').css("display", "inline-block")
+                    $('#existe').css("display", "inline-block")
+                } else {
+                    EnableInputs()
+                    $('#btn-nuevo').css("display", "none")
+                    $('#existe').css("display", "none")
+                    $('#txt-HoraInicio').val(r.ParametrosIniciales.HoraInicio)
+                    $('#txt-HoraFin').val(r.ParametrosIniciales.HoraFin)
+                    $('#txt-HoraEvaluacion').val(r.ParametrosIniciales.TiempoEvaluacion)
+                    $('#txt-HoraReceso').val(r.ParametrosIniciales.TiempoReceso)
+                    $('#NumSesion').val(r.ParametrosIniciales.NumerosSesiones)
+                    $('#txt-diaseval').val(r.ParametrosIniciales.NumeroDiasEvaluar)
+                    $('#txt-tiempoViaje').val(r.ParametrosIniciales.TiempoViaje)
+                    $('#Id').val(r.ParametrosIniciales.Id)
+                    $('#NumeroSustentantes').val(r.ParametrosIniciales.NumeroEquipos)
+                    if (r.ParametrosIniciales.Tipo != null) {
+                        if (r.ParametrosIniciales.Tipo == 1) {
+                            $("#tipoNacional").attr("checked", true);
+                            $("#tipoInterno").attr("checked", false);
+                        } else {
+                            $("#tipoInterno").attr("checked", true);
+                            $("#tipoNacional").attr("checked", false);
+                        }
+                    } else {
+                        $("#tipoNacional").attr("checked", true);
+                        $("#tipoInterno").attr("checked", false);
+                    }
+                }
+
+
+            }
+        });
+    })
 
     $('#txt-diaseval').keyup(function () {
 
@@ -56,6 +127,8 @@
             error("La hora de evaluación debe ser definida")
         } else if (horareceso == "") {
             error("La hora de receso debe ser definida")
+        } else if ($('#NumSesion').val() == "") {
+            error("El numero de sesiones debe ser definida")
         } else {
             $.ajax({
                 type: "POST",
@@ -152,7 +225,7 @@ function calculoSesion() {
         var di = getTimeFromMins(diffInMinutes)
         var di1 = moment(di, "HH:mm").diff(moment(horareceso, "HH:mm"), 'minutes');
         var divi = (di1 / horeval)
-        $('#NumSesion').val(divi * parseInt(diaeval))
+        $('#NumSesion').val(Math.round(divi * parseInt(diaeval)))
 
     }
 
