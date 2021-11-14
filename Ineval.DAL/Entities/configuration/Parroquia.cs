@@ -16,5 +16,7 @@ namespace Ineval.DAL
         public virtual Province Province { get; set; }
         public Guid? CantonId { get; set; }
         public virtual Canton Canton { get; set; }
+        public string Coordenada_lat { get; set; }
+        public string Coordenada_lng { get; set; }
     }
 }

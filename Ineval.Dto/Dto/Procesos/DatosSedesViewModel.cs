@@ -10,6 +10,7 @@ namespace Ineval.Dto
         public int NumeroLaboratorio { get; set; }
         public string coordenada_lat { get; set; }
         public string coordenada_lng { get; set; }
+        public string Agrupados { get; set; }
         public int NumeroTotalSustentantes { get; set; }
         public ICollection<DatosSedesAsignacionViewModel> DatosSedesAsignacion { get; set; }
     }

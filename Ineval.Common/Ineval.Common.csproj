@@ -69,6 +69,7 @@
     <Compile Include="Helpers\CollectionUtils.cs" />
     <Compile Include="Helpers\Context.cs" />
     <Compile Include="Helpers\GridHelperExts.cs" />
+    <Compile Include="Helpers\MetodosUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

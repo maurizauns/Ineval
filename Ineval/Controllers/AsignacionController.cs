@@ -282,6 +282,8 @@ namespace Ineval.App_Start
                             NumeroDiasEvaluar = 1,
                             SiNoNumeroLaboratorios = true,
                             NumeroLaboratorios = 5,
+                            SiNoTiempoViaje = true,
+                            TiempoViaje = 60,
                             Tipo = 1
                         };
 
@@ -310,9 +312,14 @@ namespace Ineval.App_Start
             try
             {
                 var userId = User.Identity.GetUserId();
-                var usuario = usuarioService.ObtenerPorApplicationUserId(userId);
+                var datosMapboxAPIKEYs = await db.DatosMapboxAPIKEY.ToListAsync();
 
-                ApiDriving.Root weatherForecast = await ApiDriving.GetByDriving("-122.42,37.78", "-77.03,38.91", usuario.APIKEY);
+                ApiDriving.Root weatherForecast = new ApiDriving.Root();
+                foreach (var item in datosMapboxAPIKEYs)
+                {
+                    weatherForecast = await ApiDriving.GetByDriving("-78.29870190300,-0.11483729100", "-78.34341925700,-0.05793245000", item.APIKEY.Trim());
+                }
+
 
                 return Json(new { result = weatherForecast, state = true }, JsonRequestBehavior.AllowGet);
             }
@@ -332,9 +339,14 @@ namespace Ineval.App_Start
             try
             {
                 var userId = User.Identity.GetUserId();
-                var usuario = usuarioService.ObtenerPorApplicationUserId(userId);
+                var datosMapboxAPIKEYs = await db.DatosMapboxAPIKEY.ToListAsync();
 
-                ApiPosicionGeografica.Root weatherForecast = await ApiPosicionGeografica.GetByPosicionGeografica("AZUAY,CAMILO PONCE ENRIQUEZ", usuario.APIKEY);
+                ApiPosicionGeografica.Root weatherForecast = new ApiPosicionGeografica.Root();
+
+                foreach (var item in datosMapboxAPIKEYs)
+                {
+                    weatherForecast = await ApiPosicionGeografica.GetByPosicionGeografica("Yantzaza, Zamora-Chinchipe,Ecuador", item.APIKEY);
+                }
 
                 return Json(new { result = weatherForecast, state = true }, JsonRequestBehavior.AllowGet);
             }
@@ -431,5 +443,229 @@ namespace Ineval.App_Start
 
             }
         }
+
+
+        //public static List<double> GetListOfRandomDoubles(int countOfNumbers, double totalSum, int digits)
+        //{
+        //    Random r = new Random();
+
+        //    List<double> randomDoubles = new List<double>();
+        //    double totalRandomSum = 0;
+
+        //    for (int i = 0; i < countOfNumbers; i++)
+        //    {
+        //        double nextDouble = r.NextDouble();
+        //        randomDoubles.Add(nextDouble);
+        //        totalRandomSum += nextDouble;
+        //    }
+
+        //    double totalFactor = 1 / totalRandomSum;
+        //    totalFactor = totalFactor * totalSum;
+
+        //    for (int i = 0; i < randomDoubles.Count; i++)
+        //    {
+        //        randomDoubles[i] = randomDoubles[i] * totalFactor;
+        //        randomDoubles[i] = Math.Round(randomDoubles[i], digits);
+        //    }
+
+        //    double currentRandomSum = 0;
+        //    randomDoubles.ForEach(x => currentRandomSum += x);
+        //    randomDoubles[0] += totalSum - currentRandomSum;
+
+        //    return randomDoubles;
+        //}
+
+        //List<double> randomDoubles = GetListOfRandomDoubles(7, 100, 2);
+
+        //public static List<double> GetListOfRandomDoubles(int countOfNumbers, double totalSum, int digits, int limite)
+        //{
+        //    Random r = new Random();
+
+        //    List<double> randomDoubles = new List<double>();
+        //    double suma = 0;
+        //    //do
+        //    //{
+
+        //    double totalRandomSum = 0;
+        //    randomDoubles = new List<double>();
+        //    suma = 0;
+        //    for (int i = 0; i < countOfNumbers; i++)
+        //    {
+        //        double nextDouble = r.NextDouble();
+        //        randomDoubles.Add(nextDouble);
+        //        totalRandomSum += nextDouble;
+        //    }
+
+        //    double totalFactor = 1 / totalRandomSum;
+        //    totalFactor = totalFactor * totalSum;
+
+        //    for (int i = 0; i < randomDoubles.Count; i++)
+        //    {
+        //        randomDoubles[i] = randomDoubles[i] * totalFactor;
+        //        randomDoubles[i] = Math.Round(randomDoubles[i], digits);
+
+        //        if (randomDoubles[i] > limite)
+        //        {
+        //            randomDoubles[i] = limite;
+        //        }
+        //    }
+
+        //    double currentRandomSum = 0;
+        //    randomDoubles.ForEach(x => currentRandomSum += x);
+
+        //    double faltanteTotal = totalSum - currentRandomSum;
+        //    int div = 0;
+        //    double promedioTotal = 0;
+        //    int sumaFinal = 0;
+        //    double algo = randomDoubles.Min() + faltanteTotal;
+        //    if (algo > limite)
+        //    {
+        //        div = ((int)(faltanteTotal / limite));
+        //        div++;
+        //        promedioTotal = faltanteTotal / div;
+        //        double promedioTruncado = Math.Truncate(promedioTotal);
+        //        int productoFinal = (int)(promedioTruncado * div);
+        //        sumaFinal = (int)(faltanteTotal - productoFinal);
+        //    }
+        //    else
+        //    {
+        //        div = 1;
+        //        promedioTotal = faltanteTotal;
+        //    }
+
+        //    for (int j = 0; j < div; j++)
+        //    {
+        //        bool conf = true;
+        //        for (int i = 0; i < randomDoubles.Count; i++)
+        //        {
+        //            if (conf)
+        //            {
+        //                //double faltante = totalSum - currentRandomSum;
+        //                //double sumaFaltante = randomDoubles[i] + faltante;
+
+        //                double sumaFaltante = randomDoubles[i] + promedioTotal;
+        //                if (sumaFaltante <= limite)
+        //                {
+        //                    randomDoubles[i] = Math.Truncate(sumaFaltante);
+        //                    conf = false;
+        //                    break;
+        //                }
+        //            }
+
+        //        }
+        //    }
+
+        //    if (sumaFinal > 0)
+        //    {
+        //        int div1 = ((int)(sumaFinal / limite));
+        //        div1++;
+        //        double promedioTotal1 = sumaFinal / div1;
+        //        double promedioTruncado1 = Math.Truncate(promedioTotal1);
+        //        int productoFinal1 = (int)(promedioTruncado1 * div1);
+        //        int sumaFinal1 = (int)(sumaFinal - productoFinal1);
+
+        //        for (int j = 0; j < div1; j++)
+        //        {
+        //            for (int i = 0; i < randomDoubles.Count; i++)
+        //            {
+        //                double sumaFaltante = randomDoubles[i] + promedioTotal1;
+        //                if (sumaFaltante <= limite)
+        //                {
+        //                    randomDoubles[i] = Math.Truncate(sumaFaltante);
+        //                    break;
+        //                }
+        //            }
+        //        }
+
+        //        if (sumaFinal1 > 0)
+        //        {
+        //            for (int j = 0; j < div1; j++)
+        //            {
+        //                for (int i = 0; i < randomDoubles.Count; i++)
+        //                {
+        //                    double sumaFaltante = randomDoubles[i] + sumaFinal1;
+        //                    if (sumaFaltante <= limite)
+        //                    {
+        //                        randomDoubles[i] = Math.Truncate(sumaFaltante);
+        //                        break;
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //    }
+
+
+        //    suma = randomDoubles.Sum();
+        //    //} while (suma != totalSum);
+
+
+
+
+        //    return randomDoubles;
+        //}
+
+        //public static List<Double> testpryeba(int countOfNumbers, double totalSum, int digits, int limite)
+        //{
+        //    Random rnd = new Random();
+        //    List<Double> x = new List<double>();
+
+        //    for (int i = 0; i < countOfNumbers; i++)
+        //    {
+        //        double r = rnd.NextDouble() * 100;
+        //        if (r > limite)
+        //        {
+        //            r = limite;
+
+        //        }
+        //        x.Add(r);
+        //    }
+
+        //    double v = x.Sum();
+        //    if (v < totalSum)
+        //    {
+        //        double sumaMenores = 0;
+        //        int contadorMenor = 0;
+        //        double sumaLimites = 0;
+        //        List<int> listaMenores = new List<int>();
+        //        for (int i = 0; i < x.Count; i++)
+        //        {
+
+        //            if (x[i] != limite)
+        //            {
+        //                sumaMenores += x[i];
+        //                listaMenores.Add(i);
+        //                contadorMenor++;
+        //            }
+        //            else
+        //            {
+        //                sumaLimites += x[i];
+        //            }
+        //        }
+        //        double faltanteMenores = totalSum - sumaLimites;
+        //        double promedioMenor = faltanteMenores / contadorMenor;
+
+        //        for (int i = 0; i < listaMenores.Count; i++)
+        //        {
+        //            x[listaMenores[i]] = Math.Round(promedioMenor, 0);
+        //        }
+        //    }
+        //    else if (v > totalSum)
+        //    {
+        //        double sobrante = v - totalSum;
+        //        x[countOfNumbers - 1] = x[countOfNumbers - 1] - sobrante;
+        //    }
+        //    return x;
+        //}
+
+        //public async Task<ActionResult> pruebass()
+        //{            
+        //    List<double> randomDoubles = GetListOfRandomDoubles2(3, 50, 0, 20);
+
+        //    randomDoubles.Sort();
+        //    return Json(new { p = randomDoubles, sum = randomDoubles.Sum() }, JsonRequestBehavior.AllowGet);
+        //}       
+
+
     }
 }

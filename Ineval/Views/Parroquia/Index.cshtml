@@ -78,9 +78,9 @@
                         @Html.ValidationMessageFor(model => model.ProvinceId, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(x=>x.CantonId)
-                        @Html.DropDownListFor(x=>x.CantonId,(SelectList)ViewBag.CantonId,"seleccione",new { @class = "form-control"})
-                        @Html.ValidationMessageFor(model=>model.CantonId,"",new { @class = "text-danger"})
+                        @Html.LabelFor(x => x.CantonId)
+                        @Html.DropDownListFor(x => x.CantonId, (SelectList)ViewBag.CantonId, "seleccione", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CantonId, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group ">
                         @Html.LabelFor(x => x.Code)
@@ -91,6 +91,18 @@
                         @Html.LabelFor(x => x.Description)
                         @Html.TextBoxFor(x => x.Description, new { @class = "form-control", placeholder = "Descripción" })
                         @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Coordenada_lat)
+                        @Html.TextBoxFor(x => x.Coordenada_lat, new { @class = "form-control", placeholder = "Coordenada latitud", @type = "number" })
+                        @Html.ValidationMessageFor(model => model.Coordenada_lat, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Coordenada_lng)
+                        @Html.TextBoxFor(x => x.Coordenada_lng, new { @class = "form-control", placeholder = "Coordenada longitud", @type="number" })
+                        @Html.ValidationMessageFor(model => model.Coordenada_lng, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="modal-footer">
