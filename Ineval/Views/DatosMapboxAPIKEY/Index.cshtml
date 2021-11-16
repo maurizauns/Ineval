@@ -80,12 +80,12 @@
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(x => x.Description)
-                        @Html.TextBoxFor(x => x.Description, new { @class = "form-control", placeholder = "Email Password" })
+                        @Html.PasswordFor(x => x.Description, new { @class = "form-control", placeholder = "Email Password" })
                         @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(x => x.APIKEY)
-                        @Html.TextBoxFor(x => x.APIKEY, new { @class = "form-control", placeholder = "ApiKey" })
+                        @Html.PasswordFor(x => x.APIKEY, new { @class = "form-control", placeholder = "ApiKey" })
                         @Html.ValidationMessageFor(model => model.APIKEY, "", new { @class = "text-danger" })
                     </div>                    
                     <div class="form-group">

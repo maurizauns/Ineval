@@ -40,8 +40,8 @@
                         Html.RenderPartial("_filtersPartial", new ModelFilter { FormId = "search_form", GridId = "usuarios-grid", FieldFilters = ViewBag.Filters });
                     }
                     @(Html.MyjqGrid("usuarios-grid", Ineval.Common.Context.PageSize)
-                                .AddColumn(new Column("TipoIdentificacion").SetLabel("Tipo Identificacion").SetSortable(true).SetAlign(Align.Center))
-                                .AddColumn(new Column("Identificacion").SetLabel("Identificacion").SetSortable(true).SetAlign(Align.Center))
+                                .AddColumn(new Column("TipoIdentificacion").SetLabel("Tipo Identificación").SetSortable(true).SetAlign(Align.Center))
+                                .AddColumn(new Column("Identificacion").SetLabel("Identificación").SetSortable(true).SetAlign(Align.Center))
                                 .AddColumn(new Column("NombresCompletos").SetLabel("Nombre").SetSortable(true).SetAlign(Align.Center))
                                 .AddColumn(new Column("Email").SetLabel("Email").SetSortable(true).SetAlign(Align.Center))
                                 .AddColumn(new Column("Actions").SetFixedWidth(true).SetWidth(120).SetLabel("</br>").SetSortable(false))
@@ -130,6 +130,52 @@
         </div>
     </div>
 </form>
+
+
+    <div class="modal fade text-left" id="cambio-modal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel160" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title white" id="myModalLabel160">Cambio de Clave</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="IdClave" />
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Nueva Clave:</label>
+                                <input type="password" class="form-control"   id="txt-new-clave"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Repita la Clave:</label>
+                                <input type="password" class="form-control" id="txt-repeat-clave" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger glow" data-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cerrar</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary glow ml-1" id="btn-nueva-clave">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Guardar</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 @section scripts
     {
