@@ -4,6 +4,9 @@
 
 @*@Scripts.Render("~/bundles/modalStatic")*@
 
+<link href="~/Content/Chosen/chosen.css" rel="stylesheet" />
+<script src="~/Scripts/Chosen/chosen.jquery.js"></script>
+
 <div class="content-header row">
     <div class="content-header-left col-12 mb-2 mt-1">
         <div class="row mx-0">
@@ -60,10 +63,9 @@
                                             <div class="col-md-3" data-bind="visible:visibleFiltro2">
                                                 <div class="col-md-3"><label class="control-label">Filtro 2</label></div>
                                                 <div class="col-md-9">
-                                                    <select class="form-control" id="cmbFiltro2" data-bind="value:Filtro2,event:{ change: cambiarFiltro2}">
-                                                        <option value="">-- Seleccione --</option>
-                                                        <option value="1">Jornada</option>
-                                                        <option value="2">Saber</option>
+                                                    <select class="form-control" id="cmbFiltro2" data-bind="value:Filtro2,event:{ change: cambiarFiltro2}" multiple data-placeholder="Seleccione">                                                        
+                                                        <option value="jornada_sustentante">Jornada</option>
+                                                        <option value="saber">Saber</option>
                                                     </select>
                                                 </div>
                                             </div>

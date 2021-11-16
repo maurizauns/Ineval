@@ -6,9 +6,9 @@ namespace Ineval.Dto
     {
         public Guid? AsignacionId { get; set; }
         public int? Filtro1 { get; set; }
-        public int? Filtro2 { get; set; }
-        public int? Filtro3 { get; set; }
-        public int? Filtro4 { get; set; }
-        public int? Filtro5 { get; set; }
+        public string Filtro2 { get; set; }
+        public string Filtro3 { get; set; }
+        public string Filtro4 { get; set; }
+        public string Filtro5 { get; set; }
     }
 }
