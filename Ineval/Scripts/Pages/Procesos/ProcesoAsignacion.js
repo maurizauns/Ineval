@@ -92,7 +92,7 @@ $(document).ready(function () {
                 vmFormProcesoAsignacion.visibleFiltro2(false);
                 vmFormProcesoAsignacion.visibleFiltro3(false);
                 vmFormProcesoAsignacion.visibleFiltro4(false);
-                vmFormProcesoAsignacion.visibleFiltro5(false);                
+                vmFormProcesoAsignacion.visibleFiltro5(false);
             }
         }
 
@@ -137,7 +137,7 @@ $(document).ready(function () {
                     data: JSON.stringify({
                         Id: vmh.CurrentId(),
                         Parametro1: $("#cmbFiltro1").val(),
-                        Parametro2: $("#cmbFiltro2").val(),
+                        Parametro2: $("#cmbFiltro2").val() != null ? $("#cmbFiltro2").val().toString() : null,
                         Parametro3: $("#cmbFiltro3").val(),
                     }),
                     beforeSend: function () {
@@ -194,7 +194,7 @@ $(document).ready(function () {
                 vmFormProcesoAsignacion.visibleFiltro2(true);
                 if (vmFormProcesoAsignacion.data.Filtro2() == 1) {
                     vmFormProcesoAsignacion.visibleFiltro2(true);
-                    if(vmFormProcesoAsignacion.data.Filtro3() == 1){
+                    if (vmFormProcesoAsignacion.data.Filtro3() == 1) {
                         vmFormProcesoAsignacion.visibleFiltro3(true);
                     }
                 }
@@ -216,6 +216,10 @@ $(document).ready(function () {
 
         ko.cleanNode($("#Content")[0]);
         ko.applyBindings(vmFormProcesoAsignacion, $("#Content")[0]);
+
+        $("#cmbFiltro2").chosen();
+        $("#cmbFiltro2_chosen").width("100%");
+
     };
     $.ajax({
         type: "GET",
