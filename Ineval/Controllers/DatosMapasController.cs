@@ -37,7 +37,6 @@ namespace Ineval.Controllers
         public async Task<ActionResult> MapaByProvincia(Guid? Id, Guid? id_sede)
          {
             List<DatosSedes> lista = new List<DatosSedes>();
-            //Guid? id = "ef7fe99a-0f23-ec11-a5dc-50e0857d5969";
             if (id_sede != null)
             {
                 lista = await db.DatosSedes.Where(x => x.AsignacionId == Id && x.Id == id_sede).ToListAsync();
@@ -55,7 +54,6 @@ namespace Ineval.Controllers
         public async Task<ActionResult> MapaByCanton(Guid? Id, string canton_id)
         {
             List<DatosInstituciones> lista = new List<DatosInstituciones>();
-            //Guid? id = "ef7fe99a-0f23-ec11-a5dc-50e0857d5969";
             lista = await db.DatosInstituciones.Where(x => x.AsignacionId == Id && x.canton_id == canton_id).ToListAsync();
             var jsonResult = Json(new { result = lista }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
@@ -65,7 +63,6 @@ namespace Ineval.Controllers
         public async Task<ActionResult> MapaByParroquia(Guid? Id, string id_parroquia)
         {
             List<DatosInstituciones> lista = new List<DatosInstituciones>();
-            //Guid? id = "ef7fe99a-0f23-ec11-a5dc-50e0857d5969";
             lista = await db.DatosInstituciones.Where(x => x.AsignacionId == Id && x.id_parroquia == id_parroquia).ToListAsync();
             var jsonResult = Json(new { result = lista }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
@@ -75,7 +72,6 @@ namespace Ineval.Controllers
         public async Task<ActionResult> MapaByAmie(Guid? Id)
         {
             List<DatosInstituciones> lista = new List<DatosInstituciones>();
-            //Guid? id = "ef7fe99a-0f23-ec11-a5dc-50e0857d5969";
             lista = await db.DatosInstituciones.Where(x => x.AsignacionId == Id && x.provincia == "Pichincha").ToListAsync();
             var jsonResult = Json(new { result = lista }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
