@@ -61,6 +61,7 @@ namespace Ineval.Controllers
 
         protected override string[] GetRow(Usuario item)
         {
+            
             var row = new[]
              {
                 HttpUtility.HtmlEncode(UsuarioService.GetTipoIdentificacion(item.TipoIdentificacion)),
@@ -77,8 +78,7 @@ namespace Ineval.Controllers
         }
         public IHtmlString ConfigurarAction(object id = null)
         {
-            var button = string.Format(@"<li class=""""><a title=""Cambiar de Clave"" data-toggle=""tooltip"" class=""btn btn-warning btn-xs"" href=""{0}""><i class=""bx bx-key""></i></a></li>",
-                            Url.Action("CambiaClave", new { id }));
+            var button = string.Format(@"<li><button title=""Cambiar de Clave"" data-toggle=""tooltip"" class=""btn btn-warning btn-xs"" onclick=""pass('{0}')""><i class=""bx bx-key""></i></button></li>", id);
             return MvcHtmlString.Create(button);
         }
         public override IEnumerable<FieldFilter> Filters
