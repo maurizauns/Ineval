@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace Ineval.Controllers
 {
+    [Authorize(Roles = "Administrador, Responsable_Unidad, Analista, Visitante")]
     public class DatosMapasController : Controller
     {
         SwmContext db = new SwmContext();

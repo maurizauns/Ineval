@@ -13,7 +13,7 @@ using System.Data.Entity;
 
 namespace Ineval.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    [Authorize(Roles = "Administrador, Responsable_Unidad, Analista, Visitante")]
     public class ManageController : Controller
     {
         private SwmContext db = new SwmContext(); 

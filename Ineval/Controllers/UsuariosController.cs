@@ -195,7 +195,7 @@ namespace Ineval.Controllers
 
                 if (saveResult.Succeeded)
                 {
-                    await EnvioCorreos.SendAsync(entity.Id.ToString(), "Se registro un nuevo Usuario");
+                    await EnvioCorreos.SendAsync(entity.ApplicationUserId.ToString(), "Se registro un nuevo Usuario");
 
                     return await Task.Run(() => Json(new { success = true, message = string.Empty }, JsonRequestBehavior.AllowGet));
 

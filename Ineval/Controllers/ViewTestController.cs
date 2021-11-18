@@ -18,6 +18,7 @@ using Ineval.Common.Helpers;
 
 namespace Ineval.Controllers
 {
+    [Authorize(Roles = "Administrador, Responsable_Unidad, Analista, Visitante")]
     public class ViewTestController : Controller
     {
         SwmContext db = new SwmContext();

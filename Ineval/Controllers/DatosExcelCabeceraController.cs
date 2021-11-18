@@ -14,7 +14,7 @@ using System.Web.UI.WebControls;
 
 namespace Ineval.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    [Authorize(Roles = "Administrador, Responsable_Unidad, Analista, Visitante")]
     public class DatosExcelCabeceraController : BaseConfiguracionGeneralController<DatosExcelCabecera>
     {
         public DatosExcelCabeceraController()
@@ -36,7 +36,7 @@ namespace Ineval.Controllers
         {
             public Guid Id { get; set; }
         }
-
+        [Authorize(Roles = "Administrador, Responsable_Unidad, Analista, Visitante")]
         public async Task<ActionResult> GetFormulario(Guid? id)
         {
             string NombreProceso = "";

@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace Ineval.Controllers
 {
+    [Authorize(Roles = "Administrador, Responsable_Unidad, Analista, Visitante")]
     public class ProcesoController : BaseProcesoController<Guid, Asignacion, AsignacionViewModel>
     {
         public ActionResult Record(Guid id)

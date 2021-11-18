@@ -144,7 +144,6 @@ $(document).ready(function () {
                         _load();
                     },
                     success: function (Data) {
-                        debugger
                         if (Data.result != "" && Data.result != null) {
 
                         } else {

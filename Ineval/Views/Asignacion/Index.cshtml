@@ -15,7 +15,7 @@
 <div class="content-header row">
     <div class="content-header-left col-12 mb-2 mt-1">
         <div class="row mx-0">
-            <div class="col-xl-7 col-7 d-flex align-items-center pl-0">
+            <div class="col-xl-8 col-8 d-flex align-items-center pl-0">
                 <h5 class="content-header-title float-left pl-1">@ViewBag.Title &nbsp;</h5>
                 <div class="breadcrumb-wrapper col-9">
                     <ol class="breadcrumb p-0 mb-0">
@@ -25,13 +25,24 @@
                     </ol>
                 </div>
             </div>
-            <div class="col-xl-5 col-5 px-0 pt-xl-0 pt-1">
+            <div class="col-xl-4 col-4 px-0 pt-xl-0 pt-1">
                 @*<button type="button" class="btn btn-warning glow invoice-create float-right  mr-2" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true">
-                        <i class='bx bxs-file-pdf' data-toggle="tooltip" data-placement="top" title="" data-original-title="Pdf" aria-describedby="tooltip273063"></i>
-                    </button>*@
-                <button type="button" class="btn btn-success glow invoice-create float-right mr-1" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true">
-                    <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
-                </button>
+            <i class='bx bxs-file-pdf' data-toggle="tooltip" data-placement="top" title="" data-original-title="Pdf" aria-describedby="tooltip273063"></i>
+        </button>*@
+                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad"))
+                {
+
+
+                    <button type="button" class="btn btn-success glow invoice-create float-right mr-1" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true">
+                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-success glow invoice-create float-right mr-1" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true" disabled>
+                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
+                    </button>
+                }
 
             </div>
         </div>

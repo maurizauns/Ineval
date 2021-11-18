@@ -25,7 +25,7 @@ using static Ineval.Dto.ApiPosicionGeografica;
 
 namespace Ineval.App_Start
 {
-    [Authorize(Roles = "Administrador")]
+    [Authorize(Roles = "Administrador, Responsable_Unidad, Analista, Visitante")]
     public class AsignacionController : BaseController<Guid, Asignacion, AsignacionViewModel>
     {
         SwmContext db = new SwmContext();
