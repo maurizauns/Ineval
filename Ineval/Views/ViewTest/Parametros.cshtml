@@ -159,16 +159,21 @@
                 </div>
             </div>
             <div>
-                <button type="button" class="btn btn-primary" id="btn-guardar">
-                    <span class="glyphicon glyphicon-floppy-saved"></span> Guardar
-                </button>
-                <button type="button" class="btn btn-secondary" id="btn-editar">
-                    <span class="glyphicon glyphicon-edit"></span> Editar
-                </button>
-                <button type="button" class="btn btn-warning" id="btn-cancelar">
-                    <span class="glyphicon glyphicon-remove"></span> Cancelar
-                </button>
-            </div>
+                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad") || User.IsInRole("Analista"))
+                {
+                    <button type="button" class="btn btn-primary" id="btn-guardar">
+                        <span class="glyphicon glyphicon-floppy-saved"></span> Guardar
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btn-editar">
+                        <span class="glyphicon glyphicon-edit"></span> Editar
+                    </button>
+                    <button type="button" class="btn btn-warning" id="btn-cancelar">
+                        <span class="glyphicon glyphicon-remove"></span> Cancelar
+                    </button>
+                }
+                </div>
+                
+                
         </div>
     </section>
 </div>
