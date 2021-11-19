@@ -70,7 +70,7 @@
                     <i class="bx bx-x"></i>
                 </button>
             </div>
-            <form role="form" class="modal-Crud" action='@Url.Action("Save")' data-modal="mapbox-modal" data-grid="mapbox-grid">
+            <form role="form" class="modal-Crud" action='@Url.Action("SaveDatosMapBox")' data-modal="mapbox-modal" data-grid="mapbox-grid">
                 <div class="modal-body">
                     @Html.HiddenFor(x => x.Id)
                     <div class="form-group ">
@@ -85,7 +85,7 @@
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(x => x.APIKEY)
-                        @Html.PasswordFor(x => x.APIKEY, new { @class = "form-control", placeholder = "ApiKey" })
+                        @Html.TextBoxFor(x => x.APIKEY, new { @class = "form-control", placeholder = "ApiKey" })
                         @Html.ValidationMessageFor(model => model.APIKEY, "", new { @class = "text-danger" })
                     </div>                    
                     <div class="form-group">

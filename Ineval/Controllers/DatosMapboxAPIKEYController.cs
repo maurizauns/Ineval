@@ -7,6 +7,7 @@ using RP.Website.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -72,6 +73,62 @@ namespace Ineval.Controllers
                 mapboxApiKey = EntityService.GetById(viewModel.Id.Value);
             }
             return Mapper.Map(viewModel, mapboxApiKey);
+        }
+
+
+        public virtual async Task<ActionResult> SaveDatosMapBox(DatosMapboxAPIKEYViewModel model)
+        {
+            OnBeginCrudAction();
+
+            if (!ModelState.IsValid)
+            {
+                return await Task.Run(() => Json(new { success = false, message = GetValidationMessages() }, JsonRequestBehavior.AllowGet));
+            }
+
+
+            if (model.Id == null)
+            {              
+
+                try
+                {
+                    var entity = MapperModelToEntity(model);
+
+                    var saveResult = await EntityService.SaveAsync(entity);
+
+                    if (saveResult.Succeeded)
+                    {
+                        return await Task.Run(() => Json(new { success = true, message = string.Empty }, JsonRequestBehavior.AllowGet));
+                    }
+
+                    return await Task.Run(() => Json(new { success = false, message = saveResult.GetErrorsString() }, JsonRequestBehavior.AllowGet));
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {                
+                try
+                {
+                    var result = EntityService.GetAll().Where(x => x.Id == model.Id).FirstOrDefault();
+                    model.NumeroUsadasConsultas = result.NumeroUsadasConsultas;
+                    var entity = MapperModelToEntity(model);
+
+                    var saveResult = await EntityService.SaveAsync(entity);
+
+                    if (saveResult.Succeeded)
+                    {
+                        return await Task.Run(() => Json(new { success = true, message = string.Empty }, JsonRequestBehavior.AllowGet));
+                    }
+
+                    return await Task.Run(() => Json(new { success = false, message = saveResult.GetErrorsString() }, JsonRequestBehavior.AllowGet));
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+                }
+            }
         }
     }
 }

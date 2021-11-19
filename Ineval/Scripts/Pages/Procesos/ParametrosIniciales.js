@@ -225,7 +225,7 @@ function calculoSesion() {
         var di = getTimeFromMins(diffInMinutes)
         var di1 = moment(di, "HH:mm").diff(moment(horareceso, "HH:mm"), 'minutes');
         var divi = (di1 / horeval)
-        $('#NumSesion').val(Math.round(divi * parseInt(diaeval)))
+        $('#NumSesion').val(Math.trunc(divi * parseInt(diaeval)))
 
     }
 

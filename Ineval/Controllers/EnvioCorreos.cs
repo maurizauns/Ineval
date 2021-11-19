@@ -20,7 +20,7 @@ namespace Ineval.Controllers
             bool status = false;
 
             EmailParametros emailParametros = new EmailParametros();
-            emailParametros = await db.EmailParametros.FirstOrDefaultAsync();
+            emailParametros = await db.EmailParametros.AsNoTracking().SingleOrDefaultAsync();
 
             Usuario usuario = new Usuario();
             usuario = await db.Usuarios.FirstOrDefaultAsync(x => x.ApplicationUserId == Id);
