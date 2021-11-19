@@ -6,6 +6,8 @@
 @model Ineval.Dto.Dto.Procesos.AsignacionViewModel
 
 @{
+    
+    
     ViewBag.Title = "Nueva Asignación";
 }
 
@@ -29,7 +31,7 @@
                 @*<button type="button" class="btn btn-warning glow invoice-create float-right  mr-2" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true">
             <i class='bx bxs-file-pdf' data-toggle="tooltip" data-placement="top" title="" data-original-title="Pdf" aria-describedby="tooltip273063"></i>
         </button>*@
-                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad"))
+                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad") || User.IsInRole("Analista"))
                 {
 
 
@@ -37,12 +39,7 @@
                         <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
                     </button>
                 }
-                else
-                {
-                    <button type="button" class="btn btn-success glow invoice-create float-right mr-1" data-toggle="modal" data-target="#asignacion-modal" role="button" aria-pressed="true" disabled>
-                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
-                    </button>
-                }
+                
 
             </div>
         </div>
@@ -53,21 +50,50 @@
         <div class="admission-list-filter px-1">
 
             <div class="row border-div-simec py-2 mb-2">
-                <div class="col-12  col-sm-12 col-lg-12 ">
-                    @{
-                        Html.RenderPartial("_filtersPartial", new ModelFilter { FormId = "search_form", GridId = "asignacion-grid", FieldFilters = ViewBag.Filters });
-                    }
-                    @(Html.MyjqGrid("asignacion-grid", Ineval.Common.Context.PageSize)
+                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad") || User.IsInRole("Analista"))
+                {
+                    <div class="col-12  col-sm-12 col-lg-12 ">
+                        @{
+                            Html.RenderPartial("_filtersPartial", new ModelFilter { FormId = "search_form", GridId = "asignacion-grid", FieldFilters = ViewBag.Filters });
+                        }
+
+
+
+                        @(Html.MyjqGrid("asignacion-grid", Ineval.Common.Context.PageSize)
                         .AddColumn(new Column("Code").SetLabel("Código").SetSortable(true).SetAlign(Align.Center))
                         .AddColumn(new Column("Description").SetLabel("Descripción").SetSortable(true).SetAlign(Align.Center))
                         .AddColumn(new Column("NombreProceso").SetLabel("Nombre Proceso").SetSortable(true).SetAlign(Align.Center))
                         .AddColumn(new Column("EstadoProceso").SetLabel("Estado Proceso").SetSortable(true).SetAlign(Align.Center))
                         .AddColumn(new Column("Actions").SetFixedWidth(true).SetWidth(120).SetLabel("</br>").SetSortable(false))
                         .SetUrl(Url.Action("GetList")))
-                    <div class="clearfix">
-                        @Html.PaginationBtn("asignacion-grid", "pull-right")
+                        <div class="clearfix">
+                            @Html.PaginationBtn("asignacion-grid", "pull-right")
+                        </div>
+
                     </div>
-                </div>
+                }
+                else
+                {
+                    <div class="col-12  col-sm-12 col-lg-12 ">
+                        @{
+                            Html.RenderPartial("_filtersPartial", new ModelFilter { FormId = "search_form", GridId = "asignacion-grid", FieldFilters = ViewBag.Filters });
+                        }
+
+
+
+                        @(Html.MyjqGrid("asignacion-grid", Ineval.Common.Context.PageSize)
+                        .AddColumn(new Column("Code").SetLabel("Código").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("Description").SetLabel("Descripción").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("NombreProceso").SetLabel("Nombre Proceso").SetSortable(true).SetAlign(Align.Center))
+                        .AddColumn(new Column("EstadoProceso").SetLabel("Estado Proceso").SetSortable(true).SetAlign(Align.Center))
+                        
+                        .SetUrl(Url.Action("GetList")))
+                        <div class="clearfix">
+                            @Html.PaginationBtn("asignacion-grid", "pull-right")
+                        </div>
+
+                    </div>
+                }
             </div>
         </div>
     </section>

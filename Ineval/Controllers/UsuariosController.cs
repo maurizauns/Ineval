@@ -17,9 +17,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Net.Mail;
 
+
 namespace Ineval.Controllers
 {
     [CustomAuthorize(ModuleName = "Usuarios")]
+    
     public class UsuariosController : BaseController<Guid, Usuario, UsuarioViewModel>
     {
         SwmContext db = new SwmContext();

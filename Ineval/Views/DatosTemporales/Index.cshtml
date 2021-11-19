@@ -38,11 +38,13 @@
 
             <div class="row border-div-simec py-2 mb-2">
                 <div class="col-12  col-sm-12 col-lg-12 ">
-                    <button type="button" onclick="CargaMatriz()" class="btn btn-primary">
-                        Cargar Datos Sustentantes
-                    </button>
-
-                </div>
+                    @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad") || User.IsInRole("Analista"))
+                    {
+                        <button type="button" onclick="CargaMatriz()" class="btn btn-primary">
+                            Cargar Datos Sustentantes
+                        </button>
+                    }
+                    </div>
             </div>
         </div>
     </section>

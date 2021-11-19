@@ -69,10 +69,13 @@
                 </div>
             </div>
             <div>
-                <button type="button" data-bind="click: Guardar" class="btn btn-material-teal btn-sm">
-                    <span class="glyphicon glyphicon-download-alt"></span> Generar Archivo Excel
-                </button>
-            </div>
+                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad") || User.IsInRole("Analista"))
+                {
+                    <button type="button" data-bind="click: Guardar" class="btn btn-material-teal btn-sm">
+                        <span class="glyphicon glyphicon-download-alt"></span> Generar Archivo Excel
+                    </button>
+                }
+                </div>
         </div>
     </section>
 </div>
