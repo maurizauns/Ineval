@@ -3,13 +3,13 @@
 @using MvcJqGrid.Enums
 @using RP.Website.Helpers
 
-@model Ineval.Dto.DatosExcelPersonalViewModel
+@model Ineval.Dto.DatosExcelInstitucionesViewModel
 
 @{
-    ViewBag.Title = "Datos Excel Personal";
+    ViewBag.Title = "Datos Excel Instituciones";
 }
 
-@Scripts.Render("~/bundles/modalStatic")
+@*@Scripts.Render("~/bundles/modalStatic")*@
 
 <style>
     .ulroberto {
@@ -31,10 +31,7 @@
                     </ol>
                 </div>
             </div>
-            <div class="col-4 px-0 pt-xl-0 pt-1">
-                @*<button type="button" class="btn btn-success glow invoice-create float-right mr-1 mb-0" data-toggle="modal" data-target="#usuarios-modal" role="button" aria-pressed="true">
-                        <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>
-                    </button>*@
+            <div class="col-4 px-0 pt-xl-0 pt-1">                
             </div>
         </div>
     </div>
@@ -73,16 +70,13 @@
                         <span class="glyphicon glyphicon-download-alt"></span> Generar Archivo Excel
                     </button>
                 }
-                </div>
+            </div>
         </div>
     </section>
 </div>
 
-<script type="text/javascript" language="javascript" src="~/Scripts/Pages/Procesos/DatoxExcelPersonal.js?v1"></script>
+<script type="text/javascript" language="javascript" src="~/Scripts/Pages/Procesos/DatosExcelInstituciones.js"></script>
 
 @section scripts
     {
-    @*<script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/person/personCore.js"></script>
-        <script type="text/javascript" language="javascript" src="~/Scripts/Pages/core/security/UsuarioConfig.js"></script>*@
-    
 }

@@ -46,6 +46,8 @@ namespace Ineval.App_Start
 
             CreateMap<DatosMapboxAPIKEY, DatosMapboxAPIKEYViewModel>().ReverseMap();
 
+            CreateMap<DatosExcelInstituciones, DatosExcelInstitucionesViewModel>().ReverseMap();
+
         }
     }
 }
