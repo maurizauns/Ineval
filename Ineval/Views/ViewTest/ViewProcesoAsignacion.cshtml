@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="col-4 px-0 pt-xl-0 pt-1">
-                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad") || User.IsInRole("Analista"))
+                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad"))
                 {
 
                     <button type="button" class="btn btn-success glow invoice-create float-right mr-1 mb-0" data-toggle="modal" role="button" aria-pressed="true" data-bind="click:New,visible:VisibleNew">

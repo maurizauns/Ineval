@@ -72,18 +72,33 @@ namespace Ineval.App_Start
 
         protected override string[] GetRow(Asignacion item)
         {
-            return new[]
-             {
+            
+            if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad")) {
+                return new[] {
                 HttpUtility.HtmlEncode(item.Code),
                 HttpUtility.HtmlEncode(item.Description),
-                HttpUtility.HtmlEncode(item.NombreProceso != null ?  "(" + item.NombreProceso.Code + ") " +item.NombreProceso.Description : ""),
-                HttpUtility.HtmlEncode(item.EstadoProceso.HasValue ? item.EstadoProceso.Value==1 ? "Activo" : "Finalizado" : "Activo"),
+                HttpUtility.HtmlEncode(item.NombreProceso != null ? "(" + item.NombreProceso.Code + ") " + item.NombreProceso.Description : ""),
+                HttpUtility.HtmlEncode(item.EstadoProceso.HasValue ? item.EstadoProceso.Value == 1 ? "Activo" : "Finalizado" : "Activo"),
                 HttpUtility.HtmlEncode(GridHelperExts.ActionsList("asignacion-modal")
                         .Add(GridHelperExts.EditAction(Url.Action("GetEntity"), item.Id, "asignacionCallback"))
                         .Add(GridHelperExts.DeleteAction(Url.Action("Delete"), "asignacion-grid", item.Id))
                         .Add(ConfiguracionAction(item.Id))
                         .End())
-            };
+                };
+
+        } else {
+                return new[] {
+                HttpUtility.HtmlEncode(item.Code),
+                HttpUtility.HtmlEncode(item.Description),
+                HttpUtility.HtmlEncode(item.NombreProceso != null ? "(" + item.NombreProceso.Code + ") " + item.NombreProceso.Description : ""),
+                HttpUtility.HtmlEncode(item.EstadoProceso.HasValue ? item.EstadoProceso.Value == 1 ? "Activo" : "Finalizado" : "Activo"),
+                HttpUtility.HtmlEncode(GridHelperExts.ActionsList("asignacion-modal")
+                        .Add(ConfiguracionAction(item.Id))
+                        .End())
+                };
+            }
+        
+
         }
         public IHtmlString ConfiguracionAction(object id = null)
         {
