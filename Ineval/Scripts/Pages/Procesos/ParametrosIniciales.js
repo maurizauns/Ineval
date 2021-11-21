@@ -222,12 +222,27 @@ function calculoSesion() {
         let horeval = (parseInt(eval1[0]) * 60)
         horeval = horeval + parseInt(eval1[1])
         var diffInMinutes = moment(horafin, "HH:mm").diff(moment(horainicio, "HH:mm"), 'minutes');
-        var di = getTimeFromMins(diffInMinutes)
-        var di1 = moment(di, "HH:mm").diff(moment(horareceso, "HH:mm"), 'minutes');
-        var divi = (di1 / horeval)
+        horeval = transforMinute(horareceso, horeval)
+        //var di = getTimeFromMins(diffInMinutes)
+        //var di1 = moment(di, "HH:mm").diff(moment(horareceso, "HH:mm"), 'minutes');
+        //var di1 = moment(di, 'HH:mm').add(moment(horareceso, "HH:mm"), 'minutes').minutes();
+        console.log(horeval)
+        var divi = (diffInMinutes / horeval)
         $('#NumSesion').val(Math.round(divi * parseInt(diaeval)))
 
     }
+
+}
+
+function transforMinute(input,horv) {
+    let minutes = 0;
+
+    var eval1 = input.split(':')
+    let horeval = (parseInt(eval1[0]) * 60)
+    minutes = horeval + parseInt(eval1[1])
+
+
+    return minutes + horv
 
 }
 

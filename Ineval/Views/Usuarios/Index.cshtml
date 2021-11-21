@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="col-4 px-0 pt-xl-0 pt-1">
-                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad") || User.IsInRole("Analista"))
+                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad"))
                 {
                     <button type="button" class="btn btn-success glow invoice-create float-right mr-1 mb-0" data-toggle="modal" data-target="#usuarios-modal" role="button" aria-pressed="true">
                         <i class='bx bx-folder-plus' data-toggle="tooltip" data-placement="top" title="" data-original-title="Nuevo" aria-describedby="tooltip273063"></i>

@@ -60,7 +60,7 @@
         <div class="admission-list-filter px-1">
             <div class="row border-div-simec py-2 mb-2">
                 <div class="col-12  col-sm-12 col-lg-12 ">
-                    @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad") || User.IsInRole("Analista"))
+                    @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad"))
                     {
 
                         <button type="button" onclick="CargaMatriz()" class="btn btn-primary">

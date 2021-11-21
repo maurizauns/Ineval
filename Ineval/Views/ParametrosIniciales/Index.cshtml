@@ -69,7 +69,7 @@
                 </div>
             </div>
             <div>
-                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad") || User.IsInRole("Analista"))
+                @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad"))
                 {
                     <button type="button" data-bind="click: Guardar" class="btn btn-material-teal btn-sm">
                         <span class="glyphicon glyphicon-download-alt"></span> Generar Archivo Excel
