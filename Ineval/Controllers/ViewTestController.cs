@@ -405,9 +405,26 @@ namespace Ineval.Controllers
                                 coordenada_lng = item.coordenada_y != null ? item.coordenada_y.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.')
                             };
 
-                            db.DatosSedes.Add(datosSedes);
+                            try
+                            {
+                                using (DatosSedesService datosSedesService = new DatosSedesService())
+                                {
+                                    var result = await datosSedesService.SaveAsync(datosSedes);
+                                    if (result.Succeeded)
+                                    {
 
-                            await db.SaveChangesAsync();
+                                    }
+                                } 
+                            }
+                            catch (Exception ex)
+                            {
+
+                                throw;
+                            }
+
+                            //db.DatosSedes.Add(datosSedes);
+
+                            //await db.SaveChangesAsync();
 
                             List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
 
@@ -439,7 +456,7 @@ namespace Ineval.Controllers
                             }
 
                             insertMasiveData(datosSedesAsignacions.ToList());
-                            await db.SaveChangesAsync();
+                            //await db.SaveChangesAsync();
                         }
 
                         bool status = await EnvioCorreos.SendAsync(userId, "Se creo con exito las sedes");
