@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Ineval.BO
 {
-    public class DatosExcelCabeceraService : CatalogService<DatosExcelCabecera>
+    public class DatosExcelInstitucionesService : CatalogService<DatosExcelInstituciones>
     {
-        public DatosExcelCabeceraService()
+        public DatosExcelInstitucionesService()
         {
 
         }
-        public DatosExcelCabeceraService(IUnitOfWork unitOfWork)
+        public DatosExcelInstitucionesService(IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
         }

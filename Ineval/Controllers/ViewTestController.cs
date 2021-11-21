@@ -48,6 +48,11 @@ namespace Ineval.Controllers
         public ActionResult PorArchivo()
             => PartialView();
 
+        public ActionResult GenerarExcelDatosInstituciones()
+            => PartialView();
+
+        public ActionResult SubirDatosInstituciones()
+            => PartialView();
 
         public async Task<ActionResult> GetFiltros(Guid? AsignacionId)
         {
@@ -386,7 +391,7 @@ namespace Ineval.Controllers
                                         subtotalSession += 1;
                                     }
                                 }
-                            }                           
+                            }
 
                             DatosSedes datosSedes = new DatosSedes
                             {

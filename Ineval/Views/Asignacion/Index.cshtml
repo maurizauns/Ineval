@@ -90,6 +90,7 @@
             <form role="form" class="modal-Crud" action='@Url.Action("SaveAsignacion")' data-modal="asignacion-modal" data-grid="asignacion-grid">
                 <div class="modal-body">
                     @Html.HiddenFor(x => x.Id)
+                    @Html.HiddenFor(x=>x.EstadoProceso)
                     <div class="form-group">
                         @Html.LabelFor(x => x.NombreProcesoId)
                         @Html.DropDownListFor(x => x.NombreProcesoId, (SelectList)ViewBag.NombreProcesoId, "Seleccione", new { @class = "form-control" })

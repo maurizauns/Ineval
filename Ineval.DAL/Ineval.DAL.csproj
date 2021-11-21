@@ -88,6 +88,7 @@
     <Compile Include="Entities\Menu.cs" />
     <Compile Include="Entities\procesos\Asignacion.cs" />
     <Compile Include="Entities\procesos\DatosCantonLatLng.cs" />
+    <Compile Include="Entities\procesos\DatosExcelInstituciones.cs" />
     <Compile Include="Entities\procesos\DatosExcelPersonal.cs" />
     <Compile Include="Entities\procesos\DatosFiltros.cs" />
     <Compile Include="Entities\procesos\DatosInstituciones.cs" />
@@ -171,6 +172,14 @@
     <Compile Include="Migrations\202110220758373_221020210258.Designer.cs">
       <DependentUpon>202110220758373_221020210258.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111190712169_191120210212.cs" />
+    <Compile Include="Migrations\202111190712169_191120210212.Designer.cs">
+      <DependentUpon>202111190712169_191120210212.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111190715358_191120210215.cs" />
+    <Compile Include="Migrations\202111190715358_191120210215.Designer.cs">
+      <DependentUpon>202111190715358_191120210215.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -230,6 +239,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110220758373_221020210258.resx">
       <DependentUpon>202110220758373_221020210258.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111190712169_191120210212.resx">
+      <DependentUpon>202111190712169_191120210212.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111190715358_191120210215.resx">
+      <DependentUpon>202111190715358_191120210215.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

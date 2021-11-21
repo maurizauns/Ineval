@@ -1,0 +1,71 @@
+﻿@using Ineval.Models.Filters
+@using MvcJqGrid
+@using MvcJqGrid.Enums
+@using RP.Website.Helpers
+
+@model Ineval.Dto.DatosInstitucionesViewModel
+
+@{
+    ViewBag.Title = "Cargar Datos Instituciones";
+}
+
+@*@Scripts.Render("~/bundles/modalStatic")*@
+
+<div class="content-header row">
+    <div class="content-header-left col-12 mb-2 mt-1">
+        <div class="row mx-0">
+            <div class="col-8 d-flex align-items-center pl-0">
+                <h5 class="content-header-title float-left pr-1 mb-0">@ViewBag.Title &nbsp;</h5>
+                <div class="breadcrumb-wrapper col-9">
+                    <ol class="breadcrumb p-0 mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="/"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="col-4 px-0 pt-xl-0 pt-1">                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body border-div-history">
+    <section class="admission-list-wrapper">
+        <div class="admission-list-filter px-1">
+            <div class="row border-div-simec py-2 mb-2">
+                <div class="col-12 col-sm-12 col-lg-12">
+                    <div class="form-group row">
+                        <label class="control-label col-md-4">Numero Total de Registros Cargados:</label>
+                        <div class="col-md-8">
+                            <span data-bind="text:NumeroTotal"></span>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<div class="card-body border-div-history">
+    <section class="admission-list-wrapper">
+        <div class="admission-list-filter px-1">
+            <div class="row border-div-simec py-2 mb-2">
+                <div class="col-12  col-sm-12 col-lg-12 ">
+                    @if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad") || User.IsInRole("Analista"))
+                    {
+
+                        <button type="button" onclick="CargaMatriz()" class="btn btn-primary">
+                            Cargar Datos Sustentantes
+                        </button>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+<script src="~/Scripts/Pages/Procesos/DatosInstituciones.js"></script>
+
+@section scripts
+    {
+
+}

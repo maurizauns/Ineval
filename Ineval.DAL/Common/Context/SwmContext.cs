@@ -50,5 +50,6 @@ namespace Ineval.DAL
         public DbSet<DatosFiltros> DatosFiltros { get; set; }
         public DbSet<EmailParametros> EmailParametros { get; set; }
         public DbSet<DatosMapboxAPIKEY> DatosMapboxAPIKEY { get; set; }
+        public DbSet<DatosExcelInstituciones> DatosExcelInstituciones { get; set; }
     }
 }

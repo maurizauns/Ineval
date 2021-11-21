@@ -229,6 +229,9 @@ namespace Ineval.App_Start
         {
             var userId = User.Identity.GetUserId();
 
+            int edit = 0;
+
+
             OnBeginCrudAction();
 
             if (!ModelState.IsValid)
@@ -240,7 +243,7 @@ namespace Ineval.App_Start
             {
                 if (model.Id != null)
                 {
-
+                    edit = 1;
                 }
                 else
                 {
@@ -305,7 +308,14 @@ namespace Ineval.App_Start
                         var saveresultparam = await entityparam.SaveAsync(result);
                     }
 
-                    bool status = await EnvioCorreos.SendAsync(userId, "Se creo un nuevo proceso de Asignación.");
+                    if (edit == 1)
+                    {
+                        bool status = await EnvioCorreos.SendAsync(userId, "Se modifico un proceso de Asignación.");
+                    }
+                    else
+                    {
+                        bool status = await EnvioCorreos.SendAsync(userId, "Se creo un nuevo proceso de Asignación.");
+                    }
 
                     return await Task.Run(() => Json(new { success = true, message = string.Empty }, JsonRequestBehavior.AllowGet));
 

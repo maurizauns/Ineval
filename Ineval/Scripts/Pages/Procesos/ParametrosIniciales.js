@@ -3,8 +3,8 @@
     function EnableInputs() {
         let element = Array.from($('#frm').find('input'))
         element.map(el => {
-            $('#'+el.id).prop("disabled",true)
-            
+            $('#' + el.id).prop("disabled", true)
+
         })
         $('#btn-guardar').css("display", "none")
         $('#btn-cancelar').css("display", "none")
@@ -15,7 +15,7 @@
         contentType: "application/json; charset=utf-8",
         url: "/ParametrosIniciales/GetFormulario?id=" + vmh.CurrentId(),
         success: function (r) {
-            console.log(r.ParametrosIniciales)
+            //console.log(r.ParametrosIniciales)
             if (r.ParametrosIniciales.HoraInicio == "") {
                 $('#btn-nuevo').css("display", "inline-block")
                 $('#existe').css("display", "inline-block")
@@ -45,8 +45,8 @@
                     $("#tipoInterno").attr("checked", false);
                 }
             }
-            
-            
+
+
         }
     });
 
@@ -207,6 +207,7 @@ function ValEvaluacion(t) {
 }
 
 function calculoSesion() {
+    debugger
     let horainicio = $('#txt-HoraInicio').val()
     let horafin = $('#txt-HoraFin').val()
     let horaevaluacion = $('#txt-HoraEvaluacion').val()

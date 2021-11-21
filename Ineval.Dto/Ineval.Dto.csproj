@@ -63,6 +63,7 @@
     <Compile Include="Dto\Procesos\AsignacionViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosCantonLatLngViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosExcelCabeceraViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosExcelInstitucionesViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosExcelPersonalViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosFiltrosViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosInstitucionesViewModel.cs" />
