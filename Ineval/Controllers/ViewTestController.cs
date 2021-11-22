@@ -405,25 +405,8 @@ namespace Ineval.Controllers
                                 coordenada_lng = item.coordenada_y != null ? item.coordenada_y.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.')
                             };
 
-                            try
-                            {
-                                using (DatosSedesService datosSedesService = new DatosSedesService())
-                                {
-                                    var result = await datosSedesService.SaveAsync(datosSedes);
-                                    if (result.Succeeded)
-                                    {
-
-                                    }
-                                } 
-                            }
-                            catch (Exception ex)
-                            {
-
-                                throw;
-                            }
-
                             //db.DatosSedes.Add(datosSedes);
-
+                            insertMasiveDataSedes(datosSedes);
                             //await db.SaveChangesAsync();
 
                             List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
@@ -579,9 +562,10 @@ namespace Ineval.Controllers
                                         coordenada_lng = coordenadas != null ? coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.') : ""
                                     };
 
-                                    db.DatosSedes.Add(datosSedes);
 
-                                    await db.SaveChangesAsync();
+                                    insertMasiveDataSedes(datosSedes);
+                                    //db.DatosSedes.Add(datosSedes);
+                                    //await db.SaveChangesAsync();
 
                                     List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
                                     List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => x.id_provincia == datosSedes.Code).ToList();
@@ -610,7 +594,7 @@ namespace Ineval.Controllers
                                         }
                                     }
                                     insertMasiveData(datosSedesAsignacions.ToList());
-                                    await db.SaveChangesAsync();
+                                    //await db.SaveChangesAsync();
                                     break;
                                 }
                             }
@@ -863,9 +847,9 @@ namespace Ineval.Controllers
                                     coordenada_lng = item.coordenada_lng
                                 };
 
-                                db.DatosSedes.Add(datosSedes);
-
-                                await db.SaveChangesAsync();
+                                insertMasiveDataSedes(datosSedes);
+                                //db.DatosSedes.Add(datosSedes);
+                                //await db.SaveChangesAsync();
 
                                 List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
                                 List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.canton_id)).ToList();
@@ -896,7 +880,7 @@ namespace Ineval.Controllers
                                 }
 
                                 insertMasiveData(datosSedesAsignacions.ToList());
-                                await db.SaveChangesAsync();
+                                //await db.SaveChangesAsync();
 
                             }
                         }
@@ -1147,9 +1131,9 @@ namespace Ineval.Controllers
                                     coordenada_lng = item.coordenada_lng
                                 };
 
-                                db.DatosSedes.Add(datosSedes);
-
-                                await db.SaveChangesAsync();
+                                insertMasiveDataSedes(datosSedes);
+                                //db.DatosSedes.Add(datosSedes);
+                                //await db.SaveChangesAsync();
 
                                 List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
                                 List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.canton_id)).ToList();
@@ -1180,7 +1164,7 @@ namespace Ineval.Controllers
                                 }
 
                                 insertMasiveData(datosSedesAsignacions.ToList());
-                                await db.SaveChangesAsync();
+                                //await db.SaveChangesAsync();
 
                             }
 
@@ -1406,9 +1390,24 @@ namespace Ineval.Controllers
                                     coordenada_lng = item.coordenada_lng
                                 };
 
-                                db.DatosSedes.Add(datosSedes);
+                                try
+                                {
+                                    using (DatosSedesService datosSedesService = new DatosSedesService())
+                                    {
+                                        var result = await datosSedesService.SaveAsync(datosSedes);
+                                        if (result.Succeeded)
+                                        {
 
-                                await db.SaveChangesAsync();
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+
+                                    throw;
+                                }
+                                //db.DatosSedes.Add(datosSedes);
+                                //await db.SaveChangesAsync();
 
                                 List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
                                 List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.id_parroquia)).ToList();
@@ -1439,7 +1438,7 @@ namespace Ineval.Controllers
                                 }
 
                                 insertMasiveData(datosSedesAsignacions.ToList());
-                                await db.SaveChangesAsync();
+                                //await db.SaveChangesAsync();
 
                             }
 
@@ -1666,9 +1665,24 @@ namespace Ineval.Controllers
                                     coordenada_lng = item.coordenada_lng
                                 };
 
-                                db.DatosSedes.Add(datosSedes);
+                                try
+                                {
+                                    using (DatosSedesService datosSedesService = new DatosSedesService())
+                                    {
+                                        var result = await datosSedesService.SaveAsync(datosSedes);
+                                        if (result.Succeeded)
+                                        {
 
-                                await db.SaveChangesAsync();
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+
+                                    throw;
+                                }
+                                //db.DatosSedes.Add(datosSedes);
+                                //await db.SaveChangesAsync();
 
                                 List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
                                 List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.id_parroquia)).ToList();
@@ -1699,7 +1713,7 @@ namespace Ineval.Controllers
                                 }
 
                                 insertMasiveData(datosSedesAsignacions.ToList());
-                                await db.SaveChangesAsync();
+                               // await db.SaveChangesAsync();
 
                             }
                         }
@@ -1734,6 +1748,70 @@ namespace Ineval.Controllers
             return null;
         }
 
+
+        public void insertMasiveDataSedes(DatosSedes datosSedes)
+        {
+            var table = new DataTable();
+            table.Columns.Add("Id", typeof(Guid));
+            table.Columns.Add("AsignacionId", typeof(Guid));
+            table.Columns.Add("NumeroSession", typeof(int));
+            table.Columns.Add("NumeroLaboratorio", typeof(int));
+            table.Columns.Add("coordenada_lat", typeof(string));
+            table.Columns.Add("coordenada_lng", typeof(string));
+            table.Columns.Add("Code", typeof(string));
+            table.Columns.Add("Description", typeof(string));
+            table.Columns.Add("FechaCreacion", typeof(DateTime));
+            table.Columns.Add("FechaModificacion", typeof(DateTime));
+            table.Columns.Add("FechaEliminacion", typeof(DateTime));
+            table.Columns.Add("Estado", typeof(EstadoEnum));
+            table.Columns.Add("NumeroTotalSustentantes", typeof(int));
+            table.Columns.Add("Agrupados", typeof(string));
+            //table.Columns.Add("Dia", typeof(string));
+
+            
+                table.Rows.Add(new object[]{
+                   datosSedes.Id=Guid.NewGuid(),
+                   datosSedes.AsignacionId,
+                   datosSedes.NumeroSession,
+                   datosSedes.NumeroLaboratorio,
+                   datosSedes.coordenada_lat,
+                  datosSedes.coordenada_lng,
+                  datosSedes.Code,
+                  datosSedes.Description,
+                  datosSedes.FechaCreacion,
+                  datosSedes.FechaModificacion,
+                  datosSedes.FechaEliminacion,
+                  datosSedes.Estado,
+                  datosSedes.NumeroTotalSustentantes,
+                  datosSedes.Agrupados
+                });
+
+            
+
+            using (var connection = ConnectionToSql.getConnection())
+            {
+                connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+                    {
+                        try
+                        {
+                            bulkCopy.DestinationTableName = "DatosSedes";
+                            bulkCopy.BulkCopyTimeout = 0;
+                            bulkCopy.WriteToServer(table);
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            connection.Close();
+                        }
+                    }
+                }
+
+            }
+        }
 
         public void insertMasiveData(IEnumerable<DatosSedesAsignacion> datosSedesAsignacion)
         {

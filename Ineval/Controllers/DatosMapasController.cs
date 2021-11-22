@@ -30,9 +30,12 @@ namespace Ineval.Controllers
 
             List<Datoscmb> datosProvincia = new List<Datoscmb>();
             List<Datoscmb> datosCanton = new List<Datoscmb>();
-            List<Datoscmb> datosParroquia = new List<Datoscmb>();            
+            List<Datoscmb> datosParroquia = new List<Datoscmb>();
 
-            return Json(new { result = resultDTO.OrderBy(o => o.Description) }, JsonRequestBehavior.AllowGet);
+            var jsonResult = Json(new { result = resultDTO.OrderBy(o => o.Description) }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+            
         }
 
         public async Task<ActionResult> MapaByProvincia(Guid? Id, Guid? id_sede)

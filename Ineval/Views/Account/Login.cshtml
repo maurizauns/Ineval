@@ -124,6 +124,12 @@
     .content-wrapper {
         background-color: #fff !important;
     }
+    .custom-validation-summary ul {
+        list-style-type: none;
+        color: red;
+        padding: 0;
+    }
+
 </style>
 <section class="login-block">
     <div class="container">
@@ -141,7 +147,7 @@
                                 @Html.AntiForgeryToken()
 
                                 <hr />
-                                @Html.ValidationSummary(true)
+                                @Html.ValidationSummary(true, "", new { @class = "custom-validation-summary" })
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
                                     <div class="col-md-9">
