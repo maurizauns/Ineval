@@ -19,11 +19,10 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-//using static Ineval.Dto.ApiCycling;
 using static Ineval.Dto.ApiDriving;
 using static Ineval.Dto.ApiPosicionGeografica;
 
-namespace Ineval.App_Start
+namespace Ineval.Controllers
 {
     [Authorize(Roles = "Administrador, Responsable_Unidad, Analista, Visitante")]
     public class AsignacionController : BaseController<Guid, Asignacion, AsignacionViewModel>
@@ -72,8 +71,9 @@ namespace Ineval.App_Start
 
         protected override string[] GetRow(Asignacion item)
         {
-            
-            if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad")) {
+
+            if (User.IsInRole("Administrador") || User.IsInRole("Responsable_Unidad"))
+            {
                 return new[] {
                 HttpUtility.HtmlEncode(item.Code),
                 HttpUtility.HtmlEncode(item.Description),
@@ -86,7 +86,9 @@ namespace Ineval.App_Start
                         .End())
                 };
 
-        } else {
+            }
+            else
+            {
                 return new[] {
                 HttpUtility.HtmlEncode(item.Code),
                 HttpUtility.HtmlEncode(item.Description),
@@ -97,7 +99,7 @@ namespace Ineval.App_Start
                         .End())
                 };
             }
-        
+
 
         }
         public IHtmlString ConfiguracionAction(object id = null)

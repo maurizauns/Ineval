@@ -207,7 +207,6 @@ function ValEvaluacion(t) {
 }
 
 function calculoSesion() {
-    debugger
     let horainicio = $('#txt-HoraInicio').val()
     let horafin = $('#txt-HoraFin').val()
     let horaevaluacion = $('#txt-HoraEvaluacion').val()

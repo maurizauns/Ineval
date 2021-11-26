@@ -19,10 +19,8 @@ namespace Ineval.Controllers
         {
             var response = context.HttpContext.Response;
             response.Clear();
-            response.ContentType = "application/vnd.openxmlformats-officedocument."
-                                 + "spreadsheetml.sheet";
-            response.AddHeader("content-disposition",
-                               "attachment;filename=\"" + _fileName + ".xlsx\"");
+            response.ContentType = "application/vnd.openxmlformats-officedocument." + "spreadsheetml.sheet";
+            response.AddHeader("content-disposition", "attachment;filename=\"" + _fileName + ".xlsx\"");
 
             using (var memoryStream = new MemoryStream())
             {
