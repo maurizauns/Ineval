@@ -1972,14 +1972,14 @@ namespace Ineval.Controllers
                 ws1.Cell(cont1, 2).Value = item.FechaCreacion.ToString("dd/MM/yyyy");
                 ws1.Cell(cont1, 3).Value = item.Asignacion.NombreProceso.Description ?? null;
                 ws1.Cell(cont1, 4).Value = "'" + item.Code;
-                ws1.Cell(cont1, 5).Value = item.Description;
+                ws1.Cell(cont1, 5).Value = "'" + item.Description;
                 ws1.Cell(cont1, 6).Value = item.NumeroLaboratorio;
                 ws1.Cell(cont1, 7).Value = item.NumeroSession;
                 ws1.Cell(cont1, 8).Value = item.coordenada_lat;
                 ws1.Cell(cont1, 9).Value = item.coordenada_lng;
                 ws1.Cell(cont1, 10).Value = item.NumeroTotalSustentantes;
 
-                if (item.Agrupados!="")
+                if (!string.IsNullOrEmpty(item.Agrupados))
                 {
                     string datos = "";
                     string[] agrupadoslist = item.Agrupados.Split(',');
@@ -1989,12 +1989,12 @@ namespace Ineval.Controllers
                         {
                             datos += itemagru + "\n" + " ";
                         }
-                        
+
                     }
 
                     ws1.Cell(cont1, 11).Value = datos;
                 }
-                
+
 
                 cont1++;
             }
@@ -2070,7 +2070,7 @@ namespace Ineval.Controllers
             var libro2 = wb.Worksheets.Add("Sustentantes sin Asignar");
 
             List<PorAsignacion> porAsignaciones = db.Database.SqlQuery<PorAsignacion>("exec sp_ReporteAsignaciones @AsignacionId", new SqlParameter("AsignacionId", Id)).ToList<PorAsignacion>();
-            
+
 
             ws1.Cell("A1").Value = "#";
             ws1.Cell("A1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
@@ -2340,7 +2340,7 @@ namespace Ineval.Controllers
             ws1.Cell("BB1").Value = "Micrófono";
             ws1.Cell("BB1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("BB1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
-            ws1.Cell("BB1").Style.Font.Bold = true;           
+            ws1.Cell("BB1").Style.Font.Bold = true;
 
             var cont = 0;
             var cont1 = 2;
@@ -2350,7 +2350,7 @@ namespace Ineval.Controllers
                 cont++;
                 ws1.Cell(cont1, 1).Value = cont;
                 ws1.Cell(cont1, 2).Value = "'" + item.Code;
-                ws1.Cell(cont1, 3).Value = item.Description;
+                ws1.Cell(cont1, 3).Value = "'" + item.Description;
                 ws1.Cell(cont1, 4).Value = item.LaboratorioId;
                 ws1.Cell(cont1, 5).Value = item.SessionId;
                 ws1.Cell(cont1, 6).Value = item.usu_id;
@@ -2358,7 +2358,7 @@ namespace Ineval.Controllers
                 ws1.Cell(cont1, 8).Value = "'" + item.identificacion;
                 ws1.Cell(cont1, 9).Value = item.primer_nombre;
                 ws1.Cell(cont1, 10).Value = item.segundo_nombre;
-                ws1.Cell(cont1,11).Value = item.primer_apellido;
+                ws1.Cell(cont1, 11).Value = item.primer_apellido;
                 ws1.Cell(cont1, 12).Value = item.segundo_apellido;
                 ws1.Cell(cont1, 13).Value = item.sexo;
                 ws1.Cell(cont1, 14).Value = item.grado;
@@ -2489,7 +2489,7 @@ namespace Ineval.Controllers
             libro2.Cell("P1").Value = "provincia_nacimiento";
             libro2.Cell("P1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             libro2.Cell("P1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
-            libro2.Cell("P1").Style.Font.Bold = true;            
+            libro2.Cell("P1").Style.Font.Bold = true;
 
             libro2.Cell("Q1").Value = "discapacidad";
             libro2.Cell("Q1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
@@ -2683,7 +2683,7 @@ namespace Ineval.Controllers
                 libro2.Cell(cont1, 13).Value = item.mes_nacimiento;
                 libro2.Cell(cont1, 14).Value = item.anio_nacimiento;
                 libro2.Cell(cont1, 15).Value = item.pais_nacimiento;
-                libro2.Cell(cont1, 16).Value = item.provincia_nacimiento;                
+                libro2.Cell(cont1, 16).Value = item.provincia_nacimiento;
                 libro2.Cell(cont1, 17).Value = item.discapacidad;
                 libro2.Cell(cont1, 18).Value = item.tipo_discapacidad;
                 libro2.Cell(cont1, 19).Value = item.porcentaje_discapacidad;
