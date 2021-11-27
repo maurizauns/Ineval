@@ -45,117 +45,146 @@
                     <div class="form-group" id="existe">
                         No Existe Registros
                     </div>
-                    <div class="form-group" data-bind="visible:Existe()" id="frm">
-                        <input type="hidden" name="name" id="Id" />
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Hora Inicio Evaluación (HH:MM:SS):</label>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="form-group" data-bind="visible:Existe()" id="frm">
+                                <input type="hidden" name="name" id="Id" />
+                                <div class="form-group row">
+                                    <div class="col-md-10">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Fecha de la Sesión:</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="date" id="txt-FechaSesion" class="form-control calendar" value="@DateTime.Now.ToString("yyyy-MM-dd")" onchange="validarFechaSesion(this)"/>
+
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <input type="time" id="txt-HoraInicio" class="form-control" onchange="Valhora1(this)" />
+                                <div class="form-group row">
+                                    <div class="col-md-10">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Hora Inicio Evaluación (HH:MM:SS):</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="time" id="txt-HoraInicio" class="form-control" onchange="Valhora1(this)" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-10">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Hora Fin Evaluación (HH:MM:SS):</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="time" id="txt-HoraFin" value="" class="form-control" onchange="Valhora2(this)" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-10">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Tiempo Evaluación (HH:MM:SS):</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="time" name="name" id="txt-HoraEvaluacion" onchange="ValEvaluacion(this)" class="form-control" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-10">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Tiempo Receso (HH:MM:SS):</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="time" name="name" id="txt-HoraReceso" onchange="ValReceso(this)" class="form-control" />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-10">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Aplicar Número de Días a Evaluar:</label>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <input type="number" class="form-control" value="1" id="txt-diaseval" onkeyup="generar(this)" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-10">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Aplicar Número de Sesiones:</label>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <input type="number" class="form-control" name="name" id="NumSesion" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group  row">
+                                    <div class="col-md-10">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Aplicar Número de Sustentantes por Sessión:</label>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <input type="number" class="form-control" name="NumeroSustentantes" value="" id="NumeroSustentantes" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-10">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Aplicar Tiempo de Viaje(minutos):</label>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <input type="number" class="form-control" name="name" id="txt-tiempoViaje" value="60" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+
+                                    <div class="col-md-10">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Territorio:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">NIvel Nacional:</label>
+                                            <input type="radio" name="tipo" id="tipoNacional" value="1" checked />
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="control-label">Nivel Interno:</label>
+                                            <input type="radio" name="tipo" id="tipoInterno" value="2" />
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Hora Fin Evaluación (HH:MM:SS):</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="time" id="txt-HoraFin" value="" class="form-control" onchange="Valhora2(this)" />
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Tiempo Evaluación (HH:MM:SS):</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="time" name="name" id="txt-HoraEvaluacion" onchange="ValEvaluacion(this)" class="form-control" />
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Tiempo Receso (HH:MM:SS):</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="time" name="name" id="txt-HoraReceso" onchange="ValReceso(this)" class="form-control" />
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Aplicar Numero de Dias a Evaluar:</label>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <input type="number" class="form-control" value="1" id="txt-diaseval" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Aplicar Numero de Sesiones:</label>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <input type="number" class="form-control" name="name" id="NumSesion" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group  row">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Aplicar Numero de Sustentantes por Sessión:</label>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <input type="number" class="form-control" name="NumeroSustentantes" value="" id="NumeroSustentantes" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Aplicar Tiempo de Viaje(minutos):</label>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <input type="number" class="form-control" name="name" id="txt-tiempoViaje" value="60" />
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="form-group row">
-                            
-                            <div class="col-md-6">
-                                <div class="col-md-4">
-                                    <label class="control-label">Territorio:</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="control-label">NIvel Nacional:</label>
-                                    <input type="radio" name="tipo" id="tipoNacional" value="1" checked />
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="control-label">Nivel Interno:</label>
-                                    <input type="radio" name="tipo" id="tipoInterno" value="2" />
-                                </div>
-                            </div>
-
+                        <div class="col-4">
+                            <table class="table table-bordered" id="tbl_valores">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detalle_datos"></tbody>
+                            </table>
                         </div>
                     </div>
+                    
+                    
                 </div>
             </div>
             <div>

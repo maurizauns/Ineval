@@ -31,5 +31,7 @@ namespace Ineval.Dto
         public string TiempoReceso { get; set; }
         public string TiempoReal { get; set; }
         public int? tipo { get; set; }
+        public string FechaSesion { get; set; }
+        public string HorariosSesion { get; set; }
     }
 }

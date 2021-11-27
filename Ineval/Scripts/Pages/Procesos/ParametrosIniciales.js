@@ -20,9 +20,26 @@
                 $('#btn-nuevo').css("display", "inline-block")
                 $('#existe').css("display", "inline-block")
             } else {
+                if (r.ParametrosIniciales.HorariosSesion) {
+                    JSON.parse(r.ParametrosIniciales.HorariosSesion).map((x, i) => {
+
+                        document.getElementById('detalle_datos').innerHTML += `<tr>
+                                                                <td>${x.sesion}</td>
+                                                                <td>${x.fecha}</td>
+                                                                 <td>${x.hora}</td>
+                                                               </tr>`
+
+                    })
+                }
+                
+                console.log(r)
+                $('#txt-FechaSesion').val(moment(r.ParametrosIniciales.FechaSesion).format('YYYY-MM-DD'))
                 EnableInputs()
                 $('#btn-nuevo').css("display", "none")
                 $('#existe').css("display", "none")
+                //nuevo
+                //$('#txt-FechaSesion').val(r.ParametrosIniciales.FechaSesion)
+
                 $('#txt-HoraInicio').val(r.ParametrosIniciales.HoraInicio)
                 $('#txt-HoraFin').val(r.ParametrosIniciales.HoraFin)
                 $('#txt-HoraEvaluacion').val(r.ParametrosIniciales.TiempoEvaluacion)
@@ -75,6 +92,9 @@
                     EnableInputs()
                     $('#btn-nuevo').css("display", "none")
                     $('#existe').css("display", "none")
+                    //nuevo
+                    //$('#txt-FechaSesion').val(r.ParametrosIniciales.FechaSesion)
+
                     $('#txt-HoraInicio').val(r.ParametrosIniciales.HoraInicio)
                     $('#txt-HoraFin').val(r.ParametrosIniciales.HoraFin)
                     $('#txt-HoraEvaluacion').val(r.ParametrosIniciales.TiempoEvaluacion)
@@ -117,18 +137,35 @@
         let horareceso = $('#txt-HoraReceso').val()
         let fechaInicio = moment("01/01/2021 " + horainicio, 'DD/MM/YYYY HH:mm').format('DD/MM/YYYY HH:mm');
         let fechaFin = moment("01/01/2021 " + horafin, 'DD/MM/YYYY HH:mm').format('DD/MM/YYYY HH:mm');
-        console.log(fechaInicio)
-        console.log(fechaFin)
 
+        var lista = [];
+        var row = $('#tbl_valores tbody tr');
+        for (let i = 0; i < row.length; i++) {
+            var properties = {};
+            properties.sesion = $(row[i]).find("td:eq(0)").html()
+            properties.fecha = $(row[i]).find("td:eq(1)").html()
+            properties.hora = $(row[i]).find("td:eq(2)").html()
+            lista.push(properties);
+        }
+        
+        console.log(lista)
         if (fechaInicio > fechaFin) {
             error("La hora inicio no puede ser mayor a la hora fin")
 
+        } else if ($('#txt-FechaSesion').val() == "") {
+            error("La fecha sesión debe ser definida")
+        } else if (FechaAntigua($("#txt-FechaSesion").val()) == false) {
+            error("La fecha sesión no puede ser menor a la fecha actual")
         } else if (horaevaluacion == "") {
             error("La hora de evaluación debe ser definida")
         } else if (horareceso == "") {
             error("La hora de receso debe ser definida")
         } else if ($('#NumSesion').val() == "") {
-            error("El numero de sesiones debe ser definida")
+            error("El número de sesiones debe ser definida")
+        } else if ($('#txt-diaseval').val() == "") {
+            error("El número de días a evaluar debe ser definida")
+        } else if (parseInt($('#txt-diaseval').val()) > 5) {
+            error("El número de días a evaluar no puede ser mayor a 5")
         } else {
             $.ajax({
                 type: "POST",
@@ -140,6 +177,7 @@
                     SinoNumeroLaboratorios: true,
                     NumeroLaboratorios: 1,
                     SinoNumeroEquipos: true,
+                    //FechaSesion: $("#txt-FechaSesion").val(),
                     NumeroEquipos: $("#NumeroSustentantes").val(),
                     SinoNumerosSesiones: true,
                     NumerosSesiones: $('#NumSesion').val(),
@@ -155,8 +193,10 @@
                     TiempoEvaluacion: $('#txt-HoraEvaluacion').val(),
                     TiempoReceso: $('#txt-HoraReceso').val(),
                     TiempoReal: "",
-                    Tipo: $('input:radio[name=tipo]:checked').val()
-
+                    Tipo: $('input:radio[name=tipo]:checked').val(),
+                    FechaSesion: $("#txt-FechaSesion").val(),
+                    HorariosSesion: JSON.stringify(lista)
+                    
                 }),
                 success: function (Data) {
                     swal(Data.message, "Registro Guardado", "success");
@@ -211,11 +251,11 @@ function calculoSesion() {
     let horafin = $('#txt-HoraFin').val()
     let horaevaluacion = $('#txt-HoraEvaluacion').val()
     let horareceso = $('#txt-HoraReceso').val()
-    let diaeval = $('#txt-diaseval').val()
+    
 
 
 
-    if (horainicio == "" || horafin == "" || horaevaluacion == "" || horareceso == "" || diaeval == "") {
+    if (horainicio == "" || horafin == "" || horaevaluacion == "" || horareceso == "") {
         $('#NumSesion').val("")
     } else {
         var eval1 = horaevaluacion.split(':')
@@ -228,7 +268,7 @@ function calculoSesion() {
         //var di1 = moment(di, 'HH:mm').add(moment(horareceso, "HH:mm"), 'minutes').minutes();
         console.log(horeval)
         var divi = (diffInMinutes / horeval)
-        $('#NumSesion').val(Math.round(divi * parseInt(diaeval)))
+        $('#NumSesion').val(Math.round(divi))
 
     }
 
@@ -253,7 +293,7 @@ function getTimeFromMins(mins) {
     }
     var h = mins / 60 | 0,
         m = mins % 60 | 0;
-    return moment.utc().hours(h).minutes(m).format("hh:mm");
+    return moment.utc().hours(h).minutes(m).format("HH:mm");
 }
 
 
@@ -270,4 +310,97 @@ function ValReceso(t) {
         }
     }
     calculoSesion()
+}
+
+function FechaAntigua(date) {
+    
+    let con = true;
+    let fechasesion = moment(date).format('DD/MM/YYYY');
+    let fechaactual = moment().format('DD/MM/YYYY');
+    if (fechasesion < fechaactual) {
+        con = false
+    }
+
+    return con
+   
+}
+
+function generar(el) {
+    
+    let dias = 0
+    let arrayElement = []
+    let hort = 0
+    let horformater = ''
+    
+    if ($("#txt-FechaSesion").val() == "") {
+        error("Fecha de la sesión debe ser definida")
+    } else if (parseInt(el.value) > 5) {
+        error("El número de días a evaluar no puede ser mayor a 5")
+    } else {
+        if (el.value != "") {
+
+            let dia = $("#txt-FechaSesion").val().split("-")
+            for (let i = 0; i < parseInt(el.value); i++) {
+                
+                dias = parseInt(dia[2]) + i
+
+               
+                for (let j = 0; j < parseInt($("#NumSesion").val()); j++) {
+                    let objectElement = {}
+                    
+                    if (j == 0) {
+                        hort = transforMinuteG($('#txt-HoraInicio').val())
+                        
+                    } else {
+                        hort = (transforMinuteG(horformater) + transforMinuteG($('#txt-HoraEvaluacion').val()) + transforMinuteG($('#txt-HoraReceso').val()))
+                    }
+                    horformater = getTimeFromMins(hort)
+                    objectElement.fecha = dias + `/` + dia[1] + `/` + dia[0]
+                    objectElement.hora = horformater
+                    arrayElement.push(objectElement)
+                }
+                
+                
+            }
+            
+        }
+    }
+    document.getElementById('detalle_datos').innerHTML=''
+    arrayElement.map((x, i) => {
+
+        document.getElementById('detalle_datos').innerHTML += `<tr>
+                                                                <td>S${i+1}</td>
+                                                                <td>${x.fecha}</td>
+                                                                 <td>${x.hora}</td>
+                                                               </tr>`
+        
+    })
+
+
+}
+
+function transforMinuteG(input) {
+    let minutes = 0;
+
+    var eval1 = input.split(':')
+    let horeval = (parseInt(eval1[0]) * 60)
+    minutes = horeval + parseInt(eval1[1])
+
+
+    return minutes
+
+}
+
+function validarFechaSesion(el) {
+    
+    let fechasesion = moment(el.value).format('DD/MM/YYYY');
+    let fechaactual = moment().format('DD/MM/YYYY');
+    if (fechasesion < fechaactual) {
+        error("La fecha sesión no puede ser menor a la fecha actual")
+        el.value = ""
+        document.getElementById('detalle_datos').innerHTML = ''
+    } else {
+
+        generar(document.getElementById('txt-diaseval'))
+    }
 }
