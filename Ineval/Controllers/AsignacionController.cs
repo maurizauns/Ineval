@@ -275,6 +275,8 @@ namespace Ineval.Controllers
 
                         int NumeroSessiones = 1;
 
+                        DateTime HOY = DateTime.Now;
+
                         TimeSpan HoraSession = HoraInicio + TiempoReal;
 
                         while (HoraSession <= HoraMaxima)
@@ -304,7 +306,9 @@ namespace Ineval.Controllers
                             NumeroLaboratorios = 5,
                             SiNoTiempoViaje = true,
                             TiempoViaje = 60,
-                            Tipo = 1
+                            Tipo = 1,
+                            FechaSesion = HOY,
+
                         };
 
                         var saveresultparam = await entityparam.SaveAsync(result);

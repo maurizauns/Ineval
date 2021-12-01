@@ -8,6 +8,24 @@ namespace Ineval.Common.Helpers
 {
     public static class MetodosUtils
     {
+
+        public static double GenerateDouble(int limite) {
+            bool confirmation = false;
+            double number = 0;
+            while (!confirmation) {
+                Random r = new Random();
+                double nextDouble = r.Next(1, limite);
+
+                if (nextDouble >= (limite * 0.75) && nextDouble <= (limite * 0.80))
+                {
+                    number = nextDouble;
+                    break;
+                }
+            }
+
+            return number;
+            
+        }
         public static List<double> GetListOfRandomDoubles(int countOfNumbers, double totalSum, int digits, int limite)
         {
             Random r = new Random();
@@ -20,7 +38,8 @@ namespace Ineval.Common.Helpers
             suma = 0;
             for (int i = 0; i < countOfNumbers; i++)
             {
-                double nextDouble = r.Next(1, limite);
+                //double nextDouble = r.Next(1, limite);                
+                double nextDouble = GenerateDouble(limite);
                 randomDoubles.Add(nextDouble);
                 totalRandomSum += nextDouble;
             }

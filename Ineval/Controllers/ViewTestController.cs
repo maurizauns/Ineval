@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Ineval.Common.Helpers;
+using Newtonsoft.Json;
+using System.Web.Script.Serialization;
 
 namespace Ineval.Controllers
 {
@@ -237,6 +239,15 @@ namespace Ineval.Controllers
                 service.Dispose();
             }
         }
+
+        public class datosJson
+        {
+            public string sesion { get; set; }
+            public string fecha { get; set; }
+            public string hora { get; set; }
+
+        }
+
         public async Task<ActionResult> Filtro(Guid? Id, int? Parametro1, string Parametro2, string Parametro3)
         {
             var userId = User.Identity.GetUserId();
@@ -304,6 +315,10 @@ namespace Ineval.Controllers
                 {
                     ParametrosIniciales parametrosIniciales = await db.ParametrosIniciales.Where(x => x.AsignacionId == Id).FirstOrDefaultAsync();
                     ParametrosInicialesViewModel parametrosInicialesDTO = Mapper.Map<ParametrosInicialesViewModel>(parametrosIniciales);
+
+                    List<datosJson> horariossessiones = new List<datosJson>();
+                    JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();                    
+                    horariossessiones = jsonSerializer.Deserialize<List<datosJson>>(parametrosInicialesDTO.HorariosSesion);
 
                     List<DatosInstituciones> datosInstituciones = new List<DatosInstituciones>();
                     List<DatosInstitucionesViewModel> resultDTO = new List<DatosInstitucionesViewModel>();
