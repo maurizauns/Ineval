@@ -266,11 +266,11 @@ namespace Ineval.Controllers
                     }
                     else
                     {
-                        TimeSpan HoraMaxima = TimeSpan.Parse("19:00:00");
-                        TimeSpan HoraInicio = TimeSpan.Parse("08:00:00");
+                        TimeSpan HoraMaxima = TimeSpan.Parse("19:00");
+                        TimeSpan HoraInicio = TimeSpan.Parse("08:00");
                         TimeSpan HoraFin = new TimeSpan();
-                        TimeSpan TiempoEvaluacion = TimeSpan.Parse("02:00:00");
-                        TimeSpan TiempoReceso = TimeSpan.Parse("01:00:00");
+                        TimeSpan TiempoEvaluacion = TimeSpan.Parse("02:00");
+                        TimeSpan TiempoReceso = TimeSpan.Parse("01:00");
                         TimeSpan TiempoReal = TiempoEvaluacion + TiempoReceso;
 
                         int NumeroSessiones = 1;
@@ -304,7 +304,9 @@ namespace Ineval.Controllers
                             NumeroLaboratorios = 5,
                             SiNoTiempoViaje = true,
                             TiempoViaje = 60,
-                            Tipo = 1
+                            Tipo = 1,
+                            FechaSesion = DateTime.Today,
+                            HorariosSesion = "[]"
                         };
 
                         var saveresultparam = await entityparam.SaveAsync(result);
