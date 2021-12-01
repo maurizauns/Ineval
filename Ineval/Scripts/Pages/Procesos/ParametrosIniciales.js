@@ -15,7 +15,7 @@
         contentType: "application/json; charset=utf-8",
         url: "/ParametrosIniciales/GetFormulario?id=" + vmh.CurrentId(),
         success: function (r) {
-            //console.log(r.ParametrosIniciales)
+            console.log(r.ParametrosIniciales)
             if (r.ParametrosIniciales.HoraInicio == "") {
                 $('#btn-nuevo').css("display", "inline-block")
                 $('#existe').css("display", "inline-block")
