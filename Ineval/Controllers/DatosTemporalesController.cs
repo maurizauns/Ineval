@@ -85,12 +85,20 @@ namespace Ineval.Controllers
                     DatosTemporales obj = new DatosTemporales();
                     foreach (var item1 in cabecera.Split(';'))
                     {
-                        PropertyInfo prop = obj.GetType().GetProperty(item1.Replace("\r", ""), BindingFlags.Public | BindingFlags.Instance);
-                        if (null != prop && prop.CanWrite)
+                        try
                         {
-                            prop.SetValue(obj, vd[i].Replace("\r", ""), null);
+                            PropertyInfo prop = obj.GetType().GetProperty(item1.Replace("\r", ""), BindingFlags.Public | BindingFlags.Instance);
+                            if (null != prop && prop.CanWrite)
+                            {
+                                prop.SetValue(obj, vd[i].Replace("\r", ""), null);
+                            }
+                            i++;
                         }
-                        i++;
+                        catch (Exception ex)
+                        {
+
+                            return Json(new { result = "Error, Revise el Documento!!", status = "error" }, JsonRequestBehavior.AllowGet);
+                        }
 
                     }
                     obj.AsignacionId = Id;
@@ -106,12 +114,14 @@ namespace Ineval.Controllers
                 binData = null;
                 result = "";
                 listaCabecera = null;
-
+                //Dispose();
                 bool status = await EnvioCorreos.SendAsync(userId, "Carga de Datos Exitosos de Datos Sustentantes");
 
             }
             catch (Exception ex)
             {
+                bool status = await EnvioCorreos.SendAsync(userId, "La carga de datos no fue exitoso!!, revisar documento");
+
                 return Json(new { result = ex.Message.ToString(), status = "error" }, JsonRequestBehavior.AllowGet);
             }
 

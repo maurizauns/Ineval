@@ -48,6 +48,10 @@ namespace Ineval.App_Start
 
             CreateMap<DatosExcelInstituciones, DatosExcelInstitucionesViewModel>().ReverseMap();
 
+            CreateMap<DatosExcelLaboratorio, DatosExcelLaboratorioViewModel>().ReverseMap();
+
+            CreateMap<DatosLaboratorio, DatosLaboratorioViewModel>().ReverseMap();
+
         }
     }
 }

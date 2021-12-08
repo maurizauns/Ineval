@@ -476,6 +476,7 @@
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\DatosExcelCabeceraController.cs" />
     <Compile Include="Controllers\DatosExcelInstitucionesController.cs" />
+    <Compile Include="Controllers\DatosExcelLaboratorioController.cs" />
     <Compile Include="Controllers\DatosExcelPersonalController.cs" />
     <Compile Include="Controllers\DatosMapasController.cs" />
     <Compile Include="Controllers\DatosMapboxAPIKEYController.cs" />
@@ -1908,7 +1909,9 @@
     <Content Include="Scripts\Pages\core\security\UsuarioConfig.js" />
     <Content Include="Scripts\Pages\Procesos\Asignacion.js" />
     <Content Include="Scripts\Pages\Procesos\DatosExcelInstituciones.js" />
+    <Content Include="Scripts\Pages\Procesos\DatosExcelLaboratorio.js" />
     <Content Include="Scripts\Pages\Procesos\DatosInstituciones.js" />
+    <Content Include="Scripts\Pages\Procesos\DatosLaboratorio.js" />
     <Content Include="Scripts\Pages\Procesos\DatosMapas.js" />
     <Content Include="Scripts\Pages\Procesos\DatosPersonalTerritorio.js" />
     <Content Include="Scripts\Pages\Procesos\DatosSustentantes.js" />
@@ -2275,11 +2278,14 @@
     <Content Include="Views\DatosMapboxAPIKEY\Index.cshtml" />
     <Content Include="Views\ViewTest\GenerarExcelDatosInstituciones.cshtml" />
     <Content Include="Views\ViewTest\SubirDatosInstituciones.cshtml" />
+    <Content Include="Views\ViewTest\GenerarExcelDatosLaboratorio.cshtml" />
+    <Content Include="Views\ViewTest\SubirDatosLaboratorios.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\BaseProceso\" />
     <Folder Include="Views\DatosExcelInstituciones\" />
+    <Folder Include="Views\DatosExcelLaboratorio\" />
     <Folder Include="Views\DatosMapas\" />
     <Folder Include="Views\ProcesoAsignacion\" />
     <Folder Include="Views\Test\" />

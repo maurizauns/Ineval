@@ -56,6 +56,12 @@ namespace Ineval.Controllers
         public ActionResult SubirDatosInstituciones()
             => PartialView();
 
+        public ActionResult GenerarExcelDatosLaboratorio()
+            => PartialView();
+
+        public ActionResult SubirDatosLaboratorios()
+            => PartialView();
+
         public async Task<ActionResult> GetFiltros(Guid? AsignacionId)
         {
             try
@@ -240,14 +246,6 @@ namespace Ineval.Controllers
             }
         }
 
-        public class datosJson
-        {
-            public string sesion { get; set; }
-            public string fecha { get; set; }
-            public string hora { get; set; }
-
-        }
-
         public async Task<ActionResult> Filtro(Guid? Id, int? Parametro1, string Parametro2, string Parametro3)
         {
             var userId = User.Identity.GetUserId();
@@ -258,11 +256,8 @@ namespace Ineval.Controllers
 
             datosMapboxAPIKEYs = await db.DatosMapboxAPIKEY.ToListAsync();
 
-
-            List<DatosTemporales> resultTemporales = new List<DatosTemporales>();
             List<DatosTemporalesViewModel> datosTemporalesDTO = new List<DatosTemporalesViewModel>();
-            resultTemporales = await db.DatosTemporales.Where(x => x.AsignacionId == Id).ToListAsync();
-            datosTemporalesDTO = Mapper.Map<List<DatosTemporalesViewModel>>(resultTemporales);
+            datosTemporalesDTO = db.Database.SqlQuery<DatosTemporalesViewModel>("exec sp_GetDatosTemporales @AsignacionId", new SqlParameter("AsignacionId", Id)).ToList();
 
             /*DATOSSEDES*/
             List<DatosSedes> ListaSedes = new List<DatosSedes>();
@@ -316,9 +311,9 @@ namespace Ineval.Controllers
                     ParametrosIniciales parametrosIniciales = await db.ParametrosIniciales.Where(x => x.AsignacionId == Id).FirstOrDefaultAsync();
                     ParametrosInicialesViewModel parametrosInicialesDTO = Mapper.Map<ParametrosInicialesViewModel>(parametrosIniciales);
 
-                    List<datosJson> horariossessiones = new List<datosJson>();
-                    JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();                    
-                    horariossessiones = jsonSerializer.Deserialize<List<datosJson>>(parametrosInicialesDTO.HorariosSesion);
+                    List<HorariosSession> horariossessiones = new List<HorariosSession>();
+                    JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+                    horariossessiones = jsonSerializer.Deserialize<List<HorariosSession>>(parametrosInicialesDTO.HorariosSesion);
 
                     List<DatosInstituciones> datosInstituciones = new List<DatosInstituciones>();
                     List<DatosInstitucionesViewModel> resultDTO = new List<DatosInstitucionesViewModel>();
@@ -340,141 +335,268 @@ namespace Ineval.Controllers
                         foreach (var item in datosporAmie)
                         {
                             int totalSuste = 0;
-                            int totalLabo = 0;
-                            int totalSession = 0;
-                            int subtotalSession = 0;
-                            int subtotalLabo = 0;
-                            int rest = 0;
-                            int xy = 0;
                             totalSuste = datosTemporalesDTO.Where(x => x.amie == item.amie).Count();
-                            totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
-
-                            //int calculosession = 0;
-                            //if(parametrosInicialesDTO.NumeroDiasEvaluar.HasValue && parametrosInicialesDTO.NumeroDiasEvaluar.Value == 1)
-                            //{
-                            //    calculosession = parametrosInicialesDTO.NumeroDiasEvaluar.Value*parametrosInicialesDTO.NumerosSesiones.Value;
-                            //}
-                            //else
-                            //{
-                            //    int var = parametrosInicialesDTO.NumeroDiasEvaluar.Value * parametrosInicialesDTO.NumerosSesiones.Value;
-                            //    if (var == parametrosInicialesDTO.NumerosSesiones.Value)
-                            //    {
-                            //        calculosession = parametrosInicialesDTO.NumerosSesiones.Value;
-                            //    }
-                            //    else
-                            //    {
-                            //        calculosession = var;
-                            //    }
-                            //}
-
-
-                            totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.ToString()), 0);
-
-                            if (totalLabo == 0)
+                            List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => x.amie == item.amie).ToList();
+                            if (totalSuste <= (parametrosInicialesDTO.NumerosSesiones.Value * parametrosInicialesDTO.NumeroEquipos.Value))
                             {
-                                totalLabo += 1;
-                            }
+                                int totalLabo = 0;
+                                int totalSession = 0;
+                                int subtotalSession = 0;
+                                int subtotalLabo = 0;
+                                int rest = 0;
+                                int xy = 0;
 
-                            if (totalSession == 0)
-                            {
-                                totalSession += 1;
-                            }
 
-                            subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
-                            subtotalSession = (totalSession / totalLabo);
+                                totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
 
-                            if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
-                            {
-                                xy = subtotalSession * subtotalLabo;
-                                rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                if (rest > 0)
+                                totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
+
+                                if (totalLabo == 0)
                                 {
-                                    subtotalLabo += 1;
+                                    totalLabo += 1;
                                 }
-                            }
-                            else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
-                            {
-                                subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
 
-                                xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
-
-                                rest = totalSuste - xy;
-
-                                while (rest > 0)
+                                if (totalSession == 0)
                                 {
-                                    subtotalLabo += 1;
-                                    rest -= totalSuste;
+                                    totalSession += 1;
                                 }
-                            }
-                            else
-                            {                                                                       //menor que el numero de sessiones
-                                if (subtotalSession == 1)
+
+                                subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                subtotalSession = (totalSession / totalLabo);
+
+                                if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
                                 {
                                     xy = subtotalSession * subtotalLabo;
                                     rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
                                     if (rest > 0)
                                     {
-                                        subtotalSession += 1;
+                                        subtotalLabo += 1;
+                                    }
+                                }
+                                else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                {
+                                    subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                    xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                    rest = totalSuste - xy;
+
+                                    while (rest > 0)
+                                    {
+                                        subtotalLabo += 1;
+                                        rest -= totalSuste;
                                     }
                                 }
                                 else
-                                {
-                                    xy = subtotalSession * subtotalLabo;
-                                    rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                    if (rest > 0)
+                                {                                                                       //menor que el numero de sessiones
+                                    if (subtotalSession == 1)
                                     {
-                                        subtotalSession += 1;
-                                    }
-                                }
-                            }
-
-                            DatosSedes datosSedes = new DatosSedes
-                            {
-                                AsignacionId = Id,
-                                NumeroSession = subtotalSession,
-                                NumeroLaboratorio = subtotalLabo,
-                                Code = item.amie,
-                                Description = item.nombre_institucion != null ? item.nombre_institucion : item.amie,
-                                NumeroTotalSustentantes = totalSuste,
-                                coordenada_lat = item.coordenada_x != null ? item.coordenada_x.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[0].ToString().Replace(',', '.'),
-                                coordenada_lng = item.coordenada_y != null ? item.coordenada_y.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.')
-                            };
-
-                            //db.DatosSedes.Add(datosSedes);
-                            insertMasiveDataSedes(datosSedes);
-                            //await db.SaveChangesAsync();
-
-                            List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
-
-                            List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => x.amie == datosSedes.Code).ToList();
-
-                            List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
-
-                            tomardatos.Sort();
-                            int datos = 0;
-
-                            for (int i = 1; i <= subtotalLabo; i++)
-                            {
-                                for (int j = 1; j <= subtotalSession; j++)
-                                {
-                                    //int tomardatos = 1 * parametrosInicialesDTO.NumeroEquipos.Value;
-                                    List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
-                                    foreach (var idsustentante in listatem)
-                                    {
-                                        datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                        xy = subtotalSession * subtotalLabo;
+                                        rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                        if (rest > 0)
                                         {
-                                            SedeId = datosSedes.Id,
-                                            SessionId = "S" + j,
-                                            LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
-                                            SustentanteId = idsustentante.Id.Value
-                                        });
-                                        listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                            subtotalSession += 1;
+                                        }
                                     }
-                                    datos++;
+                                    else
+                                    {
+                                        xy = subtotalSession * subtotalLabo;
+                                        rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                        if (rest > 0)
+                                        {
+                                            subtotalSession += 1;
+                                        }
+                                    }
+                                }
+
+                                DatosSedes datosSedes = new DatosSedes
+                                {
+                                    AsignacionId = Id,
+                                    NumeroSession = subtotalSession,
+                                    NumeroLaboratorio = subtotalLabo,
+                                    Code = item.amie,
+                                    Description = item.nombre_institucion != null ? item.nombre_institucion : item.amie,
+                                    NumeroTotalSustentantes = totalSuste,
+                                    coordenada_lat = item.coordenada_x != null ? item.coordenada_x.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[0].ToString().Replace(',', '.'),
+                                    coordenada_lng = item.coordenada_y != null ? item.coordenada_y.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.')
+                                };
+
+                                //db.DatosSedes.Add(datosSedes);
+                                insertMasiveDataSedes(datosSedes);
+                                //await db.SaveChangesAsync();
+
+                                List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
+
+                                List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
+
+                                tomardatos.Sort();
+                                int datos = 0;
+
+                                for (int i = 1; i <= subtotalLabo; i++)
+                                {
+                                    for (int j = 1; j <= subtotalSession; j++)
+                                    {
+                                        //int tomardatos = 1 * parametrosInicialesDTO.NumeroEquipos.Value;
+                                        List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                        foreach (var idsustentante in listatem)
+                                        {
+                                            datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                            {
+                                                SedeId = datosSedes.Id,
+                                                SessionId = horariossessiones[j - 1].sesion,
+                                                FechaEval = horariossessiones[j - 1].fecha,
+                                                Hora = horariossessiones[j - 1].hora,
+                                                Dia = "1",
+                                                LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                SustentanteId = idsustentante.Id.Value
+                                            });
+                                            listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                        }
+                                        datos++;
+                                    }
+                                }
+                                insertMasiveData(datosSedesAsignacions.ToList());
+
+                            }
+                            else
+                            {
+                                int contadorDias = 0;
+                                for (int u = 1; u <= parametrosInicialesDTO.NumeroDiasEvaluar.Value; u++)
+                                {
+
+                                    int totalLabo = 0;
+                                    int totalSession = 0;
+                                    int subtotalSession = 0;
+                                    int subtotalLabo = 0;
+                                    int rest = 0;
+                                    int xy = 0;
+
+
+                                    int totalSuste2 = 0;
+                                    float totals = float.Parse(totalSuste.ToString()) / float.Parse(parametrosInicialesDTO.NumeroDiasEvaluar.Value.ToString());
+                                    totalSuste2 = (int)Math.Round(totals, MidpointRounding.AwayFromZero);
+
+
+                                    totalSession = (int)Math.Round(Double.Parse(totalSuste2.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
+
+                                    totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
+
+                                    if (totalLabo == 0)
+                                    {
+                                        totalLabo += 1;
+                                    }
+
+                                    if (totalSession == 0)
+                                    {
+                                        totalSession += 1;
+                                    }
+
+                                    subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                    subtotalSession = (totalSession / totalLabo);
+
+                                    if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
+                                    {
+                                        xy = subtotalSession * subtotalLabo;
+                                        rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                        if (rest > 0)
+                                        {
+                                            subtotalLabo += 1;
+                                        }
+                                    }
+                                    else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                    {
+                                        subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                        xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                        rest = totalSuste2 - xy;
+
+                                        while (rest > 0)
+                                        {
+                                            subtotalLabo += 1;
+                                            rest -= totalSuste2;
+                                        }
+                                    }
+                                    else
+                                    {                                                                       //menor que el numero de sessiones
+                                        if (subtotalSession == 1)
+                                        {
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
+                                            {
+                                                subtotalSession += 1;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
+                                            {
+                                                subtotalSession += 1;
+                                            }
+                                        }
+                                    }
+
+                                    DatosSedes datosSedes = new DatosSedes
+                                    {
+                                        AsignacionId = Id,
+                                        NumeroSession = subtotalSession,
+                                        NumeroLaboratorio = subtotalLabo,
+                                        Code = item.amie,
+                                        Description = item.nombre_institucion != null ? item.nombre_institucion : item.amie,
+                                        NumeroTotalSustentantes = totalSuste2,
+                                        coordenada_lat = item.coordenada_x != null ? item.coordenada_x.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[0].ToString().Replace(',', '.'),
+                                        coordenada_lng = item.coordenada_y != null ? item.coordenada_y.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.')
+                                    };
+
+                                    //db.DatosSedes.Add(datosSedes);
+                                    insertMasiveDataSedes(datosSedes);
+                                    //await db.SaveChangesAsync();
+
+                                    List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
+
+                                    List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), totalSuste2, 0, parametrosInicialesDTO.NumeroEquipos.Value);
+
+                                    tomardatos.Sort();
+                                    int datos = 0;
+                                    int contadordias2 = contadorDias;
+
+                                    for (int i = 1; i <= subtotalLabo; i++)
+                                    {
+                                        contadorDias = 0;
+                                        for (int j = 1; j <= subtotalSession; j++)
+                                        {
+
+                                            //int tomardatos = 1 * parametrosInicialesDTO.NumeroEquipos.Value;
+                                            List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                            foreach (var idsustentante in listatem)
+                                            {
+                                                datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                {
+                                                    SedeId = datosSedes.Id,
+                                                    SessionId = horariossessiones[contadorDias].sesion,
+                                                    FechaEval = horariossessiones[contadorDias].fecha,
+                                                    Hora = horariossessiones[contadorDias].hora,
+                                                    Dia = u.ToString(),
+                                                    LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                    SustentanteId = idsustentante.Id.Value
+                                                });
+                                                listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                            }
+                                            contadorDias++;
+                                            datos++;
+                                        }
+                                    }
+                                    contadorDias = contadordias2;
+                                    insertMasiveData(datosSedesAsignacions.ToList());
+                                    contadorDias += (parametrosInicialesDTO.NumerosSesiones.Value);
                                 }
                             }
 
-                            insertMasiveData(datosSedesAsignacions.ToList());
+
+
                             //await db.SaveChangesAsync();
                         }
 
@@ -505,133 +627,296 @@ namespace Ineval.Controllers
                                 }
                                 else
                                 {
+
                                     int totalSuste = 0;
-                                    int totalLabo = 0;
-                                    int totalSession = 0;
-                                    int subtotalSession = 0;
-                                    int subtotalLabo = 0;
-                                    int rest = 0;
-                                    int xy = 0;
                                     totalSuste = datosTemporalesDTO.Where(x => x.id_provincia == item.id_provincia).Count();
-                                    totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
-                                    totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
-
-                                    if (totalLabo == 0)
+                                    List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => x.id_provincia == item.id_provincia).ToList();
+                                    if (totalSuste <= (parametrosInicialesDTO.NumerosSesiones.Value * parametrosInicialesDTO.NumeroEquipos.Value))
                                     {
-                                        totalLabo += 1;
-                                    }
+                                        int totalLabo = 0;
+                                        int totalSession = 0;
+                                        int subtotalSession = 0;
+                                        int subtotalLabo = 0;
+                                        int rest = 0;
+                                        int xy = 0;
 
-                                    if (totalSession == 0)
-                                    {
-                                        totalSession += 1;
-                                    }
+                                        totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
 
-                                    subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
-                                    subtotalSession = (totalSession / totalLabo);
+                                        int diasporsessiones = parametrosInicialesDTO.NumeroDiasEvaluar.Value * parametrosInicialesDTO.NumerosSesiones.Value;
+                                        totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
 
-                                    if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
-                                    {
-                                        xy = subtotalSession * subtotalLabo;
-                                        rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                        if (rest > 0)
+                                        if (totalLabo == 0)
                                         {
-                                            subtotalLabo += 1;
+                                            totalLabo += 1;
                                         }
-                                    }
-                                    else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
-                                    {
-                                        subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
 
-                                        xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
-
-                                        rest = totalSuste - xy;
-
-                                        while (rest > 0)
+                                        if (totalSession == 0)
                                         {
-                                            subtotalLabo += 1;
-                                            rest -= totalSuste;
+                                            totalSession += 1;
                                         }
-                                    }
-                                    else
-                                    {                                                                       //menor que el numero de sessiones
-                                        if (subtotalSession == 1)
+
+                                        subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                        subtotalSession = (totalSession / totalLabo);
+
+                                        if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
                                         {
                                             xy = subtotalSession * subtotalLabo;
                                             rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
                                             if (rest > 0)
                                             {
-                                                subtotalSession += 1;
+                                                subtotalLabo += 1;
+                                            }
+                                        }
+                                        else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                        {
+                                            subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                            xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                            rest = totalSuste - xy;
+
+                                            while (rest > 0)
+                                            {
+                                                subtotalLabo += 1;
+                                                rest -= totalSuste;
                                             }
                                         }
                                         else
-                                        {
-                                            xy = subtotalSession * subtotalLabo;
-                                            rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                            if (rest > 0)
+                                        {                                                                       //menor que el numero de sessiones
+                                            if (subtotalSession == 1)
                                             {
-                                                subtotalSession += 1;
-                                            }
-                                        }
-                                    }
-
-
-                                    ApiPosicionGeografica.Root coordenadas = await ApiPosicionGeografica.GetByPosicionGeografica(item.provincia.Trim() + "," + "Ecuador", itemApiKey.APIKEY.Trim());
-
-                                    DatosMapboxAPIKEY resultApiKey = await db.DatosMapboxAPIKEY.Where(x => x.Id == itemApiKey.Id).FirstOrDefaultAsync();
-
-                                    resultApiKey.NumeroUsadasConsultas = itemApiKey.NumeroUsadasConsultas + cont;
-
-                                    var entry = db.Entry(resultApiKey);
-                                    entry.State = EntityState.Modified;
-                                    await db.SaveChangesAsync();
-
-
-                                    DatosSedes datosSedes = new DatosSedes
-                                    {
-                                        AsignacionId = Id,
-                                        NumeroSession = subtotalSession,
-                                        NumeroLaboratorio = subtotalLabo,
-                                        Code = item.id_provincia,
-                                        Description = item.provincia,
-                                        NumeroTotalSustentantes = totalSuste,
-                                        coordenada_lat = coordenadas != null ? coordenadas.features.FirstOrDefault().center[0].ToString().Replace(',', '.') : "",
-                                        coordenada_lng = coordenadas != null ? coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.') : ""
-                                    };
-
-
-                                    insertMasiveDataSedes(datosSedes);
-                                    //db.DatosSedes.Add(datosSedes);
-                                    //await db.SaveChangesAsync();
-
-                                    List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
-                                    List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => x.id_provincia == datosSedes.Code).ToList();
-
-                                    List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
-                                    tomardatos.Sort();
-                                    int datos = 0;
-                                    for (int i = 1; i <= subtotalLabo; i++)
-                                    {
-                                        for (int j = 1; j <= subtotalSession; j++)
-                                        {
-                                            List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
-                                            foreach (var idsustentante in listatem)
-                                            {
-                                                datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                xy = subtotalSession * subtotalLabo;
+                                                rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                if (rest > 0)
                                                 {
-                                                    SedeId = datosSedes.Id,
-                                                    SessionId = "S" + j,
-                                                    Dia = "1",
-                                                    LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
-                                                    SustentanteId = idsustentante.Id.Value
-                                                });
-                                                listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                                    subtotalSession += 1;
+                                                }
                                             }
-                                            datos++;
+                                            else
+                                            {
+                                                xy = subtotalSession * subtotalLabo;
+                                                rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                if (rest > 0)
+                                                {
+                                                    subtotalSession += 1;
+                                                }
+                                            }
                                         }
+
+
+                                        ApiPosicionGeografica.Root coordenadas = await ApiPosicionGeografica.GetByPosicionGeografica(item.provincia.Trim() + "," + "Ecuador", itemApiKey.APIKEY.Trim());
+
+                                        DatosMapboxAPIKEY resultApiKey = await db.DatosMapboxAPIKEY.Where(x => x.Id == itemApiKey.Id).FirstOrDefaultAsync();
+
+                                        resultApiKey.NumeroUsadasConsultas = itemApiKey.NumeroUsadasConsultas + cont;
+
+                                        var entry = db.Entry(resultApiKey);
+                                        entry.State = EntityState.Modified;
+                                        await db.SaveChangesAsync();
+
+
+                                        DatosSedes datosSedes = new DatosSedes
+                                        {
+                                            AsignacionId = Id,
+                                            NumeroSession = subtotalSession,
+                                            NumeroLaboratorio = subtotalLabo,
+                                            Code = item.id_provincia,
+                                            Description = item.provincia,
+                                            NumeroTotalSustentantes = totalSuste,
+                                            coordenada_lat = coordenadas != null ? coordenadas.features.FirstOrDefault().center[0].ToString().Replace(',', '.') : "",
+                                            coordenada_lng = coordenadas != null ? coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.') : ""
+                                        };
+
+
+                                        insertMasiveDataSedes(datosSedes);
+                                        //db.DatosSedes.Add(datosSedes);
+                                        //await db.SaveChangesAsync();
+
+                                        List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
+
+
+                                        List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
+                                        tomardatos.Sort();
+                                        int datos = 0;
+                                        for (int i = 1; i <= subtotalLabo; i++)
+                                        {
+                                            for (int j = 1; j <= subtotalSession; j++)
+                                            {
+                                                List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                                foreach (var idsustentante in listatem)
+                                                {
+                                                    datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                    {
+                                                        SedeId = datosSedes.Id,
+                                                        SessionId = horariossessiones[j - 1].sesion,
+                                                        FechaEval = horariossessiones[j - 1].fecha,
+                                                        Hora = horariossessiones[j - 1].hora,
+                                                        Dia = "1",
+                                                        LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                        SustentanteId = idsustentante.Id.Value
+                                                    });
+                                                    listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                                }
+                                                datos++;
+                                            }
+                                        }
+                                        insertMasiveData(datosSedesAsignacions.ToList());
+                                        //await db.SaveChangesAsync();
+                                        break;
+
                                     }
-                                    insertMasiveData(datosSedesAsignacions.ToList());
-                                    //await db.SaveChangesAsync();
-                                    break;
+                                    else
+                                    {
+                                        //List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => x.id_provincia == datosSedes.Code).ToList();
+                                        int contadorDias = 0;
+                                        for (int u = 1; u <= parametrosInicialesDTO.NumeroDiasEvaluar.Value; u++)
+                                        {
+
+                                            int totalLabo = 0;
+                                            int totalSession = 0;
+                                            int subtotalSession = 0;
+                                            int subtotalLabo = 0;
+                                            int rest = 0;
+                                            int xy = 0;
+
+                                            int totalSuste2 = 0;
+                                            float totals = float.Parse(totalSuste.ToString()) / float.Parse(parametrosInicialesDTO.NumeroDiasEvaluar.Value.ToString());
+                                            totalSuste2 = (int)Math.Round(totals, MidpointRounding.AwayFromZero);
+
+                                            //totalSuste = datosTemporalesDTO.Where(x => x.id_provincia == item.id_provincia).Count();
+                                            totalSession = (int)Math.Round(Double.Parse(totalSuste2.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
+
+                                            //int diasporsessiones = parametrosInicialesDTO.NumeroDiasEvaluar.Value * parametrosInicialesDTO.NumerosSesiones.Value;
+                                            totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
+
+                                            if (totalLabo == 0)
+                                            {
+                                                totalLabo += 1;
+                                            }
+
+                                            if (totalSession == 0)
+                                            {
+                                                totalSession += 1;
+                                            }
+
+                                            subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                            subtotalSession = (totalSession / totalLabo);
+
+                                            if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
+                                            {
+                                                xy = subtotalSession * subtotalLabo;
+                                                rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                if (rest > 0)
+                                                {
+                                                    subtotalLabo += 1;
+                                                }
+                                            }
+                                            else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                            {
+                                                subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                                xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                                rest = totalSuste2 - xy;
+
+                                                while (rest > 0)
+                                                {
+                                                    subtotalLabo += 1;
+                                                    rest -= totalSuste2;
+                                                }
+                                            }
+                                            else
+                                            {                                                                       //menor que el numero de sessiones
+                                                if (subtotalSession == 1)
+                                                {
+                                                    xy = subtotalSession * subtotalLabo;
+                                                    rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                    if (rest > 0)
+                                                    {
+                                                        subtotalSession += 1;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    xy = subtotalSession * subtotalLabo;
+                                                    rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                    if (rest > 0)
+                                                    {
+                                                        subtotalSession += 1;
+                                                    }
+                                                }
+                                            }
+
+
+                                            ApiPosicionGeografica.Root coordenadas = await ApiPosicionGeografica.GetByPosicionGeografica(item.provincia.Trim() + "," + "Ecuador", itemApiKey.APIKEY.Trim());
+
+                                            DatosMapboxAPIKEY resultApiKey = await db.DatosMapboxAPIKEY.Where(x => x.Id == itemApiKey.Id).FirstOrDefaultAsync();
+
+                                            resultApiKey.NumeroUsadasConsultas = itemApiKey.NumeroUsadasConsultas + cont;
+
+                                            var entry = db.Entry(resultApiKey);
+                                            entry.State = EntityState.Modified;
+                                            await db.SaveChangesAsync();
+
+
+                                            DatosSedes datosSedes = new DatosSedes
+                                            {
+                                                AsignacionId = Id,
+                                                NumeroSession = subtotalSession,
+                                                NumeroLaboratorio = subtotalLabo,
+                                                Code = item.id_provincia,
+                                                Description = item.provincia,
+                                                NumeroTotalSustentantes = totalSuste,
+                                                coordenada_lat = coordenadas != null ? coordenadas.features.FirstOrDefault().center[0].ToString().Replace(',', '.') : "",
+                                                coordenada_lng = coordenadas != null ? coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.') : ""
+                                            };
+
+
+                                            insertMasiveDataSedes(datosSedes);
+                                            //db.DatosSedes.Add(datosSedes);
+                                            //await db.SaveChangesAsync();
+
+                                            List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
+
+
+                                            List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), totalSuste2, 0, parametrosInicialesDTO.NumeroEquipos.Value);
+                                            tomardatos.Sort();
+                                            int datos = 0;
+                                            int contadordias2 = contadorDias;
+
+                                            for (int i = 1; i <= subtotalLabo; i++)
+                                            {
+                                                contadorDias = 0;
+                                                for (int j = 1; j <= subtotalSession; j++)
+                                                {
+
+                                                    List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                                    foreach (var idsustentante in listatem)
+                                                    {
+                                                        datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                        {
+                                                            SedeId = datosSedes.Id,
+                                                            SessionId = horariossessiones[contadorDias].sesion,
+                                                            FechaEval = horariossessiones[contadorDias].fecha,
+                                                            Hora = horariossessiones[contadorDias].hora,
+                                                            Dia = u.ToString(),
+                                                            LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                            SustentanteId = idsustentante.Id.Value
+                                                        });
+                                                        listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                                    }
+                                                    contadorDias++;
+                                                    datos++;
+                                                }
+
+                                            }
+                                            contadorDias = contadordias2;
+                                            insertMasiveData(datosSedesAsignacions.ToList());
+
+                                            contadorDias += (parametrosInicialesDTO.NumerosSesiones.Value);
+                                        }
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -802,120 +1087,259 @@ namespace Ineval.Controllers
                                 }
 
                                 int totalSuste = 0;
-                                int totalLabo = 0;
-                                int totalSession = 0;
-                                int subtotalSession = 0;
-                                int subtotalLabo = 0;
-                                int rest = 0;
-                                int xy = 0;
                                 totalSuste = datosTemporalesDTO.Where(x => agrupados.Contains(x.canton_id)).Count();
-                                totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
-                                totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
-
-                                if (totalLabo == 0)
+                                List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.canton_id)).ToList();
+                                if (totalSuste <= (parametrosInicialesDTO.NumerosSesiones.Value * parametrosInicialesDTO.NumeroEquipos.Value))
                                 {
-                                    totalLabo += 1;
-                                }
 
-                                if (totalSession == 0)
-                                {
-                                    totalSession += 1;
-                                }
+                                    int totalLabo = 0;
+                                    int totalSession = 0;
+                                    int subtotalSession = 0;
+                                    int subtotalLabo = 0;
+                                    int rest = 0;
+                                    int xy = 0;
 
-                                subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
-                                subtotalSession = (totalSession / totalLabo);
+                                    totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
+                                    totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
 
-                                if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
-                                {
-                                    xy = subtotalSession * subtotalLabo;
-                                    rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                    if (rest > 0)
+                                    if (totalLabo == 0)
                                     {
-                                        subtotalLabo += 1;
+                                        totalLabo += 1;
                                     }
-                                }
-                                else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
-                                {
-                                    subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
 
-                                    xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
-
-                                    rest = totalSuste - xy;
-
-                                    while (rest > 0)
+                                    if (totalSession == 0)
                                     {
-                                        subtotalLabo += 1;
-                                        rest -= totalSuste;
+                                        totalSession += 1;
                                     }
-                                }
-                                else
-                                {                                                                       //menor que el numero de sessiones
-                                    if (subtotalSession == 1)
+
+                                    subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                    subtotalSession = (totalSession / totalLabo);
+
+                                    if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
                                     {
                                         xy = subtotalSession * subtotalLabo;
                                         rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
                                         if (rest > 0)
                                         {
-                                            subtotalSession += 1;
+                                            subtotalLabo += 1;
+                                        }
+                                    }
+                                    else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                    {
+                                        subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                        xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                        rest = totalSuste - xy;
+
+                                        while (rest > 0)
+                                        {
+                                            subtotalLabo += 1;
+                                            rest -= totalSuste;
                                         }
                                     }
                                     else
-                                    {
-                                        xy = subtotalSession * subtotalLabo;
-                                        rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                        if (rest > 0)
+                                    {                                                                       //menor que el numero de sessiones
+                                        if (subtotalSession == 1)
                                         {
-                                            subtotalSession += 1;
-                                        }
-                                    }
-                                }
-
-                                DatosSedes datosSedes = new DatosSedes
-                                {
-                                    AsignacionId = Id,
-                                    NumeroSession = subtotalSession,
-                                    NumeroLaboratorio = subtotalLabo,
-                                    Code = item.Code,
-                                    Description = item.Description,
-                                    Agrupados = item.Agrupados,
-                                    NumeroTotalSustentantes = totalSuste,
-                                    coordenada_lat = item.coordenada_lat,
-                                    coordenada_lng = item.coordenada_lng
-                                };
-
-                                insertMasiveDataSedes(datosSedes);
-                                //db.DatosSedes.Add(datosSedes);
-                                //await db.SaveChangesAsync();
-
-                                List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
-                                List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.canton_id)).ToList();
-
-                                List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
-                                tomardatos.Sort();
-                                int datos = 0;
-
-                                for (int i = 1; i <= subtotalLabo; i++)
-                                {
-                                    for (int j = 1; j <= subtotalSession; j++)
-                                    {
-
-                                        List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
-                                        foreach (var idsustentante in listatem)
-                                        {
-                                            datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
                                             {
-                                                SedeId = datosSedes.Id,
-                                                SessionId = "S" + j,
-                                                LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
-                                                SustentanteId = idsustentante.Id.Value
-                                            });
-                                            listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                                subtotalSession += 1;
+                                            }
                                         }
-                                        datos++;
+                                        else
+                                        {
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
+                                            {
+                                                subtotalSession += 1;
+                                            }
+                                        }
+                                    }
+
+                                    DatosSedes datosSedes = new DatosSedes
+                                    {
+                                        AsignacionId = Id,
+                                        NumeroSession = subtotalSession,
+                                        NumeroLaboratorio = subtotalLabo,
+                                        Code = item.Code,
+                                        Description = item.Description,
+                                        Agrupados = item.Agrupados,
+                                        NumeroTotalSustentantes = totalSuste,
+                                        coordenada_lat = item.coordenada_lat,
+                                        coordenada_lng = item.coordenada_lng
+                                    };
+
+                                    insertMasiveDataSedes(datosSedes);
+                                    //db.DatosSedes.Add(datosSedes);
+                                    //await db.SaveChangesAsync();
+
+                                    List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
+
+                                    List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
+                                    tomardatos.Sort();
+                                    int datos = 0;
+
+                                    for (int i = 1; i <= subtotalLabo; i++)
+                                    {
+                                        for (int j = 1; j <= subtotalSession; j++)
+                                        {
+
+                                            List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                            foreach (var idsustentante in listatem)
+                                            {
+                                                datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                {
+                                                    SedeId = datosSedes.Id,
+                                                    SessionId = horariossessiones[j - 1].sesion,
+                                                    FechaEval = horariossessiones[j - 1].fecha,
+                                                    Hora = horariossessiones[j - 1].hora,
+                                                    Dia = "1",
+                                                    LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                    SustentanteId = idsustentante.Id.Value
+                                                });
+                                                listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                            }
+                                            datos++;
+                                        }
+                                    }
+
+                                    insertMasiveData(datosSedesAsignacions.ToList());
+                                }
+                                else
+                                {
+                                    int contadorDias = 0;
+                                    for (int u = 1; u <= parametrosInicialesDTO.NumeroDiasEvaluar.Value; u++)
+                                    {
+                                        int totalLabo = 0;
+                                        int totalSession = 0;
+                                        int subtotalSession = 0;
+                                        int subtotalLabo = 0;
+                                        int rest = 0;
+                                        int xy = 0;
+
+                                        int totalSuste2 = 0;
+                                        float totals = float.Parse(totalSuste.ToString()) / float.Parse(parametrosInicialesDTO.NumeroDiasEvaluar.Value.ToString());
+                                        totalSuste2 = (int)Math.Round(totals, MidpointRounding.AwayFromZero);
+
+                                        totalSession = (int)Math.Round(Double.Parse(totalSuste2.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
+                                        totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
+
+                                        if (totalLabo == 0)
+                                        {
+                                            totalLabo += 1;
+                                        }
+
+                                        if (totalSession == 0)
+                                        {
+                                            totalSession += 1;
+                                        }
+
+                                        subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                        subtotalSession = (totalSession / totalLabo);
+
+                                        if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
+                                        {
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
+                                            {
+                                                subtotalLabo += 1;
+                                            }
+                                        }
+                                        else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                        {
+                                            subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                            xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                            rest = totalSuste2 - xy;
+
+                                            while (rest > 0)
+                                            {
+                                                subtotalLabo += 1;
+                                                rest -= totalSuste;
+                                            }
+                                        }
+                                        else
+                                        {                                                                       //menor que el numero de sessiones
+                                            if (subtotalSession == 1)
+                                            {
+                                                xy = subtotalSession * subtotalLabo;
+                                                rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                if (rest > 0)
+                                                {
+                                                    subtotalSession += 1;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                xy = subtotalSession * subtotalLabo;
+                                                rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                if (rest > 0)
+                                                {
+                                                    subtotalSession += 1;
+                                                }
+                                            }
+                                        }
+
+                                        DatosSedes datosSedes = new DatosSedes
+                                        {
+                                            AsignacionId = Id,
+                                            NumeroSession = subtotalSession,
+                                            NumeroLaboratorio = subtotalLabo,
+                                            Code = item.Code,
+                                            Description = item.Description,
+                                            Agrupados = item.Agrupados,
+                                            NumeroTotalSustentantes = totalSuste,
+                                            coordenada_lat = item.coordenada_lat,
+                                            coordenada_lng = item.coordenada_lng
+                                        };
+
+                                        insertMasiveDataSedes(datosSedes);
+
+                                        List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
+
+                                        List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), totalSuste2, 0, parametrosInicialesDTO.NumeroEquipos.Value);
+                                        tomardatos.Sort();
+                                        int datos = 0;
+
+                                        int contadordias2 = contadorDias;
+
+                                        for (int i = 1; i <= subtotalLabo; i++)
+                                        {
+                                            contadorDias = 0;
+                                            for (int j = 1; j <= subtotalSession; j++)
+                                            {
+
+                                                List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                                foreach (var idsustentante in listatem)
+                                                {
+                                                    datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                    {
+                                                        SedeId = datosSedes.Id,
+                                                        SessionId = horariossessiones[contadorDias].sesion,
+                                                        FechaEval = horariossessiones[contadorDias].fecha,
+                                                        Hora = horariossessiones[contadorDias].hora,
+                                                        Dia = u.ToString(),
+                                                        LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                        SustentanteId = idsustentante.Id.Value
+                                                    });
+                                                    listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                                }
+                                                datos++;
+                                            }
+                                        }
+                                        contadorDias = contadordias2;
+                                        insertMasiveData(datosSedesAsignacions.ToList());
+                                        contadorDias += (parametrosInicialesDTO.NumerosSesiones.Value);
                                     }
                                 }
 
-                                insertMasiveData(datosSedesAsignacions.ToList());
+
                                 //await db.SaveChangesAsync();
 
                             }
@@ -1085,125 +1509,263 @@ namespace Ineval.Controllers
                                     }
                                 }
 
+
                                 int totalSuste = 0;
-                                int totalLabo = 0;
-                                int totalSession = 0;
-                                int subtotalSession = 0;
-                                int subtotalLabo = 0;
-                                int rest = 0;
-                                int xy = 0;
                                 totalSuste = datosTemporalesDTO.Where(x => agrupados.Contains(x.canton_id)).Count();
-                                totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
-                                totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
-
-                                if (totalLabo == 0)
+                                List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.canton_id)).ToList();
+                                if (totalSuste <= (parametrosInicialesDTO.NumerosSesiones.Value * parametrosInicialesDTO.NumeroEquipos.Value))
                                 {
-                                    totalLabo += 1;
-                                }
 
-                                if (totalSession == 0)
-                                {
-                                    totalSession += 1;
-                                }
+                                    int totalLabo = 0;
+                                    int totalSession = 0;
+                                    int subtotalSession = 0;
+                                    int subtotalLabo = 0;
+                                    int rest = 0;
+                                    int xy = 0;
+                                    totalSuste = datosTemporalesDTO.Where(x => agrupados.Contains(x.canton_id)).Count();
+                                    totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
+                                    totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
 
-                                subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
-                                subtotalSession = (totalSession / totalLabo);
-
-                                if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
-                                {
-                                    xy = subtotalSession * subtotalLabo;
-                                    rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                    if (rest > 0)
+                                    if (totalLabo == 0)
                                     {
-                                        subtotalLabo += 1;
+                                        totalLabo += 1;
                                     }
-                                }
-                                else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
-                                {
-                                    subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
 
-                                    xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
-
-                                    rest = totalSuste - xy;
-
-                                    while (rest > 0)
+                                    if (totalSession == 0)
                                     {
-                                        subtotalLabo += 1;
-                                        rest -= totalSuste;
+                                        totalSession += 1;
                                     }
-                                }
-                                else
-                                {                                                                       //menor que el numero de sessiones
-                                    if (subtotalSession == 1)
+
+                                    subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                    subtotalSession = (totalSession / totalLabo);
+
+                                    if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
                                     {
                                         xy = subtotalSession * subtotalLabo;
                                         rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
                                         if (rest > 0)
                                         {
-                                            subtotalSession += 1;
+                                            subtotalLabo += 1;
+                                        }
+                                    }
+                                    else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                    {
+                                        subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                        xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                        rest = totalSuste - xy;
+
+                                        while (rest > 0)
+                                        {
+                                            subtotalLabo += 1;
+                                            rest -= totalSuste;
                                         }
                                     }
                                     else
-                                    {
-                                        xy = subtotalSession * subtotalLabo;
-                                        rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                        if (rest > 0)
+                                    {                                                                       //menor que el numero de sessiones
+                                        if (subtotalSession == 1)
                                         {
-                                            subtotalSession += 1;
-                                        }
-                                    }
-                                }
-
-                                DatosSedes datosSedes = new DatosSedes
-                                {
-                                    AsignacionId = Id,
-                                    NumeroSession = subtotalSession,
-                                    NumeroLaboratorio = subtotalLabo,
-                                    Code = item.Code,
-                                    Description = item.Description,
-                                    Agrupados = item.Agrupados,
-                                    NumeroTotalSustentantes = totalSuste,
-                                    coordenada_lat = item.coordenada_lat,
-                                    coordenada_lng = item.coordenada_lng
-                                };
-
-                                insertMasiveDataSedes(datosSedes);
-                                //db.DatosSedes.Add(datosSedes);
-                                //await db.SaveChangesAsync();
-
-                                List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
-                                List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.canton_id)).ToList();
-
-                                List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
-                                tomardatos.Sort();
-                                int datos = 0;
-
-                                for (int i = 1; i <= subtotalLabo; i++)
-                                {
-                                    for (int j = 1; j <= subtotalSession; j++)
-                                    {
-
-                                        List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
-                                        foreach (var idsustentante in listatem)
-                                        {
-                                            datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
                                             {
-                                                SedeId = datosSedes.Id,
-                                                SessionId = "S" + j,
-                                                LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
-                                                SustentanteId = idsustentante.Id.Value
-                                            });
-                                            listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                                subtotalSession += 1;
+                                            }
                                         }
-                                        datos++;
+                                        else
+                                        {
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
+                                            {
+                                                subtotalSession += 1;
+                                            }
+                                        }
+                                    }
+
+                                    DatosSedes datosSedes = new DatosSedes
+                                    {
+                                        AsignacionId = Id,
+                                        NumeroSession = subtotalSession,
+                                        NumeroLaboratorio = subtotalLabo,
+                                        Code = item.Code,
+                                        Description = item.Description,
+                                        Agrupados = item.Agrupados,
+                                        NumeroTotalSustentantes = totalSuste,
+                                        coordenada_lat = item.coordenada_lat,
+                                        coordenada_lng = item.coordenada_lng
+                                    };
+
+                                    insertMasiveDataSedes(datosSedes);
+
+                                    List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
+
+
+                                    List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
+                                    tomardatos.Sort();
+                                    int datos = 0;
+
+                                    for (int i = 1; i <= subtotalLabo; i++)
+                                    {
+                                        for (int j = 1; j <= subtotalSession; j++)
+                                        {
+
+                                            List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                            foreach (var idsustentante in listatem)
+                                            {
+                                                datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                {
+                                                    SedeId = datosSedes.Id,
+                                                    SessionId = horariossessiones[j - 1].sesion,
+                                                    FechaEval = horariossessiones[j - 1].fecha,
+                                                    Hora = horariossessiones[j - 1].hora,
+                                                    Dia = "1",
+                                                    LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                    SustentanteId = idsustentante.Id.Value
+                                                });
+                                                listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                            }
+                                            datos++;
+                                        }
+                                    }
+
+                                    insertMasiveData(datosSedesAsignacions.ToList());
+
+                                }
+                                else  ////POR DIAS
+                                {
+                                    int contadorDias = 0;
+
+                                    for (int u = 1; u <= parametrosInicialesDTO.NumeroDiasEvaluar.Value; u++)
+                                    {
+                                        int totalLabo = 0;
+                                        int totalSession = 0;
+                                        int subtotalSession = 0;
+                                        int subtotalLabo = 0;
+                                        int rest = 0;
+                                        int xy = 0;
+
+
+                                        int totalSuste2 = 0;
+                                        float totals = float.Parse(totalSuste.ToString()) / float.Parse(parametrosInicialesDTO.NumeroDiasEvaluar.Value.ToString());
+                                        totalSuste2 = (int)Math.Round(totals, MidpointRounding.AwayFromZero);
+
+                                        totalSession = (int)Math.Round(Double.Parse(totalSuste2.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
+                                        totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
+
+                                        if (totalLabo == 0)
+                                        {
+                                            totalLabo += 1;
+                                        }
+
+                                        if (totalSession == 0)
+                                        {
+                                            totalSession += 1;
+                                        }
+
+                                        subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                        subtotalSession = (totalSession / totalLabo);
+
+                                        if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
+                                        {
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
+                                            {
+                                                subtotalLabo += 1;
+                                            }
+                                        }
+                                        else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                        {
+                                            subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                            xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                            rest = totalSuste2 - xy;
+
+                                            while (rest > 0)
+                                            {
+                                                subtotalLabo += 1;
+                                                rest -= totalSuste;
+                                            }
+                                        }
+                                        else
+                                        {                                                                       //menor que el numero de sessiones
+                                            if (subtotalSession == 1)
+                                            {
+                                                xy = subtotalSession * subtotalLabo;
+                                                rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                if (rest > 0)
+                                                {
+                                                    subtotalSession += 1;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                xy = subtotalSession * subtotalLabo;
+                                                rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                if (rest > 0)
+                                                {
+                                                    subtotalSession += 1;
+                                                }
+                                            }
+                                        }
+
+                                        DatosSedes datosSedes = new DatosSedes
+                                        {
+                                            AsignacionId = Id,
+                                            NumeroSession = subtotalSession,
+                                            NumeroLaboratorio = subtotalLabo,
+                                            Code = item.Code,
+                                            Description = item.Description,
+                                            Agrupados = item.Agrupados,
+                                            NumeroTotalSustentantes = totalSuste,
+                                            coordenada_lat = item.coordenada_lat,
+                                            coordenada_lng = item.coordenada_lng
+                                        };
+
+                                        insertMasiveDataSedes(datosSedes);
+
+                                        List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
+
+
+                                        List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), totalSuste2, 0, parametrosInicialesDTO.NumeroEquipos.Value);
+                                        tomardatos.Sort();
+                                        int datos = 0;
+                                        int contadordias2 = contadorDias;
+
+                                        for (int i = 1; i <= subtotalLabo; i++)
+                                        {
+                                            contadorDias = 0;
+                                            for (int j = 1; j <= subtotalSession; j++)
+                                            {
+
+                                                List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                                foreach (var idsustentante in listatem)
+                                                {
+                                                    datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                    {
+                                                        SedeId = datosSedes.Id,
+                                                        SessionId = horariossessiones[contadorDias].sesion,
+                                                        FechaEval = horariossessiones[contadorDias].fecha,
+                                                        Hora = horariossessiones[contadorDias].hora,
+                                                        Dia = u.ToString(),
+                                                        LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                        SustentanteId = idsustentante.Id.Value
+                                                    });
+                                                    listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                                }
+                                                contadorDias++;
+                                                datos++;
+                                            }
+                                        }
+                                        contadorDias = contadordias2;
+                                        insertMasiveData(datosSedesAsignacions.ToList());
+                                        contadorDias += (parametrosInicialesDTO.NumerosSesiones.Value);
                                     }
                                 }
-
-                                insertMasiveData(datosSedesAsignacions.ToList());
-                                //await db.SaveChangesAsync();
-
                             }
-
                         }
 
                         bool status = await EnvioCorreos.SendAsync(userId, "Se creo con Exito las Sedes");
@@ -1345,136 +1907,257 @@ namespace Ineval.Controllers
                                 }
 
                                 int totalSuste = 0;
-                                int totalLabo = 0;
-                                int totalSession = 0;
-                                int subtotalSession = 0;
-                                int subtotalLabo = 0;
-                                int rest = 0;
-                                int xy = 0;
                                 totalSuste = datosTemporalesDTO.Where(x => agrupados.Contains(x.id_parroquia)).Count();
-                                totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
-                                totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
-
-                                if (totalLabo == 0)
+                                List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.id_parroquia)).ToList();
+                                if (totalSuste <= (parametrosInicialesDTO.NumerosSesiones.Value * parametrosInicialesDTO.NumeroEquipos.Value))
                                 {
-                                    totalLabo += 1;
-                                }
+                                    int totalLabo = 0;
+                                    int totalSession = 0;
+                                    int subtotalSession = 0;
+                                    int subtotalLabo = 0;
+                                    int rest = 0;
+                                    int xy = 0;
+                                    totalSuste = datosTemporalesDTO.Where(x => agrupados.Contains(x.id_parroquia)).Count();
+                                    totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
+                                    totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
 
-                                if (totalSession == 0)
-                                {
-                                    totalSession += 1;
-                                }
-
-                                subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
-                                subtotalSession = (totalSession / totalLabo);
-
-                                if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
-                                {
-                                    xy = subtotalSession * subtotalLabo;
-                                    rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                    if (rest > 0)
+                                    if (totalLabo == 0)
                                     {
-                                        subtotalLabo += 1;
+                                        totalLabo += 1;
                                     }
-                                }
-                                else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
-                                {
-                                    subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
 
-                                    xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
-
-                                    rest = totalSuste - xy;
-
-                                    while (rest > 0)
+                                    if (totalSession == 0)
                                     {
-                                        subtotalLabo += 1;
-                                        rest -= totalSuste;
+                                        totalSession += 1;
                                     }
-                                }
-                                else
-                                {                                                                       //menor que el numero de sessiones
-                                    if (subtotalSession == 1)
+
+                                    subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                    subtotalSession = (totalSession / totalLabo);
+
+                                    if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
                                     {
                                         xy = subtotalSession * subtotalLabo;
                                         rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
                                         if (rest > 0)
                                         {
-                                            subtotalSession += 1;
+                                            subtotalLabo += 1;
+                                        }
+                                    }
+                                    else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                    {
+                                        subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                        xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                        rest = totalSuste - xy;
+
+                                        while (rest > 0)
+                                        {
+                                            subtotalLabo += 1;
+                                            rest -= totalSuste;
                                         }
                                     }
                                     else
-                                    {
-                                        xy = subtotalSession * subtotalLabo;
-                                        rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                        if (rest > 0)
+                                    {                                                                       //menor que el numero de sessiones
+                                        if (subtotalSession == 1)
                                         {
-                                            subtotalSession += 1;
-                                        }
-                                    }
-                                }
-
-                                DatosSedes datosSedes = new DatosSedes
-                                {
-                                    AsignacionId = Id,
-                                    NumeroSession = subtotalSession,
-                                    NumeroLaboratorio = subtotalLabo,
-                                    Code = item.Code,
-                                    Description = item.Description,
-                                    Agrupados = item.Agrupados,
-                                    NumeroTotalSustentantes = totalSuste,
-                                    coordenada_lat = item.coordenada_lat,
-                                    coordenada_lng = item.coordenada_lng
-                                };
-
-                                try
-                                {
-                                    using (DatosSedesService datosSedesService = new DatosSedesService())
-                                    {
-                                        var result = await datosSedesService.SaveAsync(datosSedes);
-                                        if (result.Succeeded)
-                                        {
-
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-
-                                    throw;
-                                }
-                                //db.DatosSedes.Add(datosSedes);
-                                //await db.SaveChangesAsync();
-
-                                List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
-                                List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.id_parroquia)).ToList();
-
-                                List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
-                                tomardatos.Sort();
-                                int datos = 0;
-
-                                for (int i = 1; i <= subtotalLabo; i++)
-                                {
-                                    for (int j = 1; j <= subtotalSession; j++)
-                                    {
-
-                                        List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
-                                        foreach (var idsustentante in listatem)
-                                        {
-                                            datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
                                             {
-                                                SedeId = datosSedes.Id,
-                                                SessionId = "S" + j,
-                                                LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
-                                                SustentanteId = idsustentante.Id.Value
-                                            });
-                                            listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                                subtotalSession += 1;
+                                            }
                                         }
-                                        datos++;
+                                        else
+                                        {
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
+                                            {
+                                                subtotalSession += 1;
+                                            }
+                                        }
+                                    }
+
+                                    DatosSedes datosSedes = new DatosSedes
+                                    {
+                                        AsignacionId = Id,
+                                        NumeroSession = subtotalSession,
+                                        NumeroLaboratorio = subtotalLabo,
+                                        Code = item.Code,
+                                        Description = item.Description,
+                                        Agrupados = item.Agrupados,
+                                        NumeroTotalSustentantes = totalSuste,
+                                        coordenada_lat = item.coordenada_lat,
+                                        coordenada_lng = item.coordenada_lng
+                                    };
+
+                                    insertMasiveDataSedes(datosSedes);
+
+
+                                    List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();                                    
+
+                                    List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
+                                    tomardatos.Sort();
+                                    int datos = 0;
+
+                                    for (int i = 1; i <= subtotalLabo; i++)
+                                    {
+                                        for (int j = 1; j <= subtotalSession; j++)
+                                        {
+
+                                            List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                            foreach (var idsustentante in listatem)
+                                            {
+                                                datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                {
+                                                    SedeId = datosSedes.Id,
+                                                    SessionId = horariossessiones[j - 1].sesion,
+                                                    FechaEval = horariossessiones[j - 1].fecha,
+                                                    Hora = horariossessiones[j - 1].hora,
+                                                    Dia = "1",
+                                                    LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                    SustentanteId = idsustentante.Id.Value
+                                                });
+                                                listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                            }
+                                            datos++;
+                                        }
+                                    }
+
+                                    insertMasiveData(datosSedesAsignacions.ToList());
+                                }
+                                else
+                                {
+                                    int contadorDias = 0;
+                                    for (int u = 1; u <= parametrosInicialesDTO.NumeroDiasEvaluar.Value; u++)
+                                    {
+                                        int totalLabo = 0;
+                                        int totalSession = 0;
+                                        int subtotalSession = 0;
+                                        int subtotalLabo = 0;
+                                        int rest = 0;
+                                        int xy = 0;
+
+
+                                        int totalSuste2 = 0;
+                                        float totals = float.Parse(totalSuste.ToString()) / float.Parse(parametrosInicialesDTO.NumeroDiasEvaluar.Value.ToString());
+                                        totalSuste2 = (int)Math.Round(totals, MidpointRounding.AwayFromZero);
+
+                                        totalSession = (int)Math.Round(Double.Parse(totalSuste2.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
+                                        totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
+
+                                        if (totalLabo == 0)
+                                        {
+                                            totalLabo += 1;
+                                        }
+
+                                        if (totalSession == 0)
+                                        {
+                                            totalSession += 1;
+                                        }
+
+                                        subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                        subtotalSession = (totalSession / totalLabo);
+
+                                        if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
+                                        {
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
+                                            {
+                                                subtotalLabo += 1;
+                                            }
+                                        }
+                                        else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                        {
+                                            subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                            xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                            rest = totalSuste2 - xy;
+
+                                            while (rest > 0)
+                                            {
+                                                subtotalLabo += 1;
+                                                rest -= totalSuste;
+                                            }
+                                        }
+                                        else
+                                        {                                                                       //menor que el numero de sessiones
+                                            if (subtotalSession == 1)
+                                            {
+                                                xy = subtotalSession * subtotalLabo;
+                                                rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                if (rest > 0)
+                                                {
+                                                    subtotalSession += 1;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                xy = subtotalSession * subtotalLabo;
+                                                rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                if (rest > 0)
+                                                {
+                                                    subtotalSession += 1;
+                                                }
+                                            }
+                                        }
+
+                                        DatosSedes datosSedes = new DatosSedes
+                                        {
+                                            AsignacionId = Id,
+                                            NumeroSession = subtotalSession,
+                                            NumeroLaboratorio = subtotalLabo,
+                                            Code = item.Code,
+                                            Description = item.Description,
+                                            Agrupados = item.Agrupados,
+                                            NumeroTotalSustentantes = totalSuste,
+                                            coordenada_lat = item.coordenada_lat,
+                                            coordenada_lng = item.coordenada_lng
+                                        };
+
+                                        insertMasiveDataSedes(datosSedes);
+
+
+                                        List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();                                        
+
+                                        List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
+                                        tomardatos.Sort();
+                                        int datos = 0;
+                                        int contadordias2 = contadorDias;
+                                        for (int i = 1; i <= subtotalLabo; i++)
+                                        {
+                                            contadorDias = 0;
+                                            for (int j = 1; j <= subtotalSession; j++)
+                                            {
+
+                                                List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                                foreach (var idsustentante in listatem)
+                                                {
+                                                    datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                    {
+                                                        SedeId = datosSedes.Id,
+                                                        SessionId = horariossessiones[contadorDias].sesion,
+                                                        FechaEval = horariossessiones[contadorDias].fecha,
+                                                        Hora = horariossessiones[contadorDias].hora,
+                                                        Dia = u.ToString(),
+                                                        LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                        SustentanteId = idsustentante.Id.Value
+                                                    });
+                                                    listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                                }
+                                                contadorDias++;
+                                                datos++;
+                                            }
+                                        }
+
+                                        insertMasiveData(datosSedesAsignacions.ToList());
+                                        contadorDias += (parametrosInicialesDTO.NumerosSesiones.Value);
                                     }
                                 }
 
-                                insertMasiveData(datosSedesAsignacions.ToList());
-                                //await db.SaveChangesAsync();
 
                             }
 
@@ -1620,136 +2303,260 @@ namespace Ineval.Controllers
                                 }
 
                                 int totalSuste = 0;
-                                int totalLabo = 0;
-                                int totalSession = 0;
-                                int subtotalSession = 0;
-                                int subtotalLabo = 0;
-                                int rest = 0;
-                                int xy = 0;
                                 totalSuste = datosTemporalesDTO.Where(x => agrupados.Contains(x.id_parroquia)).Count();
-                                totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
-                                totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
-
-                                if (totalLabo == 0)
+                                List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.id_parroquia)).ToList();
+                                if (totalSuste <= (parametrosInicialesDTO.NumerosSesiones.Value * parametrosInicialesDTO.NumeroEquipos.Value))
                                 {
-                                    totalLabo += 1;
-                                }
 
-                                if (totalSession == 0)
-                                {
-                                    totalSession += 1;
-                                }
+                                    int totalLabo = 0;
+                                    int totalSession = 0;
+                                    int subtotalSession = 0;
+                                    int subtotalLabo = 0;
+                                    int rest = 0;
+                                    int xy = 0;
+                                    totalSuste = datosTemporalesDTO.Where(x => agrupados.Contains(x.id_parroquia)).Count();
+                                    totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
+                                    totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
 
-                                subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
-                                subtotalSession = (totalSession / totalLabo);
-
-                                if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
-                                {
-                                    xy = subtotalSession * subtotalLabo;
-                                    rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                    if (rest > 0)
+                                    if (totalLabo == 0)
                                     {
-                                        subtotalLabo += 1;
+                                        totalLabo += 1;
                                     }
-                                }
-                                else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
-                                {
-                                    subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
 
-                                    xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
-
-                                    rest = totalSuste - xy;
-
-                                    while (rest > 0)
+                                    if (totalSession == 0)
                                     {
-                                        subtotalLabo += 1;
-                                        rest -= totalSuste;
+                                        totalSession += 1;
                                     }
-                                }
-                                else
-                                {                                                                       //menor que el numero de sessiones
-                                    if (subtotalSession == 1)
+
+                                    subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                    subtotalSession = (totalSession / totalLabo);
+
+                                    if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
                                     {
                                         xy = subtotalSession * subtotalLabo;
                                         rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
                                         if (rest > 0)
                                         {
-                                            subtotalSession += 1;
+                                            subtotalLabo += 1;
+                                        }
+                                    }
+                                    else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                    {
+                                        subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                        xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                        rest = totalSuste - xy;
+
+                                        while (rest > 0)
+                                        {
+                                            subtotalLabo += 1;
+                                            rest -= totalSuste;
                                         }
                                     }
                                     else
-                                    {
-                                        xy = subtotalSession * subtotalLabo;
-                                        rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
-                                        if (rest > 0)
+                                    {                                                                       //menor que el numero de sessiones
+                                        if (subtotalSession == 1)
                                         {
-                                            subtotalSession += 1;
-                                        }
-                                    }
-                                }
-
-                                DatosSedes datosSedes = new DatosSedes
-                                {
-                                    AsignacionId = Id,
-                                    NumeroSession = subtotalSession,
-                                    NumeroLaboratorio = subtotalLabo,
-                                    Code = item.Code,
-                                    Description = item.Description,
-                                    Agrupados = item.Agrupados,
-                                    NumeroTotalSustentantes = totalSuste,
-                                    coordenada_lat = item.coordenada_lat,
-                                    coordenada_lng = item.coordenada_lng
-                                };
-
-                                try
-                                {
-                                    using (DatosSedesService datosSedesService = new DatosSedesService())
-                                    {
-                                        var result = await datosSedesService.SaveAsync(datosSedes);
-                                        if (result.Succeeded)
-                                        {
-
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-
-                                    throw;
-                                }
-                                //db.DatosSedes.Add(datosSedes);
-                                //await db.SaveChangesAsync();
-
-                                List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
-                                List<DatosTemporalesViewModel> listanueva = datosTemporalesDTO.Where(x => agrupados.Contains(x.id_parroquia)).ToList();
-
-                                List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
-                                tomardatos.Sort();
-                                int datos = 0;
-
-                                for (int i = 1; i <= subtotalLabo; i++)
-                                {
-                                    for (int j = 1; j <= subtotalSession; j++)
-                                    {
-
-                                        List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
-                                        foreach (var idsustentante in listatem)
-                                        {
-                                            datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
                                             {
-                                                SedeId = datosSedes.Id,
-                                                SessionId = "S" + j,
-                                                LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
-                                                SustentanteId = idsustentante.Id.Value
-                                            });
-                                            listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                                subtotalSession += 1;
+                                            }
                                         }
-                                        datos++;
+                                        else
+                                        {
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
+                                            {
+                                                subtotalSession += 1;
+                                            }
+                                        }
+                                    }
+
+                                    DatosSedes datosSedes = new DatosSedes
+                                    {
+                                        AsignacionId = Id,
+                                        NumeroSession = subtotalSession,
+                                        NumeroLaboratorio = subtotalLabo,
+                                        Code = item.Code,
+                                        Description = item.Description,
+                                        Agrupados = item.Agrupados,
+                                        NumeroTotalSustentantes = totalSuste,
+                                        coordenada_lat = item.coordenada_lat,
+                                        coordenada_lng = item.coordenada_lng
+                                    };
+
+                                    insertMasiveDataSedes(datosSedes);
+
+                                    List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
+
+
+                                    List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
+                                    tomardatos.Sort();
+                                    int datos = 0;
+
+                                    for (int i = 1; i <= subtotalLabo; i++)
+                                    {
+                                        for (int j = 1; j <= subtotalSession; j++)
+                                        {
+
+                                            List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                            foreach (var idsustentante in listatem)
+                                            {
+                                                datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                {
+                                                    SedeId = datosSedes.Id,
+                                                    SessionId = horariossessiones[j - 1].sesion,
+                                                    FechaEval = horariossessiones[j - 1].fecha,
+                                                    Hora = horariossessiones[j - 1].hora,
+                                                    Dia = "1",
+                                                    LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                    SustentanteId = idsustentante.Id.Value
+                                                });
+                                                listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                            }
+                                            datos++;
+                                        }
+                                    }
+
+                                    insertMasiveData(datosSedesAsignacions.ToList());
+
+                                }
+                                else
+                                {
+                                    int contadorDias = 0;
+
+                                    for (int u = 1; u <= parametrosInicialesDTO.NumeroDiasEvaluar.Value; u++)
+                                    {
+                                        int totalLabo = 0;
+                                        int totalSession = 0;
+                                        int subtotalSession = 0;
+                                        int subtotalLabo = 0;
+                                        int rest = 0;
+                                        int xy = 0;
+
+
+                                        int totalSuste2 = 0;
+                                        float totals = float.Parse(totalSuste.ToString()) / float.Parse(parametrosInicialesDTO.NumeroDiasEvaluar.Value.ToString());
+                                        totalSuste2 = (int)Math.Round(totals, MidpointRounding.AwayFromZero);
+
+                                        totalSession = (int)Math.Round(Double.Parse(totalSuste2.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
+                                        totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
+
+                                        if (totalLabo == 0)
+                                        {
+                                            totalLabo += 1;
+                                        }
+
+                                        if (totalSession == 0)
+                                        {
+                                            totalSession += 1;
+                                        }
+
+                                        subtotalLabo = totalLabo == 0 ? 1 : totalLabo;
+                                        subtotalSession = (totalSession / totalLabo);
+
+                                        if (subtotalSession == parametrosInicialesDTO.NumerosSesiones.Value) //igual al numero de sessiones
+                                        {
+                                            xy = subtotalSession * subtotalLabo;
+                                            rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                            if (rest > 0)
+                                            {
+                                                subtotalLabo += 1;
+                                            }
+                                        }
+                                        else if (subtotalSession > parametrosInicialesDTO.NumerosSesiones.Value) //mayor al numero de sessiones
+                                        {
+                                            subtotalSession = parametrosInicialesDTO.NumerosSesiones.Value;
+
+                                            xy = (subtotalSession * subtotalLabo) * parametrosInicialesDTO.NumeroEquipos.Value;
+
+                                            rest = totalSuste2 - xy;
+
+                                            while (rest > 0)
+                                            {
+                                                subtotalLabo += 1;
+                                                rest -= totalSuste;
+                                            }
+                                        }
+                                        else
+                                        {                                                                       //menor que el numero de sessiones
+                                            if (subtotalSession == 1)
+                                            {
+                                                xy = subtotalSession * subtotalLabo;
+                                                rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                if (rest > 0)
+                                                {
+                                                    subtotalSession += 1;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                xy = subtotalSession * subtotalLabo;
+                                                rest = totalSuste2 - (xy * parametrosInicialesDTO.NumeroEquipos.Value);
+                                                if (rest > 0)
+                                                {
+                                                    subtotalSession += 1;
+                                                }
+                                            }
+                                        }
+
+                                        DatosSedes datosSedes = new DatosSedes
+                                        {
+                                            AsignacionId = Id,
+                                            NumeroSession = subtotalSession,
+                                            NumeroLaboratorio = subtotalLabo,
+                                            Code = item.Code,
+                                            Description = item.Description,
+                                            Agrupados = item.Agrupados,
+                                            NumeroTotalSustentantes = totalSuste,
+                                            coordenada_lat = item.coordenada_lat,
+                                            coordenada_lng = item.coordenada_lng
+                                        };
+
+                                        insertMasiveDataSedes(datosSedes);
+
+                                        List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
+
+
+                                        List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), totalSuste2, 0, parametrosInicialesDTO.NumeroEquipos.Value);
+                                        tomardatos.Sort();
+                                        int datos = 0;
+                                        int contadordias2 = contadorDias;
+
+                                        for (int i = 1; i <= subtotalLabo; i++)
+                                        {
+                                            contadorDias = 0;
+                                            for (int j = 1; j <= subtotalSession; j++)
+                                            {
+
+                                                List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
+                                                foreach (var idsustentante in listatem)
+                                                {
+                                                    datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                                    {
+                                                        SedeId = datosSedes.Id,
+                                                        SessionId = horariossessiones[contadorDias].sesion,
+                                                        FechaEval = horariossessiones[contadorDias].fecha,
+                                                        Hora = horariossessiones[contadorDias].hora,
+                                                        Dia = u.ToString(),
+                                                        LaboratorioId = datosSedes.Code + "_" + (i <= 9 ? ("0" + i.ToString()) : i.ToString()),
+                                                        SustentanteId = idsustentante.Id.Value
+                                                    });
+                                                    listanueva.RemoveAll(x => x.Id == idsustentante.Id);
+                                                }
+                                                contadorDias++;
+                                                datos++;
+                                            }
+                                        }
+                                        contadorDias = contadordias2;
+                                        insertMasiveData(datosSedesAsignacions.ToList());
+                                        contadorDias += (parametrosInicialesDTO.NumerosSesiones.Value);
                                     }
                                 }
-
-                                insertMasiveData(datosSedesAsignacions.ToList());
-                                // await db.SaveChangesAsync();
 
                             }
                         }
@@ -1864,7 +2671,10 @@ namespace Ineval.Controllers
             table.Columns.Add("FechaEliminacion", typeof(DateTime));
             table.Columns.Add("Estado", typeof(EstadoEnum));
             table.Columns.Add("DatosSedes_Id", typeof(Guid));
-            //table.Columns.Add("Dia", typeof(string));
+            table.Columns.Add("DatosTemporales_Id", typeof(Guid));
+            table.Columns.Add("Dia", typeof(string));
+            table.Columns.Add("FechaEval", typeof(string));
+            table.Columns.Add("Hora", typeof(string));
 
             foreach (var item in datosSedesAsignacion)
             {
@@ -1880,8 +2690,11 @@ namespace Ineval.Controllers
                   ,item.FechaModificacion
                   ,item.FechaEliminacion
                   ,item.Estado
-                  //item.Dia
-
+                  ,item.SedeId
+                  ,item.SustentanteId
+                  ,item.Dia
+                  ,item.FechaEval
+                  ,item.Hora
                 });
 
             }
@@ -2023,6 +2836,8 @@ namespace Ineval.Controllers
         //REPORTE ASIGNACION ID
         public class PorAsignacion
         {
+            public string FechaEval { get; set; }
+            public string Hora { get; set; }
             public string Code { get; set; }
             public string Description { get; set; }
             public string SessionId { get; set; }
@@ -2076,6 +2891,7 @@ namespace Ineval.Controllers
             public string conexion_internet { get; set; }
             public string camara_web { get; set; }
             public string microfono { get; set; }
+            public string Dia { get; set; }
         }
         public ActionResult ExportarPorAsignacionExcel(Guid? Id)
         {
@@ -2092,270 +2908,285 @@ namespace Ineval.Controllers
             ws1.Cell("A1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("A1").Style.Font.Bold = true;
 
-            ws1.Cell("B1").Value = "Sede Id";
+            ws1.Cell("B1").Value = "fecha_eval";
             ws1.Cell("B1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("B1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("B1").Style.Font.Bold = true;
 
-            ws1.Cell("C1").Value = "Sede Nombre";
+            ws1.Cell("C1").Value = "hora_eval";
             ws1.Cell("C1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("C1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("C1").Style.Font.Bold = true;
 
-            ws1.Cell("D1").Value = "Laboratorio";
+            ws1.Cell("D1").Value = "sesion_eval";
             ws1.Cell("D1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("D1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("D1").Style.Font.Bold = true;
 
-            ws1.Cell("E1").Value = "Sessión";
+            ws1.Cell("E1").Value = "cod_sede";
             ws1.Cell("E1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("E1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("E1").Style.Font.Bold = true;
 
-            ws1.Cell("F1").Value = "Usuario Id";
+            ws1.Cell("F1").Value = "cod_sede_nombre";
             ws1.Cell("F1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("F1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("F1").Style.Font.Bold = true;
 
-            ws1.Cell("G1").Value = "Tipo de Identificación";
+            ws1.Cell("G1").Value = "cod_lab_sede";
             ws1.Cell("G1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("G1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("G1").Style.Font.Bold = true;
 
-            ws1.Cell("H1").Value = "Identificación";
+            ws1.Cell("H1").Value = "usu_id";
             ws1.Cell("H1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("H1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("H1").Style.Font.Bold = true;
 
-            ws1.Cell("I1").Value = "Primer Nombre";
+            ws1.Cell("I1").Value = "tipo_identificacion";
             ws1.Cell("I1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("I1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("I1").Style.Font.Bold = true;
 
-            ws1.Cell("J1").Value = "Segundo Nombre";
+            ws1.Cell("J1").Value = "identificacion";
             ws1.Cell("J1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("J1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("J1").Style.Font.Bold = true;
 
-            ws1.Cell("K1").Value = "Primer Apellido";
+            ws1.Cell("K1").Value = "primer_nombre";
             ws1.Cell("K1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("K1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("K1").Style.Font.Bold = true;
 
-            ws1.Cell("L1").Value = "Segundo Apellido";
+            ws1.Cell("L1").Value = "segundo_nombre";
             ws1.Cell("L1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("L1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("L1").Style.Font.Bold = true;
 
-            ws1.Cell("M1").Value = "Sexo";
+            ws1.Cell("M1").Value = "primer_apellido";
             ws1.Cell("M1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("M1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("M1").Style.Font.Bold = true;
 
-            ws1.Cell("N1").Value = "Grado";
+            ws1.Cell("N1").Value = "segundo_apellido";
             ws1.Cell("N1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("N1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("N1").Style.Font.Bold = true;
 
-            ws1.Cell("O1").Value = "Paralelo";
+            ws1.Cell("O1").Value = "sexo";
             ws1.Cell("O1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("O1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("O1").Style.Font.Bold = true;
 
-            ws1.Cell("P1").Value = "Dia Nacimiento";
+            ws1.Cell("P1").Value = "grado";
             ws1.Cell("P1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("P1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("P1").Style.Font.Bold = true;
 
-            ws1.Cell("Q1").Value = "Mes Nacimiento";
+            ws1.Cell("Q1").Value = "paralelo";
             ws1.Cell("Q1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("Q1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("Q1").Style.Font.Bold = true;
 
-            ws1.Cell("R1").Value = "Año Nacimiento";
+            ws1.Cell("R1").Value = "dia_nacimiento";
             ws1.Cell("R1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("R1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("R1").Style.Font.Bold = true;
 
-            ws1.Cell("S1").Value = "Pais Nacimiento";
+            ws1.Cell("S1").Value = "mes_nacimiento";
             ws1.Cell("S1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("S1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("S1").Style.Font.Bold = true;
 
-            ws1.Cell("T1").Value = "Provincia Nacimiento";
+            ws1.Cell("T1").Value = "anio_nacimiento";
             ws1.Cell("T1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("T1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("T1").Style.Font.Bold = true;
 
-            ws1.Cell("U1").Value = "Discapacidad";
+            ws1.Cell("U1").Value = "pais_nacimiento";
             ws1.Cell("U1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("U1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("U1").Style.Font.Bold = true;
 
-            ws1.Cell("V1").Value = "Tipo Discapacidad";
+            ws1.Cell("V1").Value = "provincia_nacimiento";
             ws1.Cell("V1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("V1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("V1").Style.Font.Bold = true;
 
-            ws1.Cell("W1").Value = "Porcentaje de Discapacidad";
+            ws1.Cell("W1").Value = "discapacidad";
             ws1.Cell("W1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("W1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("W1").Style.Font.Bold = true;
 
-            ws1.Cell("X1").Value = "Correo Sustentante";
+            ws1.Cell("X1").Value = "tipo_discapacidad";
             ws1.Cell("X1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("X1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("X1").Style.Font.Bold = true;
 
-            ws1.Cell("Y1").Value = "Teléfono Sustentante";
+            ws1.Cell("Y1").Value = "porcentaje_discapacidad";
             ws1.Cell("Y1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("Y1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("Y1").Style.Font.Bold = true;
 
-            ws1.Cell("Z1").Value = "Teléfono Sustentante Secundario";
+            ws1.Cell("Z1").Value = "correo_sustentante";
             ws1.Cell("Z1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("Z1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("Z1").Style.Font.Bold = true;
 
-            ws1.Cell("AA1").Value = "Celular Sustentante";
+            ws1.Cell("AA1").Value = "telefono_sustentante";
             ws1.Cell("AA1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AA1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AA1").Style.Font.Bold = true;
 
-            ws1.Cell("AB1").Value = "Jornada";
+            ws1.Cell("AB1").Value = "telefono_sustentante_secundario";
             ws1.Cell("AB1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AB1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AB1").Style.Font.Bold = true;
 
-            ws1.Cell("AC1").Value = "Saber";
+            ws1.Cell("AC1").Value = "celular_sustentante";
             ws1.Cell("AC1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AC1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AC1").Style.Font.Bold = true;
 
-            ws1.Cell("AD1").Value = "Amie";
+            ws1.Cell("AD1").Value = "jornada_sustentante";
             ws1.Cell("AD1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AD1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AD1").Style.Font.Bold = true;
 
-            ws1.Cell("AE1").Value = "Nombre Institución";
+            ws1.Cell("AE1").Value = "saber";
             ws1.Cell("AE1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AE1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AE1").Style.Font.Bold = true;
 
-            ws1.Cell("AF1").Value = "Provincia Id";
+            ws1.Cell("AF1").Value = "Amie";
             ws1.Cell("AF1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AF1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AF1").Style.Font.Bold = true;
 
-            ws1.Cell("AG1").Value = "Provincia";
+            ws1.Cell("AG1").Value = "nombre_institucion";
             ws1.Cell("AG1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AG1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AG1").Style.Font.Bold = true;
 
-            ws1.Cell("AH1").Value = "Cantón Id";
+            ws1.Cell("AH1").Value = "id_provincia";
             ws1.Cell("AH1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AH1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AH1").Style.Font.Bold = true;
 
-            ws1.Cell("AI1").Value = "Cantón";
+            ws1.Cell("AI1").Value = "provincia";
             ws1.Cell("AI1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AI1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AI1").Style.Font.Bold = true;
 
-            ws1.Cell("AJ1").Value = "Parroquia Id";
+            ws1.Cell("AJ1").Value = "canton_id";
             ws1.Cell("AJ1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AJ1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AJ1").Style.Font.Bold = true;
 
-            ws1.Cell("AK1").Value = "Parroquia";
+            ws1.Cell("AK1").Value = "canton";
             ws1.Cell("AK1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AK1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AK1").Style.Font.Bold = true;
 
-            ws1.Cell("AL1").Value = "Cuircuito Id";
+            ws1.Cell("AL1").Value = "id_parroquia";
             ws1.Cell("AL1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AL1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AL1").Style.Font.Bold = true;
 
-            ws1.Cell("AM1").Value = "Circuito";
+            ws1.Cell("AM1").Value = "parroquia";
             ws1.Cell("AM1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AM1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AM1").Style.Font.Bold = true;
 
-            ws1.Cell("AN1").Value = "Distrito Id";
+            ws1.Cell("AN1").Value = "id_circuito";
             ws1.Cell("AN1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AN1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AN1").Style.Font.Bold = true;
 
-            ws1.Cell("AO1").Value = "Distrito";
+            ws1.Cell("AO1").Value = "circuito";
             ws1.Cell("AO1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AO1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AO1").Style.Font.Bold = true;
 
-            ws1.Cell("AP1").Value = "Zona Id";
+            ws1.Cell("AP1").Value = "id_distrito";
             ws1.Cell("AP1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AP1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AP1").Style.Font.Bold = true;
 
-            ws1.Cell("AQ1").Value = "Sostenimiento Institución";
+            ws1.Cell("AQ1").Value = "distrito";
             ws1.Cell("AQ1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AQ1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AQ1").Style.Font.Bold = true;
 
-            ws1.Cell("AR1").Value = "Régimen Institución";
+            ws1.Cell("AR1").Value = "id_zona";
             ws1.Cell("AR1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AR1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AR1").Style.Font.Bold = true;
 
-            ws1.Cell("AS1").Value = "Ciclo";
+            ws1.Cell("AS1").Value = "sostenimiento_institucion";
             ws1.Cell("AS1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AS1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AS1").Style.Font.Bold = true;
 
-            ws1.Cell("AT1").Value = "Población";
+            ws1.Cell("AT1").Value = "regimen_institucion";
             ws1.Cell("AT1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AT1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AT1").Style.Font.Bold = true;
 
-            ws1.Cell("AU1").Value = "Modalidad";
+            ws1.Cell("AU1").Value = "ciclo";
             ws1.Cell("AU1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AU1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AU1").Style.Font.Bold = true;
 
-            ws1.Cell("AV1").Value = "Coordenada X";
+            ws1.Cell("AV1").Value = "poblacion";
             ws1.Cell("AV1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AV1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AV1").Style.Font.Bold = true;
 
-            ws1.Cell("AW1").Value = "Coordenada Y";
+            ws1.Cell("AW1").Value = "modalidad";
             ws1.Cell("AW1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AW1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AW1").Style.Font.Bold = true;
 
-            ws1.Cell("AX1").Value = "Computador";
+            ws1.Cell("AX1").Value = "coordenada_x";
             ws1.Cell("AX1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AX1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AX1").Style.Font.Bold = true;
 
-            ws1.Cell("AY1").Value = "Internet";
+            ws1.Cell("AY1").Value = "coordenada_y";
             ws1.Cell("AY1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AY1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AY1").Style.Font.Bold = true;
 
-            ws1.Cell("AZ1").Value = "Conexión Internet";
+            ws1.Cell("AZ1").Value = "computador";
             ws1.Cell("AZ1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("AZ1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("AZ1").Style.Font.Bold = true;
 
-            ws1.Cell("BA1").Value = "Cámara Web";
+            ws1.Cell("BA1").Value = "internet";
             ws1.Cell("BA1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("BA1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("BA1").Style.Font.Bold = true;
 
-            ws1.Cell("BB1").Value = "Micrófono";
+            ws1.Cell("BB1").Value = "conexion_internet";
             ws1.Cell("BB1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("BB1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
             ws1.Cell("BB1").Style.Font.Bold = true;
+
+            ws1.Cell("BC1").Value = "camara_web";
+            ws1.Cell("BC1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
+            ws1.Cell("BC1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
+            ws1.Cell("BC1").Style.Font.Bold = true;
+
+            ws1.Cell("BD1").Value = "microfono";
+            ws1.Cell("BD1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
+            ws1.Cell("BD1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
+            ws1.Cell("BD1").Style.Font.Bold = true;
+
+            ws1.Cell("BE1").Value = "#número_dia";
+            ws1.Cell("BE1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
+            ws1.Cell("BE1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
+            ws1.Cell("BE1").Style.Font.Bold = true;
 
             var cont = 0;
             var cont1 = 2;
@@ -2364,59 +3195,62 @@ namespace Ineval.Controllers
             {
                 cont++;
                 ws1.Cell(cont1, 1).Value = cont;
-                ws1.Cell(cont1, 2).Value = "'" + item.Code;
-                ws1.Cell(cont1, 3).Value = "'" + item.Description;
-                ws1.Cell(cont1, 4).Value = item.LaboratorioId;
-                ws1.Cell(cont1, 5).Value = item.SessionId;
-                ws1.Cell(cont1, 6).Value = item.usu_id;
-                ws1.Cell(cont1, 7).Value = item.tipo_identificacion;
-                ws1.Cell(cont1, 8).Value = "'" + item.identificacion;
-                ws1.Cell(cont1, 9).Value = item.primer_nombre;
-                ws1.Cell(cont1, 10).Value = item.segundo_nombre;
-                ws1.Cell(cont1, 11).Value = item.primer_apellido;
-                ws1.Cell(cont1, 12).Value = item.segundo_apellido;
-                ws1.Cell(cont1, 13).Value = item.sexo;
-                ws1.Cell(cont1, 14).Value = item.grado;
-                ws1.Cell(cont1, 15).Value = item.paralelo;
-                ws1.Cell(cont1, 16).Value = item.dia_nacimiento;
-                ws1.Cell(cont1, 17).Value = item.mes_nacimiento;
-                ws1.Cell(cont1, 18).Value = item.anio_nacimiento;
-                ws1.Cell(cont1, 19).Value = item.pais_nacimiento;
-                ws1.Cell(cont1, 20).Value = item.provincia_nacimiento;
-                ws1.Cell(cont1, 21).Value = item.discapacidad;
-                ws1.Cell(cont1, 22).Value = item.tipo_discapacidad;
-                ws1.Cell(cont1, 23).Value = item.porcentaje_discapacidad;
-                ws1.Cell(cont1, 24).Value = item.correo_sustentante;
-                ws1.Cell(cont1, 25).Value = item.telefono_sustentante;
-                ws1.Cell(cont1, 26).Value = item.telefono_sustentante_secundario;
-                ws1.Cell(cont1, 27).Value = item.celular_sustentante;
-                ws1.Cell(cont1, 28).Value = item.jornada_sustentante;
-                ws1.Cell(cont1, 29).Value = item.saber;
-                ws1.Cell(cont1, 30).Value = item.amie;
-                ws1.Cell(cont1, 31).Value = item.nombre_institucion;
-                ws1.Cell(cont1, 32).Value = item.id_provincia;
-                ws1.Cell(cont1, 33).Value = item.provincia;
-                ws1.Cell(cont1, 34).Value = item.canton_id;
-                ws1.Cell(cont1, 35).Value = item.canton;
-                ws1.Cell(cont1, 36).Value = item.id_parroquia;
-                ws1.Cell(cont1, 37).Value = item.parroquia;
-                ws1.Cell(cont1, 38).Value = item.id_circuito;
-                ws1.Cell(cont1, 39).Value = item.circuito;
-                ws1.Cell(cont1, 40).Value = item.id_distrito;
-                ws1.Cell(cont1, 41).Value = item.distrito;
-                ws1.Cell(cont1, 42).Value = item.id_zona;
-                ws1.Cell(cont1, 43).Value = item.sostenimiento_institucion;
-                ws1.Cell(cont1, 44).Value = item.regimen_institucion;
-                ws1.Cell(cont1, 45).Value = item.ciclo;
-                ws1.Cell(cont1, 46).Value = item.poblacion;
-                ws1.Cell(cont1, 47).Value = item.modalidad;
-                ws1.Cell(cont1, 48).Value = item.coordenada_x;
-                ws1.Cell(cont1, 49).Value = item.coordenada_y;
-                ws1.Cell(cont1, 50).Value = item.computador;
-                ws1.Cell(cont1, 51).Value = item.internet;
-                ws1.Cell(cont1, 52).Value = item.conexion_internet;
-                ws1.Cell(cont1, 53).Value = item.camara_web;
-                ws1.Cell(cont1, 54).Value = item.microfono;
+                ws1.Cell(cont1, 2).Value = item.FechaEval;
+                ws1.Cell(cont1, 3).Value = item.Hora;
+                ws1.Cell(cont1, 4).Value = item.SessionId;
+                ws1.Cell(cont1, 5).Value = "'" + item.Code;
+                ws1.Cell(cont1, 6).Value = "'" + item.Description;
+                ws1.Cell(cont1, 7).Value = item.LaboratorioId;
+                ws1.Cell(cont1, 8).Value = item.usu_id;
+                ws1.Cell(cont1, 9).Value = item.tipo_identificacion;
+                ws1.Cell(cont1, 10).Value = "'" + item.identificacion;
+                ws1.Cell(cont1, 11).Value = item.primer_nombre;
+                ws1.Cell(cont1, 12).Value = item.segundo_nombre;
+                ws1.Cell(cont1, 13).Value = item.primer_apellido;
+                ws1.Cell(cont1, 14).Value = item.segundo_apellido;
+                ws1.Cell(cont1, 15).Value = item.sexo;
+                ws1.Cell(cont1, 16).Value = item.grado;
+                ws1.Cell(cont1, 17).Value = item.paralelo;
+                ws1.Cell(cont1, 18).Value = item.dia_nacimiento;
+                ws1.Cell(cont1, 19).Value = item.mes_nacimiento;
+                ws1.Cell(cont1, 20).Value = item.anio_nacimiento;
+                ws1.Cell(cont1, 21).Value = item.pais_nacimiento;
+                ws1.Cell(cont1, 22).Value = item.provincia_nacimiento;
+                ws1.Cell(cont1, 23).Value = item.discapacidad;
+                ws1.Cell(cont1, 24).Value = item.tipo_discapacidad;
+                ws1.Cell(cont1, 25).Value = item.porcentaje_discapacidad;
+                ws1.Cell(cont1, 26).Value = item.correo_sustentante;
+                ws1.Cell(cont1, 27).Value = item.telefono_sustentante;
+                ws1.Cell(cont1, 28).Value = item.telefono_sustentante_secundario;
+                ws1.Cell(cont1, 29).Value = item.celular_sustentante;
+                ws1.Cell(cont1, 30).Value = item.jornada_sustentante;
+                ws1.Cell(cont1, 31).Value = item.saber;
+                ws1.Cell(cont1, 32).Value = item.amie;
+                ws1.Cell(cont1, 33).Value = item.nombre_institucion;
+                ws1.Cell(cont1, 34).Value = item.id_provincia;
+                ws1.Cell(cont1, 35).Value = item.provincia;
+                ws1.Cell(cont1, 36).Value = item.canton_id;
+                ws1.Cell(cont1, 37).Value = item.canton;
+                ws1.Cell(cont1, 38).Value = item.id_parroquia;
+                ws1.Cell(cont1, 39).Value = item.parroquia;
+                ws1.Cell(cont1, 40).Value = item.id_circuito;
+                ws1.Cell(cont1, 41).Value = item.circuito;
+                ws1.Cell(cont1, 42).Value = item.id_distrito;
+                ws1.Cell(cont1, 43).Value = item.distrito;
+                ws1.Cell(cont1, 44).Value = item.id_zona;
+                ws1.Cell(cont1, 45).Value = item.sostenimiento_institucion;
+                ws1.Cell(cont1, 46).Value = item.regimen_institucion;
+                ws1.Cell(cont1, 47).Value = item.ciclo;
+                ws1.Cell(cont1, 48).Value = item.poblacion;
+                ws1.Cell(cont1, 49).Value = item.modalidad;
+                ws1.Cell(cont1, 50).Value = item.coordenada_x;
+                ws1.Cell(cont1, 51).Value = item.coordenada_y;
+                ws1.Cell(cont1, 52).Value = item.computador;
+                ws1.Cell(cont1, 53).Value = item.internet;
+                ws1.Cell(cont1, 54).Value = item.conexion_internet;
+                ws1.Cell(cont1, 55).Value = item.camara_web;
+                ws1.Cell(cont1, 56).Value = item.microfono;
+                ws1.Cell(cont1, 57).Value = item.Dia;
 
                 cont1++;
             }

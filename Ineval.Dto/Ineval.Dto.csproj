@@ -64,9 +64,11 @@
     <Compile Include="Dto\Procesos\DatosCantonLatLngViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosExcelCabeceraViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosExcelInstitucionesViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosExcelLaboratorioViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosExcelPersonalViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosFiltrosViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosInstitucionesViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosLaboratorioViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosParroquiaLatLngViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosPersonalTerritorioViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosProvinciaLatLngViewModel.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="Dto\Procesos\DatosSedesViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosSustentantesViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosTemporalesViewModel.cs" />
+    <Compile Include="Dto\Procesos\HorariosSession.cs" />
     <Compile Include="Dto\Procesos\NombreProcesoViewModel.cs" />
     <Compile Include="Dto\Procesos\ParametrosInicialesViewModel.cs" />
     <Compile Include="Dto\Security\UsuarioViewModel.cs" />

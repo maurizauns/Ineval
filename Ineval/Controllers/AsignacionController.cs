@@ -19,6 +19,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using static Ineval.Dto.ApiDriving;
 using static Ineval.Dto.ApiPosicionGeografica;
 
@@ -286,6 +287,12 @@ namespace Ineval.Controllers
                             HoraSession += TiempoReal;
                             HoraFin = HoraSession - TiempoReceso;
                         };
+                        
+                        List<HorariosSession> horariosSessions = new List<HorariosSession>();
+                        horariosSessions.Add(new HorariosSession { sesion = "S1", fecha = HOY.ToString("dd/MM/yyyy"), hora = "08:00" });
+                        horariosSessions.Add(new HorariosSession { sesion = "S2", fecha = HOY.ToString("dd/MM/yyyy"), hora = "11:00" });
+                        horariosSessions.Add(new HorariosSession { sesion = "S3", fecha = HOY.ToString("dd/MM/yyyy"), hora = "14:00" });
+                        horariosSessions.Add(new HorariosSession { sesion = "S4", fecha = HOY.ToString("dd/MM/yyyy"), hora = "17:00" });
 
                         ParametrosIniciales result = new ParametrosIniciales
                         {
@@ -308,7 +315,7 @@ namespace Ineval.Controllers
                             TiempoViaje = 60,
                             Tipo = 1,
                             FechaSesion = DateTime.Today,
-                            HorariosSesion = "[]"
+                            HorariosSesion = JsonConvert.SerializeObject(horariosSessions),
                         };
 
                         var saveresultparam = await entityparam.SaveAsync(result);

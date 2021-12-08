@@ -89,10 +89,12 @@
     <Compile Include="Entities\procesos\Asignacion.cs" />
     <Compile Include="Entities\procesos\DatosCantonLatLng.cs" />
     <Compile Include="Entities\procesos\DatosExcelInstituciones.cs" />
+    <Compile Include="Entities\procesos\DatosExcelLaboratorio.cs" />
     <Compile Include="Entities\procesos\DatosExcelPersonal.cs" />
     <Compile Include="Entities\procesos\DatosFiltros.cs" />
     <Compile Include="Entities\procesos\DatosInstituciones.cs" />
     <Compile Include="Entities\procesos\DatosExcelCabecera.cs" />
+    <Compile Include="Entities\procesos\DatosLaboratorio.cs" />
     <Compile Include="Entities\procesos\DatosParroquiaLatLng.cs" />
     <Compile Include="Entities\procesos\DatosPersonalTerritorio.cs" />
     <Compile Include="Entities\procesos\DatosProvinciaLatLng.cs" />
@@ -180,6 +182,14 @@
     <Compile Include="Migrations\202111190715358_191120210215.Designer.cs">
       <DependentUpon>202111190715358_191120210215.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112080013334_071220211913.cs" />
+    <Compile Include="Migrations\202112080013334_071220211913.Designer.cs">
+      <DependentUpon>202112080013334_071220211913.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112080030251_071220211930.cs" />
+    <Compile Include="Migrations\202112080030251_071220211930.Designer.cs">
+      <DependentUpon>202112080030251_071220211930.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -245,6 +255,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111190715358_191120210215.resx">
       <DependentUpon>202111190715358_191120210215.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112080013334_071220211913.resx">
+      <DependentUpon>202112080013334_071220211913.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112080030251_071220211930.resx">
+      <DependentUpon>202112080030251_071220211930.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

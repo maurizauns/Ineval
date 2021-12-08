@@ -9,6 +9,8 @@ namespace Ineval.Dto
         public string SessionId { get; set; }
         public string LaboratorioId { get; set; }
         public string Dia { get; set; }
+        public string FechaEval { get; set; }
+        public string Hora { get; set; }
         public Guid SustentanteId { get; set; }
         public virtual DatosTemporalesViewModel DatosTemporales { get; set; }
     }

@@ -61,6 +61,7 @@
     <Compile Include="Implementation\configuration\EmailParametrosService.cs" />
     <Compile Include="Implementation\procesos\DatosCantonLatLngService.cs" />
     <Compile Include="Implementation\procesos\DatosExcelInstitucionesService.cs" />
+    <Compile Include="Implementation\procesos\DatosExcelLaboratorioService.cs" />
     <Compile Include="Implementation\procesos\DatosExcelPersonalService.cs" />
     <Compile Include="Implementation\procesos\DatosFiltrosService.cs" />
     <Compile Include="Implementation\procesos\DatosInstitucionesService.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Implementation\MenuService.cs" />
     <Compile Include="Implementation\procesos\AsignacionService.cs" />
     <Compile Include="Implementation\procesos\DatosExcelCabeceraService.cs" />
+    <Compile Include="Implementation\procesos\DatosLaboratorioService.cs" />
     <Compile Include="Implementation\procesos\DatosParroquiaLatLngService.cs" />
     <Compile Include="Implementation\procesos\DatosPersonalTerritorioService.cs" />
     <Compile Include="Implementation\procesos\DatosProvinciaLatLngService.cs" />
