@@ -17,5 +17,14 @@ namespace Ineval.Extensions
 
             hubContext.Clients.All.AddProgress(progressMessage, percentage + "%");
         }
+
+        public static void SendProgressAsignando(string progressMessage, int progressCount, int totalItems)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ProgressHub>();
+
+            var percentage = (progressCount * 100) / totalItems;
+
+            hubContext.Clients.All.AddProgressAsignando(progressMessage, percentage + "%");
+        }
     }
 }
