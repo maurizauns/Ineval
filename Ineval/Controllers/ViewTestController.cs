@@ -419,7 +419,6 @@ namespace Ineval.Controllers
                             int rest = 0;
                             int xy = 0;
 
-
                             totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
 
                             totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
@@ -583,6 +582,7 @@ namespace Ineval.Controllers
                                     totalSession = (int)Math.Round(Double.Parse(totalSuste.ToString()) / Double.Parse(parametrosInicialesDTO.NumeroEquipos.Value.ToString()), 0);
 
                                     int diasporsessiones = parametrosInicialesDTO.NumeroDiasEvaluar.Value * parametrosInicialesDTO.NumerosSesiones.Value;
+
                                     totalLabo = (int)Math.Round(Double.Parse(totalSession.ToString()) / Double.Parse(parametrosInicialesDTO.NumerosSesiones.Value.ToString()), 0);
 
                                     if (totalLabo == 0)

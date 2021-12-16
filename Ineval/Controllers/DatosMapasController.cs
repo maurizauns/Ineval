@@ -22,24 +22,59 @@ namespace Ineval.Controllers
             public string Code { get; set; }
             public string Description { get; set; }
         }
+
+        public class DatosSedesSin
+        {
+            public Guid Id { get; set; }
+            public Guid? AsignacionId { get; set; }
+            public virtual Asignacion Asignacion { get; set; }
+            public string Code { get; set; }
+
+            public string Description { get; set; }
+            public int NumeroSession { get; set; }
+            public int NumeroLaboratorio { get; set; }
+            public string coordenada_lat { get; set; }
+            public string coordenada_lng { get; set; }
+            public string Agrupados { get; set; }
+            public int NumeroTotalSustentantes { get; set; }
+
+        }
+
         public async Task<ActionResult> GetFormulario(Guid? id)
         {
-            
+            List<DatosSedesSin> datosSedesSins = new List<DatosSedesSin>();
             List<DatosSedes> result = await db.DatosSedes.Where(x => x.AsignacionId == id).ToListAsync();
-            List<DatosSedesViewModel> resultDTO = Mapper.Map<List<DatosSedesViewModel>>(result);           
+            foreach (var item in result)
+            {
+                datosSedesSins.Add(new DatosSedesSin
+                {
+                    Id = item.Id,
+                    AsignacionId = item.AsignacionId,
+                    Asignacion = item.Asignacion,
+                    Code = item.Code,
+                    Description = item.Description,
+                    coordenada_lat = item.coordenada_lat,
+                    coordenada_lng = item.coordenada_lng,
+                    Agrupados = item.Agrupados,
+                    NumeroLaboratorio = item.NumeroLaboratorio,
+                    NumeroSession = item.NumeroSession,
+                    NumeroTotalSustentantes = item.NumeroTotalSustentantes
+                });
+            }
+            //List<DatosSedesViewModel> resultDTO = Mapper.Map<List<DatosSedesViewModel>>(result);           
 
             List<Datoscmb> datosProvincia = new List<Datoscmb>();
             List<Datoscmb> datosCanton = new List<Datoscmb>();
             List<Datoscmb> datosParroquia = new List<Datoscmb>();
 
-            var jsonResult = Json(new { result = resultDTO.OrderBy(o => o.Description) }, JsonRequestBehavior.AllowGet);
+            var jsonResult = Json(new { result = datosSedesSins.OrderBy(o => o.Description) }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
-            
+
         }
 
         public async Task<ActionResult> MapaByProvincia(Guid? Id, Guid? id_sede)
-         {
+        {
             List<DatosSedes> lista = new List<DatosSedes>();
             if (id_sede != null)
             {
