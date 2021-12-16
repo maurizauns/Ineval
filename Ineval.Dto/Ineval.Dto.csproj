@@ -66,13 +66,16 @@
     <Compile Include="Dto\Procesos\DatosExcelInstitucionesViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosExcelLaboratorioViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosExcelPersonalViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosFiltrosLaboratorioViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosFiltrosViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosInstitucionesViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosLaboratorioViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosParroquiaLatLngViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosPersonalTerritorioViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosProvinciaLatLngViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosSedesAsignacionLaboratorioViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosSedesAsignacionViewModel.cs" />
+    <Compile Include="Dto\Procesos\DatosSedesLaboratorioViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosSedesViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosSustentantesViewModel.cs" />
     <Compile Include="Dto\Procesos\DatosTemporalesViewModel.cs" />

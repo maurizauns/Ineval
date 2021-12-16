@@ -4,18 +4,24 @@
         let element = Array.from($('#frm').find('input'))
         element.map(el => {
             $('#' + el.id).prop("disabled", true)
-
         })
+
+        let elementcheckbox = Array.from($('#frm').find('checkbox'))
+        elementcheckbox.map(el => {
+            $('#' + el.id).prop("disabled", true)
+        })
+
         $('#btn-guardar').css("display", "none")
         $('#btn-cancelar').css("display", "none")
         $('#btn-editar').css("display", "inline-block")
     }
+
     $.ajax({
         type: "GET",
         contentType: "application/json; charset=utf-8",
         url: "/ParametrosIniciales/GetFormulario?id=" + vmh.CurrentId(),
         success: function (r) {
-            console.log(r.ParametrosIniciales)
+            //console.log(r.ParametrosIniciales)
             if (r.ParametrosIniciales.HoraInicio == "") {
                 $('#btn-nuevo').css("display", "inline-block")
                 $('#existe').css("display", "inline-block")
@@ -32,7 +38,7 @@
                     })
                 }
                 
-                console.log(r)
+               // console.log(r)
                 $('#txt-FechaSesion').val(moment(r.ParametrosIniciales.FechaSesion).format('YYYY-MM-DD'))
                 EnableInputs()
                 $('#btn-nuevo').css("display", "none")
@@ -61,6 +67,10 @@
                     $("#tipoNacional").attr("checked", true);
                     $("#tipoInterno").attr("checked", false);
                 }
+
+                $('#chk-aplicarnumlabo').attr("checked", r.ParametrosIniciales.SiNoNumeroLaboratorios);
+                $('#txt-NumeroLaboratorios').val(r.ParametrosIniciales.NumeroLaboratorios);
+
             }
 
 
@@ -73,6 +83,21 @@
             $('#' + el.id).prop("disabled", false)
 
         })
+
+        let elementcheckbox = Array.from($('#frm').find('checkbox'))
+        elementcheckbox.map(el => {
+            $('#' + el.id).prop("disabled", false)
+        })
+
+        let aplicalabo = $("#chk-aplicarnumlabo").is(":checked") ? true : false;
+        if (aplicalabo) {
+            $('#txt-NumeroLaboratorios').attr('disabled', false);
+        } else {
+            $('#txt-NumeroLaboratorios').val(0);
+            $('#txt-NumeroLaboratorios').attr('disabled', true);
+        }
+
+
         $('#btn-guardar').css("display", "inline-block")
         $('#btn-editar').css("display", "none")
         $('#btn-cancelar').css("display", "inline-block")
@@ -84,7 +109,7 @@
             contentType: "application/json; charset=utf-8",
             url: "/ParametrosIniciales/GetFormulario?id=" + vmh.CurrentId(),
             success: function (r) {
-                console.log(r.ParametrosIniciales)
+                //console.log(r.ParametrosIniciales)
                 if (r.ParametrosIniciales.HoraInicio == "") {
                     $('#btn-nuevo').css("display", "inline-block")
                     $('#existe').css("display", "inline-block")
@@ -116,6 +141,11 @@
                         $("#tipoNacional").attr("checked", true);
                         $("#tipoInterno").attr("checked", false);
                     }
+
+                    $('#chk-aplicarnumlabo').attr("checked", r.ParametrosIniciales.SiNoNumeroLaboratorios);
+                    $('#txt-NumeroLaboratorios').val(r.ParametrosIniciales.NumeroLaboratorios);
+
+
                 }
 
 
@@ -148,7 +178,7 @@
             lista.push(properties);
         }
         
-        console.log(lista)
+        //console.log(lista)
         if (fechaInicio > fechaFin) {
             error("La hora inicio no puede ser mayor a la hora fin")
 
@@ -174,8 +204,8 @@
                 data: JSON.stringify({
                     Id: $('#Id').val(),
                     AsignacionId: vmh.CurrentId(),
-                    SinoNumeroLaboratorios: true,
-                    NumeroLaboratorios: 1,
+                    SinoNumeroLaboratorios: $("#chk-aplicarnumlabo").is(":checked") ? true : false,
+                    NumeroLaboratorios: $('#txt-NumeroLaboratorios').val(),
                     SinoNumeroEquipos: true,
                     //FechaSesion: $("#txt-FechaSesion").val(),
                     NumeroEquipos: $("#NumeroSustentantes").val(),
@@ -266,7 +296,7 @@ function calculoSesion() {
         //var di = getTimeFromMins(diffInMinutes)
         //var di1 = moment(di, "HH:mm").diff(moment(horareceso, "HH:mm"), 'minutes');
         //var di1 = moment(di, 'HH:mm').add(moment(horareceso, "HH:mm"), 'minutes').minutes();
-        console.log(horeval)
+        //console.log(horeval)
         var divi = (diffInMinutes / horeval)
         $('#NumSesion').val(Math.round(divi))
 
@@ -402,5 +432,14 @@ function validarFechaSesion(el) {
     } else {
 
         generar(document.getElementById('txt-diaseval'))
+    }
+}
+
+function AplicarLaboratorio(estado) {
+    if (estado.checked) {
+        $('#txt-NumeroLaboratorios').attr('disabled', false);
+    } else {
+        $('#txt-NumeroLaboratorios').val(0);
+        $('#txt-NumeroLaboratorios').attr('disabled', true);
     }
 }

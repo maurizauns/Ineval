@@ -17,6 +17,8 @@ using System.Web.Mvc;
 using Ineval.Common.Helpers;
 using Newtonsoft.Json;
 using System.Web.Script.Serialization;
+using System.Threading;
+using Ineval.Extensions;
 
 namespace Ineval.Controllers
 {
@@ -60,6 +62,9 @@ namespace Ineval.Controllers
             => PartialView();
 
         public ActionResult SubirDatosLaboratorios()
+            => PartialView();
+
+        public ActionResult ViewProcesoAsignacionLabo()
             => PartialView();
 
         public async Task<ActionResult> GetFiltros(Guid? AsignacionId)
@@ -593,11 +598,7 @@ namespace Ineval.Controllers
                                     insertMasiveData(datosSedesAsignacions.ToList());
                                     contadorDias += (parametrosInicialesDTO.NumerosSesiones.Value);
                                 }
-                            }
-
-
-
-                            //await db.SaveChangesAsync();
+                            }                           
                         }
 
                         bool status = await EnvioCorreos.SendAsync(userId, "Se creo con exito las sedes");
@@ -1029,7 +1030,7 @@ namespace Ineval.Controllers
                                                             if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                             {
                                                                 int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                int Distancia = (int)Math.Round((coordenadas.routes.FirstOrDefault().distance / 100), 0);
+                                                                double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
                                                                 if (tiempo == 0 && Distancia == 0)
                                                                 {
 
@@ -1451,7 +1452,7 @@ namespace Ineval.Controllers
                                                                     if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                                     {
                                                                         int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                        int Distancia = (int)Math.Round((coordenadas.routes.FirstOrDefault().distance / 100), 0);
+                                                                        double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
                                                                         if (tiempo == 0 && Distancia == 0)
                                                                         {
 
@@ -1852,7 +1853,7 @@ namespace Ineval.Controllers
                                                             if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                             {
                                                                 int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                int Distancia = (int)Math.Round((coordenadas.routes.FirstOrDefault().distance / 100), 0);
+                                                                double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
                                                                 if (tiempo == 0 && Distancia == 0)
                                                                 {
 
@@ -1995,7 +1996,7 @@ namespace Ineval.Controllers
                                     insertMasiveDataSedes(datosSedes);
 
 
-                                    List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();                                    
+                                    List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
 
                                     List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
                                     tomardatos.Sort();
@@ -2121,7 +2122,7 @@ namespace Ineval.Controllers
                                         insertMasiveDataSedes(datosSedes);
 
 
-                                        List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();                                        
+                                        List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
 
                                         List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
                                         tomardatos.Sort();
@@ -2162,7 +2163,7 @@ namespace Ineval.Controllers
                             }
 
                         }
-                        else                                        //NIVEL INTERNO
+                        else    //NIVEL INTERNO
                         {
                             List<PorParroquiasLatLng> porParroquiasLatLngs = new List<PorParroquiasLatLng>();
                             foreach (var item in datosporParroquias)
@@ -2247,7 +2248,7 @@ namespace Ineval.Controllers
                                                                 if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                                 {
                                                                     int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                    int Distancia = (int)Math.Round((coordenadas.routes.FirstOrDefault().distance / 100), 0);
+                                                                    double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
                                                                     if (tiempo == 0 && Distancia == 0)
                                                                     {
 
@@ -2565,15 +2566,18 @@ namespace Ineval.Controllers
 
                         return Json(new { result = "", message = "Se creo con exito las sedes", status = "success" }, JsonRequestBehavior.AllowGet);
                     }
-                    else if (Parametro1.HasValue && Parametro1.Value == 5) //CIRCUITO
+                    //CIRCUITO
+                    else if (Parametro1.HasValue && Parametro1.Value == 5)
                     {
 
                     }
-                    else if (Parametro1.HasValue && Parametro1.Value == 6) //DISTRITO
+                    //DISTRITO
+                    else if (Parametro1.HasValue && Parametro1.Value == 6)
                     {
 
                     }
-                    else if (Parametro1.HasValue && Parametro1.Value == 7) //ZONA
+                    //ZONA
+                    else if (Parametro1.HasValue && Parametro1.Value == 7)
                     {
 
                     }
@@ -2799,8 +2803,8 @@ namespace Ineval.Controllers
                 ws1.Cell(cont1, 1).Value = cont;
                 ws1.Cell(cont1, 2).Value = item.FechaCreacion.ToString("dd/MM/yyyy");
                 ws1.Cell(cont1, 3).Value = item.Asignacion.NombreProceso.Description ?? null;
-                ws1.Cell(cont1, 4).Value = "'" + item.Code;
-                ws1.Cell(cont1, 5).Value = "'" + item.Description;
+                ws1.Cell(cont1, 4).SetValue(item.Code).SetDataType(XLDataType.Text);
+                ws1.Cell(cont1, 5).SetValue(item.Description).SetDataType(XLDataType.Text);
                 ws1.Cell(cont1, 6).Value = item.NumeroLaboratorio;
                 ws1.Cell(cont1, 7).Value = item.NumeroSession;
                 ws1.Cell(cont1, 8).Value = item.coordenada_lat;
@@ -2817,13 +2821,9 @@ namespace Ineval.Controllers
                         {
                             datos += itemagru + "\n" + " ";
                         }
-
                     }
-
                     ws1.Cell(cont1, 11).Value = datos;
                 }
-
-
                 cont1++;
             }
 
@@ -3186,7 +3186,7 @@ namespace Ineval.Controllers
             ws1.Cell("BE1").Value = "#número_dia";
             ws1.Cell("BE1").Style.Fill.BackgroundColor = XLColor.FromArgb(54, 127, 220);
             ws1.Cell("BE1").Style.Font.FontColor = XLColor.FromArgb(255, 255, 255);
-            ws1.Cell("BE1").Style.Font.Bold = true;
+            ws1.Cell("BE1").Style.Font.Bold = true;            
 
             var cont = 0;
             var cont1 = 2;
@@ -3197,13 +3197,13 @@ namespace Ineval.Controllers
                 ws1.Cell(cont1, 1).Value = cont;
                 ws1.Cell(cont1, 2).Value = item.FechaEval;
                 ws1.Cell(cont1, 3).Value = item.Hora;
-                ws1.Cell(cont1, 4).Value = item.SessionId;
-                ws1.Cell(cont1, 5).Value = "'" + item.Code;
-                ws1.Cell(cont1, 6).Value = "'" + item.Description;
+                ws1.Cell(cont1, 4).Value = item.SessionId;                
+                ws1.Cell(cont1, 5).SetValue(item.Code).SetDataType(XLDataType.Text);
+                ws1.Cell(cont1, 6).SetValue(item.Description).SetDataType(XLDataType.Text);
                 ws1.Cell(cont1, 7).Value = item.LaboratorioId;
                 ws1.Cell(cont1, 8).Value = item.usu_id;
                 ws1.Cell(cont1, 9).Value = item.tipo_identificacion;
-                ws1.Cell(cont1, 10).Value = "'" + item.identificacion;
+                ws1.Cell(cont1, 10).SetValue(item.identificacion).SetDataType(XLDataType.Text);
                 ws1.Cell(cont1, 11).Value = item.primer_nombre;
                 ws1.Cell(cont1, 12).Value = item.segundo_nombre;
                 ws1.Cell(cont1, 13).Value = item.primer_apellido;
@@ -3227,11 +3227,11 @@ namespace Ineval.Controllers
                 ws1.Cell(cont1, 31).Value = item.saber;
                 ws1.Cell(cont1, 32).Value = item.amie;
                 ws1.Cell(cont1, 33).Value = item.nombre_institucion;
-                ws1.Cell(cont1, 34).Value = item.id_provincia;
+                ws1.Cell(cont1, 34).SetValue(item.id_provincia).SetDataType(XLDataType.Text);
                 ws1.Cell(cont1, 35).Value = item.provincia;
-                ws1.Cell(cont1, 36).Value = item.canton_id;
+                ws1.Cell(cont1, 36).SetValue(item.canton_id).SetDataType(XLDataType.Text);
                 ws1.Cell(cont1, 37).Value = item.canton;
-                ws1.Cell(cont1, 38).Value = item.id_parroquia;
+                ws1.Cell(cont1, 38).SetValue(item.id_parroquia).SetDataType(XLDataType.Text);
                 ws1.Cell(cont1, 39).Value = item.parroquia;
                 ws1.Cell(cont1, 40).Value = item.id_circuito;
                 ws1.Cell(cont1, 41).Value = item.circuito;
@@ -3520,7 +3520,7 @@ namespace Ineval.Controllers
                 libro2.Cell(cont1, 1).Value = cont;
                 libro2.Cell(cont1, 2).Value = item.usu_id;
                 libro2.Cell(cont1, 3).Value = item.tipo_identificacion;
-                libro2.Cell(cont1, 4).Value = item.identificacion;
+                libro2.Cell(cont1, 4).SetValue(item.identificacion).SetDataType(XLDataType.Text);
                 libro2.Cell(cont1, 5).Value = item.primer_nombre;
                 libro2.Cell(cont1, 6).Value = item.segundo_nombre;
                 libro2.Cell(cont1, 7).Value = item.primer_apellido;
@@ -3544,11 +3544,11 @@ namespace Ineval.Controllers
                 libro2.Cell(cont1, 25).Value = item.saber;
                 libro2.Cell(cont1, 26).Value = item.amie;
                 libro2.Cell(cont1, 27).Value = item.nombre_institucion;
-                libro2.Cell(cont1, 28).Value = item.id_provincia;
+                libro2.Cell(cont1, 28).SetValue(item.id_provincia).SetDataType(XLDataType.Text);
                 libro2.Cell(cont1, 29).Value = item.provincia;
-                libro2.Cell(cont1, 30).Value = item.canton_id;
+                libro2.Cell(cont1, 30).SetValue(item.canton_id).SetDataType(XLDataType.Text);
                 libro2.Cell(cont1, 31).Value = item.canton;
-                libro2.Cell(cont1, 32).Value = item.id_parroquia;
+                libro2.Cell(cont1, 32).SetValue(item.id_parroquia).SetDataType(XLDataType.Text);
                 libro2.Cell(cont1, 33).Value = item.parroquia;
                 libro2.Cell(cont1, 34).Value = item.id_circuito;
                 libro2.Cell(cont1, 35).Value = item.circuito;
@@ -3578,5 +3578,18 @@ namespace Ineval.Controllers
             return new ExcelResult(wb, NombreDocumento + DateTime.Now.ToString("dd/MM/yyyy"));
         }
 
+        public JsonResult LongRunningProcess()
+        {
+            int itemsCount = 100;
+
+            for (int i = 0; i <= itemsCount; i++)
+            {
+                Thread.Sleep(500);
+
+                Functions.SendProgress("Process in progress...", i, itemsCount);
+            }
+
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
     }
 }

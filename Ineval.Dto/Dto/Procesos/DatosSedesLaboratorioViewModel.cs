@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ineval.Dto
 {
-    public class DatosSedesViewModel : GeneralConfigurationViewModel
+    public class DatosSedesLaboratorioViewModel : GeneralConfigurationViewModel
     {
         public Guid? AsignacionId { get; set; }
         public int NumeroSession { get; set; }
@@ -12,6 +12,6 @@ namespace Ineval.Dto
         public string coordenada_lng { get; set; }
         public string Agrupados { get; set; }
         public int NumeroTotalSustentantes { get; set; }
-        public ICollection<DatosSedesAsignacionViewModel> DatosSedesAsignacion { get; set; }
+        public ICollection<DatosSedesAsignacionLaboratorioViewModel> DatosSedesAsignacionLaboratorio { get; set; }
     }
 }

@@ -63,6 +63,7 @@
     <Compile Include="Implementation\procesos\DatosExcelInstitucionesService.cs" />
     <Compile Include="Implementation\procesos\DatosExcelLaboratorioService.cs" />
     <Compile Include="Implementation\procesos\DatosExcelPersonalService.cs" />
+    <Compile Include="Implementation\procesos\DatosFiltrosLaboratorioService.cs" />
     <Compile Include="Implementation\procesos\DatosFiltrosService.cs" />
     <Compile Include="Implementation\procesos\DatosInstitucionesService.cs" />
     <Compile Include="Implementation\configuration\NumberingService.cs" />
@@ -77,7 +78,9 @@
     <Compile Include="Implementation\procesos\DatosParroquiaLatLngService.cs" />
     <Compile Include="Implementation\procesos\DatosPersonalTerritorioService.cs" />
     <Compile Include="Implementation\procesos\DatosProvinciaLatLngService.cs" />
+    <Compile Include="Implementation\procesos\DatosSedesAsignacionLaboratorioService.cs" />
     <Compile Include="Implementation\procesos\DatosSedesAsignacionService.cs" />
+    <Compile Include="Implementation\procesos\DatosSedesLaboratorioService.cs" />
     <Compile Include="Implementation\procesos\DatosSedesService.cs" />
     <Compile Include="Implementation\procesos\DatosSustentantesService.cs" />
     <Compile Include="Implementation\procesos\DatosTemporalesService.cs" />

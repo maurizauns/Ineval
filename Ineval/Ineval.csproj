@@ -502,6 +502,7 @@
     <Compile Include="DirectoryList\ItemsData.cs" />
     <Compile Include="Extensions\CustomAuthorizeAttribute.cs" />
     <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Extensions\SignalRProgressBarSimpleExample.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1922,6 +1923,7 @@
     <Content Include="Scripts\Pages\Procesos\ParametrosIniciales.js" />
     <Content Include="Scripts\Pages\Procesos\PorArchivo.js" />
     <Content Include="Scripts\Pages\Procesos\ProcesoAsignacion.js" />
+    <Content Include="Scripts\Pages\Procesos\ProcesoAsignacionLaboratorio.js" />
     <Content Include="Scripts\plugins\parsley.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -2280,6 +2282,7 @@
     <Content Include="Views\ViewTest\SubirDatosInstituciones.cshtml" />
     <Content Include="Views\ViewTest\GenerarExcelDatosLaboratorio.cshtml" />
     <Content Include="Views\ViewTest\SubirDatosLaboratorios.cshtml" />
+    <Content Include="Views\ViewTest\ViewProcesoAsignacionLabo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

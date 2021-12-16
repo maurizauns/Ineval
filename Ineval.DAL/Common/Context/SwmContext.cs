@@ -53,5 +53,7 @@ namespace Ineval.DAL
         public DbSet<DatosExcelInstituciones> DatosExcelInstituciones { get; set; }
         public DbSet<DatosExcelLaboratorio> DatosExcelLaboratorio { get; set; }
         public DbSet<DatosLaboratorio> DatosLaboratorio { get; set; }
+        public DbSet<DatosFiltrosLaboratorio> DatosFiltrosLaboratorio { get; set; }
+        public DbSet<DatosSedesLaboratorio> DatosSedesLaboratorio { get; set; }
     }
 }

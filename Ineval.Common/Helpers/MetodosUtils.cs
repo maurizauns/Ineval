@@ -16,7 +16,7 @@ namespace Ineval.Common.Helpers
                 Random r = new Random();
                 double nextDouble = r.Next(1, limite);
 
-                if (nextDouble >= (limite * 0.75) && nextDouble <= (limite * 0.80))
+                if (nextDouble >= (limite * 0.65) && nextDouble <= (limite * 0.80))
                 {
                     number = nextDouble;
                     break;
@@ -120,7 +120,7 @@ namespace Ineval.Common.Helpers
 
             double currentRandomSum2 = 0;
             randomDoubles.ForEach(x => currentRandomSum2 += x);
-            randomDoubles[0] += totalSum - currentRandomSum2;
+            //randomDoubles[0] += totalSum - currentRandomSum2;
             
             return randomDoubles;
         }
