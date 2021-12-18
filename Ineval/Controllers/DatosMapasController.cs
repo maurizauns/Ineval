@@ -76,6 +76,7 @@ namespace Ineval.Controllers
         public async Task<ActionResult> MapaByProvincia(Guid? Id, Guid? id_sede)
         {
             List<DatosSedes> lista = new List<DatosSedes>();
+            List<DatosSedesSin> dto = new List<DatosSedesSin>();
             if (id_sede != null)
             {
                 lista = await db.DatosSedes.Where(x => x.AsignacionId == Id && x.Id == id_sede).ToListAsync();
@@ -84,9 +85,28 @@ namespace Ineval.Controllers
             {
                 lista = await db.DatosSedes.Where(x => x.AsignacionId == Id).ToListAsync();
             }
+            foreach (var item in lista)
+            {
+                dto.Add(new DatosSedesSin
+                {
+                    Agrupados = item.Agrupados,
+                    Asignacion = item.Asignacion,
+                    AsignacionId = item.AsignacionId,
+                    Code = item.Code,
+                    coordenada_lat = item.coordenada_lat,
+                    coordenada_lng = item.coordenada_lng,
+                    Description = item.Description,
+                    Id= item.Id,
+                    NumeroLaboratorio= item.NumeroLaboratorio,
+                    NumeroSession = item.NumeroSession,
+                    NumeroTotalSustentantes=item.NumeroTotalSustentantes
+                });
 
+            }
 
-            var jsonResult = Json(new { result = lista }, JsonRequestBehavior.AllowGet);
+            
+
+            var jsonResult = Json(new { result = dto }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
