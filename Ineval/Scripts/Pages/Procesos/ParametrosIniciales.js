@@ -1,4 +1,6 @@
-﻿$(function () {
+﻿
+
+$(function () {
 
     function EnableInputs() {
         let element = Array.from($('#frm').find('input'))
@@ -192,8 +194,6 @@
             error("La hora de receso debe ser definida")
         } else if ($('#NumSesion').val() == "") {
             error("El número de sesiones debe ser definida")
-        } else if ($('#txt-diaseval').val() == "") {
-            error("El número de días a evaluar debe ser definida")
         } else if (parseInt($('#txt-diaseval').val()) > 5) {
             error("El número de días a evaluar no puede ser mayor a 5")
         } else {
@@ -299,7 +299,7 @@ function calculoSesion() {
         //console.log(horeval)
         var divi = (diffInMinutes / horeval)
         $('#NumSesion').val(Math.round(divi))
-
+        generar(document.getElementById('NumSesion'))
     }
 
 }
@@ -355,7 +355,7 @@ function FechaAntigua(date) {
    
 }
 
-function generar(el) {
+/*function generar(el) {
     
     let dias = 0
     let arrayElement = []
@@ -407,7 +407,7 @@ function generar(el) {
     })
 
 
-}
+}*/
 
 function transforMinuteG(input) {
     let minutes = 0;
@@ -421,6 +421,29 @@ function transforMinuteG(input) {
 
 }
 
+function generar(el) {
+    if ($("#txt-FechaSesion").val() == "") {
+        error("Fecha de la sesión debe ser definida")
+    } else {
+        document.getElementById('detalle_datos').innerHTML = ''
+        for (let i = 0; i < el.value; i++) {
+            
+            
+
+                document.getElementById('detalle_datos').innerHTML += `<tr>
+                                                                <td>S${i + 1}</td>
+                                                                <td>${$("#txt-FechaSesion").val()}</td>
+                                                                 <td></td>
+                                                               </tr>`
+
+           
+        }
+
+    }
+    
+
+}
+
 function validarFechaSesion(el) {
     
     let fechasesion = moment(el.value).format('DD/MM/YYYY');
@@ -431,7 +454,7 @@ function validarFechaSesion(el) {
         document.getElementById('detalle_datos').innerHTML = ''
     } else {
 
-        generar(document.getElementById('txt-diaseval'))
+        generar(document.getElementById('NumSesion'))
     }
 }
 
