@@ -97,14 +97,28 @@ $(document).ready(function () {
         }
 
         vmFormProcesoAsignacion.cambiarFiltro2 = function () {
+            let dat = document.getElementById('cmbFiltro3')
+            let array1 = $('#cmbFiltro2').val()
+            
+            if (array1 != null) {
+                dat.innerHTML = '<option value="">Seleccione</option>'
+                array1.map(x => {
+                    dat.innerHTML += `<option value="${x}">${x}</option>`
+                })
+            } else {
+                dat.innerHTML = '<option value="">Seleccione</option>'
+            }
+            
             if (vmFormProcesoAsignacion.Filtro2() != "") {
-                if (vmFormProcesoAsignacion.Filtro2() == 1) {
+                vmFormProcesoAsignacion.visibleFiltro3(true);
+
+                /*if (vmFormProcesoAsignacion.Filtro2() == 1) {
                     vmFormProcesoAsignacion.visibleFiltro3(true);
                 } else {
                     vmFormProcesoAsignacion.visibleFiltro3(false);
                     vmFormProcesoAsignacion.visibleFiltro4(false);
                     vmFormProcesoAsignacion.visibleFiltro5(false);
-                }
+                }*/
             } else {
                 error("Debse Seleccionar Alguno");
                 vmFormProcesoAsignacion.Filtro3("");
