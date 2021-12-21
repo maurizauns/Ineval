@@ -23,7 +23,7 @@
             success: KnockoutFormMapas,
             complete: function () {
                 _stopLoad()
-            }            
+            }
         });
 
     })
@@ -39,7 +39,7 @@
         preserveDrawingBuffer: true
     });
 
-    
+
 
 
     function getRandomColor() {
@@ -112,7 +112,7 @@
             } else {
                 cargarSedes(sede);
             }
-            
+
         }
         else {
             error("Debe selecionar alguno");
@@ -198,7 +198,19 @@
         this.href = img
     })
 
+
+    $('button').click(function () {
+        var img = map.getCanvas().toDataURL();
+        var width = $('#screenshotPlaceholder').width()
+        var height = $('#screenshotPlaceholder').height()
+        var imgHTML = `<img src="${img}", width=${width}, height = ${height}/>`
+        $('#screenshotPlaceholder').empty();
+        $('#screenshotPlaceholder').append(imgHTML);
+    });
+
+
     function crearimagen() {
+        debugger
         //html2canvas($('#map'),
         //    {
         //        onrendered: function (canvas) {
@@ -209,6 +221,51 @@
         //        }
         //    });
         downloadCanvas('map', 'imagen.png');
+
+        //var img = map.getCanvas().toDataURL();
+        //var imgHTML = `<img src="${img}"/>`;
+        //this.href = imgHTML
+        //const base64 = map.getCanvas().toDataURL()
+        //downloadFile(map.getStyle().name, base64)
+        //customize: function (doc) {
+        //    var img = new Image();
+        //    var mapCanvas = map.getCanvas(document.querySelector('.mapboxgl-canvas'));
+        //    img.src = mapCanvas.toDataURL();
+        //    doc.content.splice(1, 0,
+        //        {
+        //            margin: [0, 0, 0, 12],
+        //            alignment: 'left',
+        //            width: 300,
+        //            image: img.src,
+        //        },
+        //    );
+        //}
+        
+
+    }
+
+    function downloadFile(fileName, content) {
+        let aLink = document.createElement("a");
+        let blob = this.base64ToBlob(content); //new Blob([content]);
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("click", true, true);//If initEvent does not add the last two parameters in FF, it will report the event type, whether it bubbles, whether it prevents the default behavior of browsers.
+        aLink.download = fileName;
+        aLink.href = URL.createObjectURL(blob);
+        aLink.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
+    }
+
+    function base64ToBlob(code) {
+        let parts = code.split(";base64,");
+        let contentType = parts[0].split(":")[1];
+        let raw = window.atob(parts[1]);
+        let rawLength = raw.length;
+
+        let uInt8Array = new Uint8Array(rawLength);
+
+        for (let i = 0; i < rawLength; ++i) {
+            uInt8Array[i] = raw.charCodeAt(i);
+        }
+        return new Blob([uInt8Array], { type: contentType });
     }
 
 
@@ -244,12 +301,12 @@
         });
     }
 
-    
+
     // Haciendo la conversión y descarga de la imagen al presionar el botón
     $('#boton-descarga').click(function () {
-        
+
     });
-   
+
 } else {
-    swal("Para acceder a este modulo necesita la clave API KEY de Mapbox","","error")
+    swal("Para acceder a este modulo necesita la clave API KEY de Mapbox", "", "error")
 }

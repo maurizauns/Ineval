@@ -129,35 +129,91 @@ $(document).ready(function () {
         }
 
         vmFormProcesoAsignacionLabo.Filtro = function () {
+
             if (vmFormProcesoAsignacionLabo.Filtro1() != "") {
                 $.ajax({
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
-                    url: "/ViewTest/Filtro",
+                    url: "/ViewTest/GetExisteLaboratorios",
                     data: JSON.stringify({
-                        Id: vmh.CurrentId(),
-                        Parametro1: $("#cmbFiltro1").val(),
-                        Parametro2: $("#cmbFiltro2").val() != null ? $("#cmbFiltro2").val().toString() : null,
-                        Parametro3: $("#cmbFiltro3").val(),
+                        AsignacionId: vmh.CurrentId(),
                     }),
-                    beforeSend: function () {
-                        _load();
-                    },
                     success: function (Data) {
-                        if (Data.result != "" && Data.result != null) {
-
+                        if (Data.Exist) {
+                            $.ajax({
+                                type: "POST",
+                                contentType: "application/json; charset=utf-8",
+                                url: "/ViewTest/GetExisteProyeccion",
+                                data: JSON.stringify({
+                                    AsignacionId: vmh.CurrentId(),
+                                }),
+                                success: function (Data) {
+                                    if (Data.Exist) {
+                                        swal({
+                                            title: '¿Desea proceder sin una Proyección de un proceso de Asignación?',
+                                            //text: "Se enviará una notificación al paciente",
+                                            type: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            confirmButtonText: 'Si',
+                                            confirmButtonClass: 'btn btn-success',
+                                            cancelButtonText: 'No',
+                                            cancelButtonClass: 'btn btn-danger',
+                                            reverseButtons: true
+                                        }).then((result) => {
+                                            if (result) {
+                                                //debugger
+                                                console.log(true);
+                                            }
+                                        }).catch((result) => {
+                                            if (result) {
+                                                //debugger
+                                                console.log(false);
+                                            }
+                                        })
+                                    } else {
+                                        swal(Data.message, "", Data.status);
+                                    }
+                                },
+                            });
                         } else {
-                            swal(Data.message, "", Data.status);
-                            vmFormProcesoAsignacionLabo = {};
-
-                            $("#Content").load(vmh.CurrentUrl());
-                            $("#Content").show();
+                            swal("No existen registros de laboratorios", "", "info");
                         }
-                    },
-                    complete: function () {
-                        _stopLoad();
                     }
                 });
+
+
+
+
+
+                //$.ajax({
+                //    type: "POST",
+                //    contentType: "application/json; charset=utf-8",
+                //    url: "/ViewTest/Filtro",
+                //    data: JSON.stringify({
+                //        Id: vmh.CurrentId(),
+                //        Parametro1: $("#cmbFiltro1").val(),
+                //        Parametro2: $("#cmbFiltro2").val() != null ? $("#cmbFiltro2").val().toString() : null,
+                //        Parametro3: $("#cmbFiltro3").val(),
+                //    }),
+                //    beforeSend: function () {
+                //        _load();
+                //    },
+                //    success: function (Data) {
+                //        if (Data.result != "" && Data.result != null) {
+
+                //        } else {
+                //            swal(Data.message, "", Data.status);
+                //            vmFormProcesoAsignacionLabo = {};
+
+                //            $("#Content").load(vmh.CurrentUrl());
+                //            $("#Content").show();
+                //        }
+                //    },
+                //    complete: function () {
+                //        _stopLoad();
+                //    }
+                //});
             } else {
                 error("Debe selecionar al menos 1");
             }
@@ -223,7 +279,9 @@ $(document).ready(function () {
     $.ajax({
         type: "GET",
         contentType: "application/json; charset=utf-8",
-        url: "/ViewTest/GetFiltros?AsignacionId=" + vmh.CurrentId(),
+        url: "/ViewTest/GetFiltrosLaboratorio?AsignacionId=" + vmh.CurrentId(),
         success: KnockoutFormParametrosIniciales
     });
 });
+
+//function 
