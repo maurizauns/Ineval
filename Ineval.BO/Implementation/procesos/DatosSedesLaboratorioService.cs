@@ -3,7 +3,7 @@ using RP.DAL.Repository;
 
 namespace Ineval.BO
 {
-    class DatosSedesLaboratorioService : CatalogService<DatosSedesLaboratorio>
+    public class DatosSedesLaboratorioService : CatalogService<DatosSedesLaboratorio>
     {
         public DatosSedesLaboratorioService()
         {

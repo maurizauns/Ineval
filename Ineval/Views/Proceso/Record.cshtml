@@ -56,7 +56,49 @@
         }
         KnockoutHistory();
 
+        $(function () {
 
+            try {
+                var conexionHub = $.connection.progressHub;
+                conexionHub.client.addProgress = function (message, percentage, valor) {
+                    
+                    let bar = document.getElementById('progress_ineval')
+                    if (valor <= 30) {
+                        bar.style.backgroundColor = "red";
+                    } else if (valor <= 60) {
+                        bar.style.backgroundColor = "yellow";
+                    } else if (valor > 60) {
+                        bar.style.backgroundColor = "blue";
+                    }
+
+                    bar.style.width = percentage;
+                    bar.innerText = `${message} ${percentage}`;
+
+                };
+
+                conexionHub.client.addProgressAsignando = function (message, percentage, valor) {
+                    let bar = document.getElementById('progress_inevalAsignando')
+
+                    if (valor <= 30) {
+                        bar.style.backgroundColor = "red";
+                    } else if (valor <= 60) {
+                        bar.style.backgroundColor = "yellow";
+                    } else if (valor > 60) {
+                        bar.style.backgroundColor = "blue";
+                    }
+
+                    bar.style.width = percentage;
+                    bar.innerText = `${message} ${percentage}`;
+                };
+
+                $.connection.hub.start().done(function () {
+                    var connectionId = $.connection.hub.id;
+                });
+
+            } catch (e) {
+                console.log(e);
+            }
+        });
         
     </script>
 }

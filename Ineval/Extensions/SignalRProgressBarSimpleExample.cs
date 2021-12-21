@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace Ineval.Extensions
 {
+    [HubName("progressHub")]
     public class ProgressHub : Hub
     {
 
@@ -15,7 +17,7 @@ namespace Ineval.Extensions
 
             var percentage = (progressCount * 100) / totalItems;
 
-            hubContext.Clients.All.AddProgress(progressMessage, percentage + "%");
+            hubContext.Clients.All.AddProgress(progressMessage, percentage + "%", percentage);
         }
 
         public static void SendProgressAsignando(string progressMessage, int progressCount, int totalItems)
@@ -24,7 +26,7 @@ namespace Ineval.Extensions
 
             var percentage = (progressCount * 100) / totalItems;
 
-            hubContext.Clients.All.AddProgressAsignando(progressMessage, percentage + "%");
+            hubContext.Clients.All.AddProgressAsignando(progressMessage, percentage + "%", percentage);
         }
     }
 }

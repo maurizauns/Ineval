@@ -138,25 +138,8 @@
 <script type="text/javascript" language="javascript" src="~/Scripts/Pages/Procesos/ProcesoAsignacion.js"></script>
 
 <script type="text/javascript">
-    $(function () {
+    //ponle este codigo en la page master de record
 
-        var conexionHub = $.connection.progressHub;
-
-        conexionHub.client.AddProgress = function (message, percentage) {
-            let bar = document.getElementById('progress_ineval')
-            bar.style.width = percentage;
-            bar.innerText = `${message} ${percentage}`;
-        };
-
-        conexionHub.client.AddProgressAsignando = function (message, percentage) {
-            let bar = document.getElementById('progress_inevalAsignando')
-            bar.style.width = percentage;
-            bar.innerText = `${message} ${percentage}`;
-        };
-
-        $.connection.hub.start().done(function () {
-            var connectionId = $.connection.hub.id;
-        });
-    });
+    
 </script>
 

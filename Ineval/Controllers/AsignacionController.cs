@@ -358,6 +358,10 @@ namespace Ineval.Controllers
                     weatherForecast = await ApiDriving.GetByDriving("-78.29870190300,-0.11483729100", "-78.34341925700,-0.05793245000", item.APIKEY.Trim());
                 }
 
+                int tiempo = (int)Math.Truncate(weatherForecast.routes.FirstOrDefault().duration / 60);
+
+                double Distancia = Math.Round((weatherForecast.routes.FirstOrDefault().distance / 1000), 2);
+
 
                 return Json(new { result = weatherForecast, state = true }, JsonRequestBehavior.AllowGet);
             }

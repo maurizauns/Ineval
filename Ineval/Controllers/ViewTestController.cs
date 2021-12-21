@@ -89,6 +89,7 @@ namespace Ineval.Controllers
             }
         }
 
+
         #region ListasGenericas
         public class PorAmie
         {
@@ -834,7 +835,7 @@ namespace Ineval.Controllers
                                                             if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                             {
                                                                 int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
+                                                                double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 2);
                                                                 if (tiempo == 0 && Distancia == 0)
                                                                 {
 
@@ -1152,7 +1153,7 @@ namespace Ineval.Controllers
                                                                     if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                                     {
                                                                         int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                        double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
+                                                                        double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 2);
                                                                         if (tiempo == 0 && Distancia == 0)
                                                                         {
 
@@ -1443,7 +1444,7 @@ namespace Ineval.Controllers
                                                             if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                             {
                                                                 int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
+                                                                double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 2);
                                                                 if (tiempo == 0 && Distancia == 0)
                                                                 {
 
@@ -1708,7 +1709,7 @@ namespace Ineval.Controllers
                                                                 if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                                 {
                                                                     int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                    double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
+                                                                    double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 2);
                                                                     if (tiempo == 0 && Distancia == 0)
                                                                     {
 
@@ -2071,6 +2072,96 @@ namespace Ineval.Controllers
         }
 
 
+
+        #region LABORARATORIO
+        public async Task<ActionResult> GetFiltrosLaboratorio(Guid? AsignacionId)
+        {
+            try
+            {
+                DatosFiltrosLaboratorioViewModel resultDTO = new DatosFiltrosLaboratorioViewModel();
+                using (DatosFiltrosLaboratorioService entityService = new DatosFiltrosLaboratorioService())
+                {
+                    DatosFiltrosLaboratorio result = await entityService.GetAll().Where(x => x.AsignacionId == AsignacionId).SingleOrDefaultAsync();
+                    resultDTO = Mapper.Map<DatosFiltrosLaboratorioViewModel>(result);
+                }
+
+                return Json(new { data = resultDTO }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                Dispose();
+            }
+        }
+
+        public async Task<ActionResult> GetExisteProyeccion(Guid? AsignacionId)
+        {
+            try
+            {
+                bool exist = false;
+                using (DatosSedesService service = new DatosSedesService())
+                {
+                    var result = await service.GetAll().Where(x => x.AsignacionId == AsignacionId).CountAsync();
+
+                    if (result > 0)
+                    {
+                        exist = true;
+                    }
+                    else
+                    {
+                        exist = false;
+                    }
+
+                }
+                return Json(new { Exist = exist }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                Dispose();
+            }
+        }
+
+        public async Task<ActionResult> GetExisteLaboratorios(Guid? AsignacionId)
+        {
+            try
+            {
+                bool exist = false;
+                using (DatosLaboratorioService service = new DatosLaboratorioService())
+                {
+                    var result = await service.GetAll().Where(x => x.AsignacionId == AsignacionId).CountAsync();
+
+                    if (result > 0)
+                    {
+                        exist = true;
+                    }
+                    else
+                    {
+                        exist = false;
+                    }
+
+                }
+                return Json(new { Exist = exist }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                Dispose();
+            }
+        }
+
         public async Task<ActionResult> FiltroLaboratorio(Guid? Id, int? Parametro1, string Parametro2, string Parametro3)
         {
             var userId = User.Identity.GetUserId();
@@ -2085,11 +2176,11 @@ namespace Ineval.Controllers
             datosTemporalesDTO = db.Database.SqlQuery<DatosTemporalesViewModel>("exec sp_GetDatosTemporales @AsignacionId", new SqlParameter("AsignacionId", Id)).ToList();
 
             /*DATOSSEDES*/
-            List<DatosSedes> ListaSedes = new List<DatosSedes>();
+            List<DatosSedesLaboratorio> ListaSedes = new List<DatosSedesLaboratorio>();
             /*DATOSSEDES*/
 
             //ELIMNACION DE SEDES
-            int datoseliminacion = await db.DatosSedes.AsNoTracking().Where(x => x.AsignacionId == Id).CountAsync();
+            int datoseliminacion = await db.DatosSedesLaboratorio.AsNoTracking().Where(x => x.AsignacionId == Id).CountAsync();
             if (datoseliminacion > 0)
             {
                 var registroseliminados = db.Database.SqlQuery<List<int>>("exec sp_DeleteSedesLaboratorio @AsignacionId", new SqlParameter("AsignacionId", Id)).ToList();
@@ -2230,7 +2321,7 @@ namespace Ineval.Controllers
                                 }
                             }
 
-                            DatosSedes datosSedes = new DatosSedes
+                            DatosSedesLaboratorio datosSedes = new DatosSedesLaboratorio
                             {
                                 AsignacionId = Id,
                                 NumeroSession = subtotalSession,
@@ -2242,11 +2333,11 @@ namespace Ineval.Controllers
                                 coordenada_lng = item.coordenada_y != null ? item.coordenada_y.Replace(",", ".") : "",//coordenadas.features.FirstOrDefault().center[1].ToString().Replace(',', '.')
                             };
 
-                            insertMasiveDataSedes(datosSedes);
+                            insertMasiveDataSedesLaboratorio(datosSedes);
 
                             Functions.SendProgress("Creando sedes...", contadorProgrees, RegistrosTotales);
 
-                            List<DatosSedesAsignacion> datosSedesAsignacions = new List<DatosSedesAsignacion>();
+                            List<DatosSedesAsignacionLaboratorio> datosSedesAsignacions = new List<DatosSedesAsignacionLaboratorio>();
 
                             List<double> tomardatos = MetodosUtils.GetListOfRandomDoubles((subtotalLabo * subtotalSession), listanueva.Count(), 0, parametrosInicialesDTO.NumeroEquipos.Value);
 
@@ -2262,7 +2353,7 @@ namespace Ineval.Controllers
                                     List<DatosTemporalesViewModel> listatem = listanueva.Take((int)tomardatos[datos]).ToList();
                                     foreach (var idsustentante in listatem)
                                     {
-                                        datosSedesAsignacions.Add(new DatosSedesAsignacion
+                                        datosSedesAsignacions.Add(new DatosSedesAsignacionLaboratorio
                                         {
                                             SedeId = datosSedes.Id,
                                             SessionId = horariossessiones[j - 1].sesion,
@@ -2280,7 +2371,7 @@ namespace Ineval.Controllers
                                     datos++;
                                 }
                             }
-                            insertMasiveData(datosSedesAsignacions.ToList());
+                            insertMasiveDataLaboratorio(datosSedesAsignacions.ToList());
 
                             contadorProgrees++;
 
@@ -2587,7 +2678,7 @@ namespace Ineval.Controllers
                                                             if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                             {
                                                                 int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
+                                                                double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 2);
                                                                 if (tiempo == 0 && Distancia == 0)
                                                                 {
 
@@ -2905,7 +2996,7 @@ namespace Ineval.Controllers
                                                                     if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                                     {
                                                                         int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                        double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
+                                                                        double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 2);
                                                                         if (tiempo == 0 && Distancia == 0)
                                                                         {
 
@@ -3196,7 +3287,7 @@ namespace Ineval.Controllers
                                                             if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                             {
                                                                 int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
+                                                                double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 2);
                                                                 if (tiempo == 0 && Distancia == 0)
                                                                 {
 
@@ -3461,7 +3552,7 @@ namespace Ineval.Controllers
                                                                 if (parametrosInicialesDTO.TiempoViaje.HasValue)
                                                                 {
                                                                     int tiempo = (int)Math.Truncate(coordenadas.routes.FirstOrDefault().duration / 60);
-                                                                    double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 0);
+                                                                    double Distancia = Math.Round((coordenadas.routes.FirstOrDefault().distance / 1000), 2);
                                                                     if (tiempo == 0 && Distancia == 0)
                                                                     {
 
@@ -3822,6 +3913,142 @@ namespace Ineval.Controllers
 
             return null;
         }
+
+
+        public void insertMasiveDataSedesLaboratorio(DatosSedesLaboratorio datosSedes)
+        {
+            var table = new DataTable();
+            table.Columns.Add("Id", typeof(Guid));
+            table.Columns.Add("AsignacionId", typeof(Guid));
+            table.Columns.Add("NumeroSession", typeof(int));
+            table.Columns.Add("NumeroLaboratorio", typeof(int));
+            table.Columns.Add("coordenada_lat", typeof(string));
+            table.Columns.Add("coordenada_lng", typeof(string));
+            table.Columns.Add("Code", typeof(string));
+            table.Columns.Add("Description", typeof(string));
+            table.Columns.Add("FechaCreacion", typeof(DateTime));
+            table.Columns.Add("FechaModificacion", typeof(DateTime));
+            table.Columns.Add("FechaEliminacion", typeof(DateTime));
+            table.Columns.Add("Estado", typeof(EstadoEnum));
+            table.Columns.Add("NumeroTotalSustentantes", typeof(int));
+            table.Columns.Add("Agrupados", typeof(string));
+            //table.Columns.Add("Dia", typeof(string));
+
+
+            table.Rows.Add(new object[]{
+                   datosSedes.Id=Guid.NewGuid(),
+                   datosSedes.AsignacionId,
+                   datosSedes.NumeroSession,
+                   datosSedes.NumeroLaboratorio,
+                   datosSedes.coordenada_lat,
+                  datosSedes.coordenada_lng,
+                  datosSedes.Code,
+                  datosSedes.Description,
+                  datosSedes.FechaCreacion,
+                  datosSedes.FechaModificacion,
+                  datosSedes.FechaEliminacion,
+                  datosSedes.Estado,
+                  datosSedes.NumeroTotalSustentantes,
+                  datosSedes.Agrupados
+                });
+
+
+
+            using (var connection = ConnectionToSql.getConnection())
+            {
+                connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+                    {
+                        try
+                        {
+                            bulkCopy.DestinationTableName = "DatosSedesLaboratorio";
+                            bulkCopy.BulkCopyTimeout = 0;
+                            bulkCopy.WriteToServer(table);
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            connection.Close();
+                        }
+                    }
+                }
+
+            }
+        }
+
+        public void insertMasiveDataLaboratorio(IEnumerable<DatosSedesAsignacionLaboratorio> datosSedesAsignacion)
+        {
+            var table = new DataTable();
+            table.Columns.Add("Id", typeof(Guid));
+            table.Columns.Add("SedeId", typeof(Guid));
+            table.Columns.Add("SessionId", typeof(string));
+            table.Columns.Add("LaboratorioId", typeof(string));
+            table.Columns.Add("SustentanteId", typeof(Guid));
+            table.Columns.Add("Code", typeof(string));
+            table.Columns.Add("Description", typeof(string));
+            table.Columns.Add("FechaCreacion", typeof(DateTime));
+            table.Columns.Add("FechaModificacion", typeof(DateTime));
+            table.Columns.Add("FechaEliminacion", typeof(DateTime));
+            table.Columns.Add("Estado", typeof(EstadoEnum));
+            table.Columns.Add("DatosSedes_Id", typeof(Guid));
+            table.Columns.Add("DatosTemporales_Id", typeof(Guid));
+            table.Columns.Add("Dia", typeof(string));
+            table.Columns.Add("FechaEval", typeof(string));
+            table.Columns.Add("Hora", typeof(string));
+
+            foreach (var item in datosSedesAsignacion)
+            {
+                table.Rows.Add(new object[]{
+                   item.Id=Guid.NewGuid(),
+                   item.SedeId,
+                   item.SessionId
+                  ,item.LaboratorioId
+                  ,item.SustentanteId
+                  ,item.Code
+                  ,item.Description
+                  ,item.FechaCreacion
+                  ,item.FechaModificacion
+                  ,item.FechaEliminacion
+                  ,item.Estado
+                  ,item.SedeId
+                  ,item.SustentanteId
+                  ,item.Dia
+                  ,item.FechaEval
+                  ,item.Hora
+                });
+
+            }
+
+            using (var connection = ConnectionToSql.getConnection())
+            {
+                connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+                    {
+                        try
+                        {
+                            bulkCopy.DestinationTableName = "DatosSedesAsignacionLaboratorio";
+                            bulkCopy.BulkCopyTimeout = 0;
+                            bulkCopy.WriteToServer(table);
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            connection.Close();
+                        }
+                    }
+                }
+
+            }
+        }
+
+        #endregion
+
 
 
         public void insertMasiveDataSedes(DatosSedes datosSedes)
