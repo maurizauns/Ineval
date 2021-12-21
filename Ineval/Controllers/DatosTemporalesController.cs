@@ -363,5 +363,29 @@ namespace Ineval.Controllers
             return Json(new { Total = result, TotalInstituciones = resultInstituciones }, JsonRequestBehavior.AllowGet);
 
         }
+
+        public async Task<ActionResult> GetFilter(Guid? AsignacionId,string filtro)
+        {
+            
+            try
+            {
+                List<DatosTemporalesViewModel> datostemporesls = db.Database.SqlQuery<DatosTemporalesViewModel>("exec sp_TipoAsignaciones @AsignacionId,@Param1,@Param2,@Param3,@Param4,@Param5", new SqlParameter("AsignacionId", AsignacionId), new SqlParameter("Param1", 1), new SqlParameter("Param2", filtro), new SqlParameter("Param3", DBNull.Value), new SqlParameter("Param4", DBNull.Value), new SqlParameter("Param5", DBNull.Value)).ToList();
+
+                    var jsonResult = Json(new { data = datostemporesls, status = "success" }, JsonRequestBehavior.AllowGet);
+
+                jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { message = ex.Message.ToString(), status = "error" }, JsonRequestBehavior.AllowGet);
+            }
+            finally
+            {
+                Dispose();
+            }
+
+        }
     }
 }

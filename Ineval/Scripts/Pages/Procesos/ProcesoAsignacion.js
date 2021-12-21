@@ -97,50 +97,70 @@ $(document).ready(function () {
         }
 
         vmFormProcesoAsignacion.cambiarFiltro2 = function () {
-            let dat = document.getElementById('cmbFiltro3')
-            let array1 = $('#cmbFiltro2').val()
+            let $dat = $('#cmbFiltro3')
+            let $array1 = $('#cmbFiltro2')
             
-            if (array1 != null) {
-                dat.innerHTML = '<option value="">Seleccione</option>'
-                array1.map(x => {
-                    dat.innerHTML += `<option value="${x}">${x}</option>`
+            if ($array1.val() != null) {
+                let datt = ''
+                vmFormProcesoAsignacion.visibleFiltro3(true);
+                datt='<option value="">Seleccione</option>'
+                $array1.val().map(x => {
+                    
+                    let op = $array1.find('option[value=' + x + ']').text()
+                    datt += `<option value="${x}">${op}</option>`
+                    $dat.html(datt)
                 })
             } else {
-                dat.innerHTML = '<option value="">Seleccione</option>'
+                $dat.html('<option value="">Seleccione</option>')
             }
             
-            if (vmFormProcesoAsignacion.Filtro2() != "") {
-                vmFormProcesoAsignacion.visibleFiltro3(true);
-
-                /*if (vmFormProcesoAsignacion.Filtro2() == 1) {
-                    vmFormProcesoAsignacion.visibleFiltro3(true);
-                } else {
-                    vmFormProcesoAsignacion.visibleFiltro3(false);
-                    vmFormProcesoAsignacion.visibleFiltro4(false);
-                    vmFormProcesoAsignacion.visibleFiltro5(false);
-                }*/
-            } else {
-                error("Debse Seleccionar Alguno");
-                vmFormProcesoAsignacion.Filtro3("");
-                vmFormProcesoAsignacion.visibleFiltro3(false);
-                vmFormProcesoAsignacion.visibleFiltro4(false);
-                vmFormProcesoAsignacion.visibleFiltro5(false);
-            }
+            
         }
 
-        vmFormProcesoAsignacion.cambiarFiltro3 = function () {
+        vmFormProcesoAsignacion.cargarDatos = () => {
             if (vmFormProcesoAsignacion.Filtro3() != "") {
-                if (vmFormProcesoAsignacion.Filtro3() == 1) {
-                    vmFormProcesoAsignacion.visibleFiltro3(true);
-                } else {
-                    vmFormProcesoAsignacion.visibleFiltro3(false);
-                    vmFormProcesoAsignacion.visibleFiltro4(false);
-                    vmFormProcesoAsignacion.visibleFiltro5(false);
-                }
+                fetch(`/datostemporales/getfilter?AsignacionId=${vmh.CurrentId()}&filtro=${vmFormProcesoAsignacion.Filtro3()}`)
+                    .then(res => res.json())
+                    .then(res => {
+                        let data = []
+                        res.data.map(x => {
+                            if (vmFormProcesoAsignacion.Filtro3() == "jornada_sustentante") {
+                                if (x.jornada_sustentante != null) {
+                                    data.push(x.jornada_sustentante)
+                                }
+                                
+                            } else if (vmFormProcesoAsignacion.Filtro3() == "saber") {
+                                if (x.jornada_saber != null) {
+                                    data.push(x.saber)
+                                }
+                                
+                            }
+                            
+                        })
+                        let unicos = Array.from(new Set(data))
+                        let cmb4 = document.getElementById('cmbFiltro4')
+                        if (unicos.length > 0) {
+                            cmb4.innerHTML=''
+                            vmFormProcesoAsignacion.visibleFiltro4(true);
+                            unicos.map(x => {
+                                cmb4.innerHTML += `<option value="${x}">${x}</option>`
+                            })
+                        }
+                        
+                    })
+
             } else {
-                error("Debse Seleccionar Alguno");
+                error("Seleccione opcion en filtro 3")
+                document.getElementById('cmbFiltro4').innerHTML = ''
+                document.getElementById('cmbFiltro4').innerHTML = '<option value="">Seleccione</option>'
+                vmFormProcesoAsignacion.visibleFiltro4(false);
             }
+            
+            
+
         }
+
+        
 
         vmFormProcesoAsignacion.Filtro = function () {
             if (vmFormProcesoAsignacion.Filtro1() != "") {
@@ -231,6 +251,8 @@ $(document).ready(function () {
         ko.applyBindings(vmFormProcesoAsignacion, $("#Content")[0]);
 
         $("#cmbFiltro2").chosen();
+        $("#cmbFiltro4").chosen();
+        
         $("#cmbFiltro2_chosen").width("100%");
 
     };
