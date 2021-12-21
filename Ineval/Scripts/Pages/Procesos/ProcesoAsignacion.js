@@ -97,6 +97,7 @@ $(document).ready(function () {
         }
 
         vmFormProcesoAsignacion.cambiarFiltro2 = function () {
+            debugger
             let dat = document.getElementById('cmbFiltro3')
             let array1 = $('#cmbFiltro2').val()
             
@@ -129,8 +130,9 @@ $(document).ready(function () {
         }
 
         vmFormProcesoAsignacion.cambiarFiltro3 = function () {
+            debugger
             if (vmFormProcesoAsignacion.Filtro3() != "") {
-                if (vmFormProcesoAsignacion.Filtro3() == 1) {
+                if (vmFormProcesoAsignacion.Filtro3() == 'jornada_sustentante') {
                     vmFormProcesoAsignacion.visibleFiltro3(true);
                 } else {
                     vmFormProcesoAsignacion.visibleFiltro3(false);
