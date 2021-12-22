@@ -124,27 +124,35 @@ $(document).ready(function () {
                     .then(res => {
                         let data = []
                         res.data.map(x => {
+                            
                             if (vmFormProcesoAsignacion.Filtro3() == "jornada_sustentante") {
                                 if (x.jornada_sustentante != null) {
                                     data.push(x.jornada_sustentante)
                                 }
                                 
                             } else if (vmFormProcesoAsignacion.Filtro3() == "saber") {
-                                if (x.jornada_saber != null) {
+                                if (x.saber != null) {
                                     data.push(x.saber)
                                 }
                                 
                             }
                             
                         })
-                        let unicos = Array.from(new Set(data))
-                        let cmb4 = document.getElementById('cmbFiltro4')
-                        if (unicos.length > 0) {
-                            cmb4.innerHTML=''
+                        
+                        
+                        
+                        if (data.length > 0) {
+                            
                             vmFormProcesoAsignacion.visibleFiltro4(true);
-                            unicos.map(x => {
-                                cmb4.innerHTML += `<option value="${x}">${x}</option>`
+                            data.map(x => {
+                                var option = $(document.createElement('option'));
+                                option.text(x);
+                                option.val(x);
+                                $('#cmbFiltro4').append(option);
+                                $("#cmbFiltro4").trigger("chosen:updated");
                             })
+                            
+                            
                         }
                         
                     })
@@ -254,6 +262,7 @@ $(document).ready(function () {
         $("#cmbFiltro4").chosen();
         
         $("#cmbFiltro2_chosen").width("100%");
+        $("#cmbFiltro4_chosen").width("100%");
 
     };
     $.ajax({

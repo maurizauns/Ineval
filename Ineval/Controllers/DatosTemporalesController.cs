@@ -369,7 +369,7 @@ namespace Ineval.Controllers
             
             try
             {
-                List<DatosTemporalesViewModel> datostemporesls = db.Database.SqlQuery<DatosTemporalesViewModel>("exec sp_TipoAsignaciones @AsignacionId,@Param1,@Param2,@Param3,@Param4,@Param5", new SqlParameter("AsignacionId", AsignacionId), new SqlParameter("Param1", 1), new SqlParameter("Param2", filtro), new SqlParameter("Param3", DBNull.Value), new SqlParameter("Param4", DBNull.Value), new SqlParameter("Param5", DBNull.Value)).ToList();
+                List<FiltrosViewModel> datostemporesls = db.Database.SqlQuery<FiltrosViewModel>("exec sp_filter @asignacionid,@filtro", new SqlParameter("asignacionid", AsignacionId), new SqlParameter("filtro", filtro)).ToList();
 
                     var jsonResult = Json(new { data = datostemporesls, status = "success" }, JsonRequestBehavior.AllowGet);
 
