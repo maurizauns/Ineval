@@ -4349,7 +4349,7 @@ namespace Ineval.Controllers
                             else
                             {
                                 ws2.Cell(contCellAgrupados2, 3).SetValue(agrupadosSepra[0]).SetDataType(XLDataType.Text);
-                                ws2.Cell(contCellAgrupados2, 4).SetValue(agrupadosSepra[1]).SetDataType(XLDataType.Text);
+                                ws2.Cell(contCellAgrupados2, 4).SetValue(agrupadosSepra.Length == 2 ? agrupadosSepra[1] : null).SetDataType(XLDataType.Text);
                                 ws2.Cell(contCellAgrupados2, 7).Value = agrupadosSepra.Length == 3 ? agrupadosSepra[2] : null;
                             }
 
