@@ -99,7 +99,8 @@ $(document).ready(function () {
         vmFormProcesoAsignacion.cambiarFiltro2 = function () {
             let $dat = $('#cmbFiltro3')
             let $array1 = $('#cmbFiltro2')
-            
+            $('#cmbFiltro4').html("")
+            $("#cmbFiltro4").trigger("chosen:updated");
             if ($array1.val() != null) {
                 let datt = ''
                 vmFormProcesoAsignacion.visibleFiltro3(true);
@@ -118,7 +119,12 @@ $(document).ready(function () {
         }
 
         vmFormProcesoAsignacion.cargarDatos = () => {
+            $('#cmbFiltro4').html("")
+            $("#cmbFiltro4").trigger("chosen:updated");
             if (vmFormProcesoAsignacion.Filtro3() != "") {
+                
+                
+                
                 fetch(`/datostemporales/getfilter?AsignacionId=${vmh.CurrentId()}&filtro=${vmFormProcesoAsignacion.Filtro3()}`)
                     .then(res => res.json())
                     .then(res => {
