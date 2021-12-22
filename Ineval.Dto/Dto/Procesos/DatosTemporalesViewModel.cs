@@ -62,4 +62,13 @@ namespace Ineval.Dto
         public string camara_web { get; set; }
         public string microfono { get; set; }
     }
+
+    public class FiltrosViewModel : BaseModel
+    {
+        
+        
+        public string jornada_sustentante { get; set; }
+        public string saber { get; set; }
+        
+    }
 }
