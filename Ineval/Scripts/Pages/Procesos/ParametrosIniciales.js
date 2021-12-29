@@ -486,6 +486,8 @@ function CalcularSesionesOcupar(el) {
     } else {
         $('#txtTotalSesionesOcupar').val("")
     }
+
+    CalcularTotalLaboratorios1(st)
     
 }
 
@@ -500,7 +502,7 @@ function CalcularSesionesOcupar1(el) {
     } else {
         $('#txtTotalSesionesOcupar').val("")
     }
-    
+    CalcularTotalLaboratorios1(st)
 }
 
 function CalcularTotalLaboratorios(el) {
@@ -509,6 +511,21 @@ function CalcularTotalLaboratorios(el) {
     let ts = $('#txtTotalSesionesOcupar').val()
 
     if (ns != "" && ts != "") {
+        let tl = parseInt(ts) / parseInt(ns)
+        $('#txtTotalLaboratorios').val(Math.round(tl))
+    } else {
+        $('#txtTotalLaboratorios').val("")
+    }
+
+}
+
+function CalcularTotalLaboratorios1(st) {
+
+    
+    let ns = $('#NumSesion').val()
+    let ts = $('#txtTotalSesionesOcupar').val()
+
+    if (st != "" && ns != "") {
         let tl = parseInt(ts) / parseInt(ns)
         $('#txtTotalLaboratorios').val(Math.round(tl))
     } else {
