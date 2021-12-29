@@ -69,6 +69,8 @@ namespace Ineval.Dto
         
         public string jornada_sustentante { get; set; }
         public string saber { get; set; }
-        
+        public string grado { get; set; }
+        public string tipo_discapacidad { get; set; }
+
     }
 }

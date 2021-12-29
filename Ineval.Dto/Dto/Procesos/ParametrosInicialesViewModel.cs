@@ -33,5 +33,9 @@ namespace Ineval.Dto
         public int? tipo { get; set; }
         public string FechaSesion { get; set; }
         public string HorariosSesion { get; set; }
+
+        public int? SustentantesTotales { get; set; }
+        public int? SesionesOcupar { get; set; }
+        public int? TotalLaboratorios { get; set; }
     }
 }

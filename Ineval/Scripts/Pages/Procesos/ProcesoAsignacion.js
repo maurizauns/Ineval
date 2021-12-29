@@ -141,6 +141,16 @@ $(document).ready(function () {
                                     data.push(x.saber)
                                 }
                                 
+                            } else if (vmFormProcesoAsignacion.Filtro3() == "grado") {
+                                if (x.grado != null) {
+                                    data.push(x.grado)
+                                }
+
+                            } else if (vmFormProcesoAsignacion.Filtro3() == "tipo_discapacidad") {
+                                if (x.tipo_discapacidad != null) {
+                                    data.push(x.tipo_discapacidad)
+                                }
+
                             }
                             
                         })

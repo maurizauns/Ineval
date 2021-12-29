@@ -32,6 +32,10 @@ namespace Ineval.DAL
         public string TiempoReal { get; set; }
         public int? Tipo { get; set; }
         public DateTime FechaSesion { get; set; }
-        public string HorariosSesion {get;set;}        
+        public string HorariosSesion {get;set;}   
+        
+        public int? SustentantesTotales { get; set; }
+        public int? SesionesOcupar { get; set; }
+        public int? TotalLaboratorios { get; set; }
     }
 }

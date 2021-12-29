@@ -23,8 +23,9 @@ $(function () {
         contentType: "application/json; charset=utf-8",
         url: "/ParametrosIniciales/GetFormulario?id=" + vmh.CurrentId(),
         success: function (r) {
-            //console.log(r.ParametrosIniciales)
-            if (r.ParametrosIniciales.HoraInicio == "") {
+           
+            console.log(r.ParametrosIniciales)
+            if (r.ParametrosIniciales === null) {
                 $('#btn-nuevo').css("display", "inline-block")
                 $('#existe').css("display", "inline-block")
             } else {
@@ -47,6 +48,10 @@ $(function () {
                 $('#existe').css("display", "none")
                 //nuevo
                 //$('#txt-FechaSesion').val(r.ParametrosIniciales.FechaSesion)
+
+                $('#txtTotalSustentantes').val(r.ParametrosIniciales.SustentantesTotales),
+                    $('#txtTotalSesionesOcupar').val(r.ParametrosIniciales.SesionesOcupar),
+                    $('#txtTotalLaboratorios').val(r.ParametrosIniciales.TotalLaboratorios)
 
                 $('#txt-HoraInicio').val(r.ParametrosIniciales.HoraInicio)
                 $('#txt-HoraFin').val(r.ParametrosIniciales.HoraFin)
@@ -225,7 +230,10 @@ $(function () {
                     TiempoReal: "",
                     Tipo: $('input:radio[name=tipo]:checked').val(),
                     FechaSesion: $("#txt-FechaSesion").val(),
-                    HorariosSesion: JSON.stringify(lista)
+                    HorariosSesion: JSON.stringify(lista),
+                    SustentantesTotales: $('#txtTotalSustentantes').val(),
+                    SesionesOcupar: $('#txtTotalSesionesOcupar').val(),
+                    TotalLaboratorios: $('#txtTotalLaboratorios').val()
                     
                 }),
                 success: function (Data) {
@@ -440,6 +448,8 @@ function generar(el) {
         }
 
     }
+
+    CalcularTotalLaboratorios(el)
     
 
 }
@@ -465,4 +475,44 @@ function AplicarLaboratorio(estado) {
         $('#txt-NumeroLaboratorios').val(0);
         $('#txt-NumeroLaboratorios').attr('disabled', true);
     }
+}
+
+function CalcularSesionesOcupar(el) {
+    let st = el.value;
+    let ss = $('#NumeroSustentantes').val()
+    if (st != "" && ss !="") {
+        let so = parseInt(st) / parseInt(ss)
+        $('#txtTotalSesionesOcupar').val(Math.round(so))
+    } else {
+        $('#txtTotalSesionesOcupar').val("")
+    }
+    
+}
+
+function CalcularSesionesOcupar1(el) {
+   
+    let ss = el.value;
+    let st = $('#txtTotalSustentantes').val()
+
+    if (ss != "" && st !="") {
+        let so = parseInt(st) / parseInt(ss)
+        $('#txtTotalSesionesOcupar').val(Math.round(so))
+    } else {
+        $('#txtTotalSesionesOcupar').val("")
+    }
+    
+}
+
+function CalcularTotalLaboratorios(el) {
+
+    let ns = el.value;
+    let ts = $('#txtTotalSesionesOcupar').val()
+
+    if (ns != "" && ts != "") {
+        let tl = parseInt(ts) / parseInt(ns)
+        $('#txtTotalLaboratorios').val(Math.round(tl))
+    } else {
+        $('#txtTotalLaboratorios').val("")
+    }
+
 }
