@@ -112,9 +112,9 @@ $(document).ready(function () {
             if ($array1.val() != null) {
                 let datt = ''
                 vmFormProcesoAsignacion.visibleFiltro3(true);
-                datt='<option value="">Seleccione</option>'
+                datt = '<option value="">Seleccione</option>'
                 $array1.val().map(x => {
-                    
+
                     let op = $array1.find('option[value=' + x + ']').text()
                     datt += `<option value="${x}">${op}</option>`
                     $dat.html(datt)
@@ -122,8 +122,8 @@ $(document).ready(function () {
             } else {
                 $dat.html('<option value="">Seleccione</option>')
             }
-            
-            
+
+
         }
 
         vmFormProcesoAsignacion.cargarDatos = () => {
@@ -136,17 +136,17 @@ $(document).ready(function () {
                     .then(res => {
                         let data = []
                         res.data.map(x => {
-                            
+
                             if (vmFormProcesoAsignacion.Filtro3() == "jornada_sustentante") {
                                 if (x.jornada_sustentante != null) {
                                     data.push(x.jornada_sustentante)
                                 }
-                                
+
                             } else if (vmFormProcesoAsignacion.Filtro3() == "saber") {
                                 if (x.saber != null) {
                                     data.push(x.saber)
                                 }
-                                
+
                             } else if (vmFormProcesoAsignacion.Filtro3() == "grado") {
                                 if (x.grado != null) {
                                     data.push(x.grado)
@@ -158,11 +158,11 @@ $(document).ready(function () {
                                 }
 
                             }
-                            
+
                         })
 
                         if (data.length > 0) {
-                            
+
                             vmFormProcesoAsignacion.visibleFiltro4(true);
                             data.map(x => {
                                 var option = $(document.createElement('option'));
@@ -171,10 +171,10 @@ $(document).ready(function () {
                                 $('#cmbFiltro4').append(option);
                                 $("#cmbFiltro4").trigger("chosen:updated");
                             })
-                            
-                            
+
+
                         }
-                        
+
                     })
 
             } else {
@@ -186,27 +186,25 @@ $(document).ready(function () {
         }
 
         vmFormProcesoAsignacion.cargarDatosF4 = () => {
-            debugger
             let x = $("#cmbFiltro4").val();
             if (x != "" && x != null) {
-
-                for (var i = 0; i < x.length; i++) {
-                    let existe = vmFormProcesoAsignacion.arrayFiltro4().filter(s => s == x)
-                    if (existe != null) {
-                        var datos = new Detalle({
-                            Id: x[i],
-                            Nombre: x[i]
-                        });
-                        vmFormProcesoAsignacion.arrayFiltro4.push(x);
+                for (var option of document.getElementById('cmbFiltro4').options) {
+                    if (option.selected) {
+                        var existe = vmFormProcesoAsignacion.arrayFiltro4().filter(s => s == option.value)
+                        if (existe.length == 0) {
+                            vmFormProcesoAsignacion.arrayFiltro4.push(option.value);
+                        }
+                    } else {
+                        vmFormProcesoAsignacion.arrayFiltro4.remove(option.value);
                     }
                 }
-
-                
             }
-
         }
 
         vmFormProcesoAsignacion.Filtro = function () {
+
+
+
             if (vmFormProcesoAsignacion.Filtro1() != "") {
                 $.ajax({
                     type: "POST",
@@ -296,7 +294,7 @@ $(document).ready(function () {
 
         $("#cmbFiltro2").chosen();
         $("#cmbFiltro4").chosen();
-        
+
         $("#cmbFiltro2_chosen").width("100%");
         $("#cmbFiltro4_chosen").width("100%");
 
