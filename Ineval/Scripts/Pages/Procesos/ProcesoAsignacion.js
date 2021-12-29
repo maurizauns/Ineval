@@ -8,6 +8,12 @@
     }
 }
 
+function Detalle(data) {
+    var self = this;
+    self.Id = data.Id;
+    self.Nombre = data.Nombre;
+};
+
 var vmFormProcesoAsignacion = {};
 $(document).ready(function () {
     var url = window.location.pathname;
@@ -38,6 +44,8 @@ $(document).ready(function () {
         vmFormProcesoAsignacion.visibleFiltro3 = ko.observable(false);
         vmFormProcesoAsignacion.visibleFiltro4 = ko.observable(false);
         vmFormProcesoAsignacion.visibleFiltro5 = ko.observable(false);
+
+        vmFormProcesoAsignacion.arrayFiltro4 = ko.observableArray();
 
         vmFormProcesoAsignacion.New = function () {
             vmFormProcesoAsignacion.Existe(true);
@@ -122,9 +130,7 @@ $(document).ready(function () {
             $('#cmbFiltro4').html("")
             $("#cmbFiltro4").trigger("chosen:updated");
             if (vmFormProcesoAsignacion.Filtro3() != "") {
-                
-                
-                
+
                 fetch(`/datostemporales/getfilter?AsignacionId=${vmh.CurrentId()}&filtro=${vmFormProcesoAsignacion.Filtro3()}`)
                     .then(res => res.json())
                     .then(res => {
@@ -144,9 +150,7 @@ $(document).ready(function () {
                             }
                             
                         })
-                        
-                        
-                        
+
                         if (data.length > 0) {
                             
                             vmFormProcesoAsignacion.visibleFiltro4(true);
@@ -169,12 +173,28 @@ $(document).ready(function () {
                 document.getElementById('cmbFiltro4').innerHTML = '<option value="">Seleccione</option>'
                 vmFormProcesoAsignacion.visibleFiltro4(false);
             }
-            
-            
-
         }
 
-        
+        vmFormProcesoAsignacion.cargarDatosF4 = () => {
+            debugger
+            let x = $("#cmbFiltro4").val();
+            if (x != "" && x != null) {
+
+                for (var i = 0; i < x.length; i++) {
+                    let existe = vmFormProcesoAsignacion.arrayFiltro4().filter(s => s == x)
+                    if (existe != null) {
+                        var datos = new Detalle({
+                            Id: x[i],
+                            Nombre: x[i]
+                        });
+                        vmFormProcesoAsignacion.arrayFiltro4.push(x);
+                    }
+                }
+
+                
+            }
+
+        }
 
         vmFormProcesoAsignacion.Filtro = function () {
             if (vmFormProcesoAsignacion.Filtro1() != "") {
